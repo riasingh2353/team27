@@ -78,13 +78,16 @@ The rubric is as follows:
   * Week 13-16 (Milestone 4, competition, final report): Ian (comp) + Michael(report)
 
 I participated in formulating the standards, roles, and procedures as stated in this contract. 
+
 I understand that I am obligated to abide by these terms and conditions.
+
 I understand that if I do not abide by these terms and conditions, I will suffer the consequences as stated in this contract.
-  1) Ria Singh				date 8/31/18 
-  2) Ben Taussig			date 8/31/18
-  3) Felicia Guo				date 8/31/18 
-  4) Ian Power			date 8/31/18
-  5) Michael Gong Rivera	date 8/31/18
+	
+1. Ria Singh			date 8/31/18
+2. Ben Taussig			date 8/31/18
+3. Felicia Guo			date 8/31/18 
+4. Ian Power			date 8/31/18
+5. Michael Gong Rivera		date 8/31/18
 
 
 
