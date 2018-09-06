@@ -5,11 +5,8 @@ Subteam 1: Felicia, Ben, Ian
 
 Subteam 2: Michael, Ria
 
-Original blink code:
 
-<p>
-    <img src="/media/original_blink.png" width="700" height="500" />
-</p>
+![Original blink code:]({{https://rs2353.github.io/team27/Lab1.html }}/media/original_blink.png)
  
 Modified blink code (setup):
 
