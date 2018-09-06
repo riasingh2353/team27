@@ -7,7 +7,8 @@ Subteam 2: Michael, Ria
 
 
 ![Original blink code](/media/original_blink.png)
- 
+
+[![blinking vid](https://www.youtube.com/watch?v=TRF9JSS3JlQ.jpg)](https://www.youtube.com/watch?v=TRF9JSS3JlQ)
  
 ![Modified blink code (setup)](/media/blink_setup.png)
  
