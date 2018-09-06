@@ -7,7 +7,9 @@ Subteam 2: Michael, Ria
 
 Original blink code:
 
-![alt text](/media/original_blink.png)
+<p>
+    <img src="/media/original_blink.png" width="700" height="500" />
+</p>
  
 Modified blink code (setup):
 
