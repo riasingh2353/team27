@@ -6,7 +6,7 @@ Subteam 1: Felicia, Ben, Ian
 Subteam 2: Michael, Ria
 
 
-![Original Blink Code](/media/original_blink.png)
+<img src="media/original_blink.png" alt="hi" class="inline"/>
  
  
 ![Modified blink code (setup)](/media/blink_setup.png)
