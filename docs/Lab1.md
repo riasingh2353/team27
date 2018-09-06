@@ -13,9 +13,15 @@ Subteam 2: Michael, Ria
  
 
 ![Modified blink code (loop)](/media/blink_loop.png)
-  
+
+
+![Potentiometer Setup](/media/PotentiometerSetup.png)  
+
 
 ![Analog read function](/media/analog_read.png)
+
+
+![Servo Wiring](/media/servo_wiring.png)
  
 
 ![Analog write using potentiometer](/media/PWM.png)
