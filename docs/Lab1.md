@@ -8,9 +8,8 @@ Subteam 2: Michael, Ria
 
 ![Original blink code](/media/original_blink.png)
 
-<iframe src="https://www.youtube.com/watch?v=TRF9JSS3JlQ" width="640" height="480"></iframe>
+<iframe width="560" height="315" src="www.youtube.com/watch?v=TRF9JSS3JlQ" frameborder="0" allowfullscreen></iframe>
 
-[![blinking vid](https://www.youtube.com/watch?v=TRF9JSS3JlQ.jpg)](https://www.youtube.com/watch?v=TRF9JSS3JlQ)
  
 ![Modified blink code (setup)](/media/blink_setup.png)
  
