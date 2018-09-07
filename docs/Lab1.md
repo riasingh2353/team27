@@ -9,7 +9,7 @@ Subteam 2: Michael, Ria
 ![Original blink code](/media/original_blink.png)
 
 
-<video src="https://www.youtube.com/watch?v=TRF9JSS3JlQ" width="320" height="200" controls preload></video>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/TRF9JSS3JlQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
  
 ![Modified blink code (setup)](/media/blink_setup.png)
