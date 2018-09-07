@@ -7,7 +7,7 @@ Subteam 2: Michael, Ria
 
 Original blink code:
 
-~~~
+~~~c
 // the setup function runs once when you press reset or power the board
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
@@ -36,7 +36,7 @@ On-board LED blinking:
 
 Modifications to blink code:
 
-~~~
+~~~c
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(2, OUTPUT);
@@ -103,7 +103,7 @@ Analog Read Function:
 
 ![Analog read function](/media/analog_read.png)
 
-~~~
+~~~c
 int analogPin = 0;
 void setup() {
   // put your setup code here, to run once:
@@ -137,7 +137,7 @@ Servo Wiring Setup:
  
  Analog Write Function:
 
-~~~
+~~~c
 int analogPin = 0;
 int ledPin = 3;
 void setup() {
