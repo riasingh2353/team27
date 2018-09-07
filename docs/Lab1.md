@@ -203,9 +203,17 @@ void loop() {
 
 
 
+
+We used these PWM output pins next to drive our servos, which would eventually mobilize our robot.  Including Arduino’s Servo library in the header of our program, we were able to write a range of rotation speeds, to the servo.  Once more, we implemented our potentiometer/voltage divider circuit here in order to physically adjust the Servo’s rotation speed during operation.
+
+
+
 *Servo Motor Controls Using Potentiometer:*
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/B7ZHxNOI4Dc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
+We programmed our robot to move in a square and complete its first autonomous task! 
 
 
 *Implementation of Autonomous Task:*
