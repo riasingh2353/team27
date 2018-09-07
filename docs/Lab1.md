@@ -1,5 +1,6 @@
 
 # Lab 1
+[Home](./teamContract.md)
 
 Subteam 1: Felicia, Ben, Ian
 
