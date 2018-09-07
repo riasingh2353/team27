@@ -7,7 +7,7 @@ Subteam 2: Michael, Ria
 
 Materials:  
   * 2 Parallax Continuous Rotation Servos
-  * X Ω potentiometer
+  * 3000 Ω potentiometer
   * Robot chassis
   * 2 wheels
   * Ball bearing (w/ housing)
@@ -46,10 +46,8 @@ void loop() {
 A video of the uploading process onto the Arduino Uno is shown for reference:
 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/e6g0XYT9Gvw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/e6g0XYT9Gvw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>  
+  
 
 A video showing the on-board blinking mechanism is shown below. We were able to confirm that both the board and the Arduino IDE were functioning normally.
 
@@ -59,7 +57,7 @@ A video showing the on-board blinking mechanism is shown below. We were able to 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/TRF9JSS3JlQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-The LED_BUILTIN value in the original code corresponds to the digital pin 13. Using an external LED, we modified this code to blink this LED for every other digital pin on the board. The LED was connected in series with a resistor to a digital out pin to ensure the max current wasn't exceeded. The modifications are shown below:
+The original blink code blinks the Arduino's built-in LED(corresponding to digital pin 13, referred to as LED_BUILTIN in the code above). We modified the original code so that we could blink LEDs connected to the board's other digital outputs. These LEDs were connected in series with 330Ω resistors to these digital output pins, in order to ensure that the arduino's max current wasn't exceeded. The modifications are shown below:
 
 *Modifications to blink code:*
 
@@ -123,7 +121,7 @@ First we tried it with one LED. Then we tried it with a bunch of LEDs. They all 
 
 
 
-Having confirmed that the digital output pins are functional, we turned next to the analog input pins.  We tested these by using the potentiometer to create a simple voltage divider circuit, shown below:
+Having confirmed the functionality of the digital output pins, we turned next to the analog input pins.  We tested these by using the potentiometer to create a simple voltage divider circuit, shown below:
 
 
 *Potentiometer Wiring Setup:*
@@ -131,7 +129,7 @@ Having confirmed that the digital output pins are functional, we turned next to 
 ![Potentiometer Setup](/media/PotentiometerSetup.png)  
 
 
-In order to read the value, we initialized the serial monitor output and read the value of the analog pin every second:
+We initialized the serial monitor output to read the value of the analog pin every second:
 
 
 
@@ -156,7 +154,7 @@ void loop() {
 
 
 
-By adjusting the resistance of the potentiometer (turning the screw on top), we were able to adjust the voltage read by the analog input pins, which we confirmed by printing this read voltage within the IDE twice every second.  
+By adjusting the resistance of the potentiometer (turning the screw on top), we were able to adjust the voltage read by the analog input pins.
 
 
 *Potentiometer Analog Value Output:*
@@ -166,21 +164,13 @@ By adjusting the resistance of the potentiometer (turning the screw on top), we 
 
 
 
-As above, we repeated this procedure for each analog input pin on the board to confirm the functionality of the board.
+We repeated this procedure for each analog input pin on the board to confirm the functionality of the board.
 
 
 
-Next, we adapted this code to create an ‘analog output’ in the form of a pulse-width modulated (PWM) digital output.  By continuing to track our potentiometer/voltage divider circuit, we were able to map our analog input value to a duty cycle for our PWM output.  
+Next, we adapted this code to create an pseudo-analog output in the form of a pulse-width modulated (PWM) digital output.  By continuing to use our potentiometer/voltage divider circuit as input to the Arduino, we were able to map our analog input value to a duty cycle for our PWM output.  
 
-We put an LED and resistor in series with our PWM pin, and by adjusting the potentiometer’s resistance, the LED’s brightness changed respectively.
-
-
-*Servo Wiring Setup:*
-
-![Servo Wiring](/media/servo_wiring.png)
- 
- 
- Since we were converting between analog and digital values, the 8-bit capacity of the digital pin limited the possible values that could be writted to the pin to between 0 and 255.  This conversion and the writing process is shown in our code below: 
+The arduino's so-called "analog output" is limited by the 8-bit bit depth of the digital output pin, restricting the possible output values to between 0 and 255.  This conversion and the writing process is shown in our code below: 
  
  
  *Analog Write Function:*
@@ -205,7 +195,7 @@ void loop() {
 }
 ~~~
 
-
+We put an LED and resistor in series with our PWM output pin, and by adjusting the potentiometer’s resistance, we were able to change the LED’s brightness.
 
 
 *Changing LED Brightness:*
@@ -215,8 +205,12 @@ void loop() {
 
 
 
-We used these PWM output pins next to drive our servos, which would eventually mobilize our robot.  Including Arduino’s Servo library in the header of our program, we were able to write a range of rotation speeds, to the servo.  Once more, we implemented our potentiometer/voltage divider circuit here in order to physically adjust the Servo’s rotation speed during operation.
+We used these PWM output pins next to drive our servos, which would eventually mobilize our robot.  Including Arduino’s Servo library in the header of our program, we were able to write a range of rotation speeds to the servo.  Once more, we implemented our potentiometer/voltage divider circuit here, allowing us to physically adjust the Servo’s rotation speed during operation.
 
+*Servo Wiring Setup:*
+
+![Servo Wiring](/media/servo_wiring.png)
+ 
 
 
 *Servo Motor Controls Using Potentiometer:*
@@ -224,7 +218,7 @@ We used these PWM output pins next to drive our servos, which would eventually m
 <iframe width="560" height="315" src="https://www.youtube.com/embed/B7ZHxNOI4Dc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-We programmed our robot to move in a square and complete its first autonomous task! 
+Finally, we programmed our robot to move in a square and complete its first autonomous task! 
 
 
 *Implementation of Autonomous Task:*
@@ -252,6 +246,6 @@ delay(1000);
 }
 
 ~~~
-Watch our robot make a lil square!!
+*Watch our robot make a lil square!!*
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/ZfidmBTznY8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
