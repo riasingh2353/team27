@@ -110,6 +110,8 @@ First we tried it with one LED. Then we tried it with a bunch of LEDs. They all 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/70jK-FcvBzQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
+
+
 Having confirmed that the digital output pins are functional, we turned next to the analog input pins.  We tested these by using the potentiometer to create a simple voltage divider circuit, shown below:
 
 
@@ -119,6 +121,8 @@ Having confirmed that the digital output pins are functional, we turned next to 
 
 
 In order to read the value, we initialized the serial monitor output and read the value of the analog pin every second:
+
+
 
 *Analog Read Function:*
 
@@ -139,6 +143,8 @@ void loop() {
 }
 ~~~
 
+
+
 By adjusting the resistance of the potentiometer (turning the screw on top), we were able to adjust the voltage read by the analog input pins, which we confirmed by printing this read voltage within the IDE twice every second.  
 
 
@@ -147,17 +153,23 @@ By adjusting the resistance of the potentiometer (turning the screw on top), we 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/4LRD3s4hR_s" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
+
+
 As above, we repeated this procedure for each analog input pin on the board to confirm the functionality of the board.
 
 
-*Changing LED Brightness:*
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/9KBB9-9VRFg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+Next, we adapted this code to create an ‘analog output’ in the form of a pulse-width modulated (PWM) digital output.  By continuing to track our potentiometer/voltage divider circuit, we were able to map our analog input value to a duty cycle for our PWM output.  
+
+We put an LED and resistor in series with our PWM pin, and by adjusting the potentiometer’s resistance, the LED’s brightness changed respectively.
 
 
 *Servo Wiring Setup:*
 
 ![Servo Wiring](/media/servo_wiring.png)
+ 
+ 
+ Since we were converting between analog and digital values, the 8-bit capacity of the digital pin limited the possible values that could be writted to the pin to between 0 and 255.  This conversion and the writing process is shown in our code below: 
  
  
  *Analog Write Function:*
@@ -181,6 +193,14 @@ void loop() {
   delay(250);
 }
 ~~~
+
+
+
+
+*Changing LED Brightness:*
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/9KBB9-9VRFg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 
 
 *Servo Motor Controls Using Potentiometer:*
