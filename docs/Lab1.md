@@ -5,6 +5,10 @@ Subteam 1: Felicia, Ben, Ian
 
 Subteam 2: Michael, Ria
 
+
+The purpose of this lab is to familiarize the team with the functionality of the Arduino Uno, including the Arduino IDE, the Uno’s I/O capabilities, and its ability to perform simple tasks autonomously.  A set of tasks was laid out in advance in order to facilitate this familiarization, including blinking an external LED, controlling various systems via potentiometer, and assembling an autonomously-operated robot.
+
+
 Original blink code:
 
 ~~~c
