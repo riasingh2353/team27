@@ -48,7 +48,7 @@ A video showing the on-board blinking mechanism is shown below. We were able to 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/TRF9JSS3JlQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-The LED_BUILTIN value in the original code corresponds to the digital pin 13. Using an external LED, we modified this code to blink this LED for every other digital pin on the board. The modifications are shown below:
+The LED_BUILTIN value in the original code corresponds to the digital pin 13. Using an external LED, we modified this code to blink this LED for every other digital pin on the board. The LED was connected in series with a resistor to a digital out pin to ensure the max current wasn't exceeded. The modifications are shown below:
 
 *Modifications to blink code:*
 
@@ -110,12 +110,15 @@ First we tried it with one LED. Then we tried it with a bunch of LEDs. They all 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/70jK-FcvBzQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
+Having confirmed that the digital output pins are functional, we turned next to the analog input pins.  We tested these by using the potentiometer to create a simple voltage divider circuit, shown below:
 
 
 *Potentiometer Wiring Setup:*
 
 ![Potentiometer Setup](/media/PotentiometerSetup.png)  
 
+
+In order to read the value, we initialized the serial monitor output and read the value of the analog pin every second:
 
 *Analog Read Function:*
 
@@ -136,9 +139,15 @@ void loop() {
 }
 ~~~
 
+By adjusting the resistance of the potentiometer (turning the screw on top), we were able to adjust the voltage read by the analog input pins, which we confirmed by printing this read voltage within the IDE twice every second.  
+
+
 *Potentiometer Analog Value Output:*
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/4LRD3s4hR_s" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
+As above, we repeated this procedure for each analog input pin on the board to confirm the functionality of the board.
 
 
 *Changing LED Brightness:*
