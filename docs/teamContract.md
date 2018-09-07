@@ -1,4 +1,5 @@
 # TEAM CONTRACT
+[Home](./index.md)
 * ECE 3400, Semester #1	Team #27
 * Team Members: Ria, Ben, Felicia, Ian, Michael
 
