@@ -164,13 +164,13 @@ By adjusting the resistance of the potentiometer (turning the screw on top), we 
 
 
 
-We repeated this procedure for each analog input pin on the board to confirm the functionality of the board.
+We repeated this procedure for each analog input pin on the board to confirm functionality.
 
 
 
 Next, we adapted this code to create an pseudo-analog output in the form of a pulse-width modulated (PWM) digital output.  By continuing to use our potentiometer/voltage divider circuit as input to the Arduino, we were able to map our analog input value to a duty cycle for our PWM output.  
 
-The arduino's so-called "analog output" is limited by the 8-bit bit depth of the digital output pin, restricting the possible output values to between 0 and 255.  This conversion and the writing process is shown in our code below: 
+The arduino's so-called "analog output" is limited by the 8-bit bit depth of the digital output pin, restricting the possible output values to between 0 and 255.  The conversion from the 10-bit input to the 8-bit output as well as the writing process is shown in our code below: 
  
  
  *Analog Write Function:*
@@ -205,7 +205,7 @@ We put an LED and resistor in series with our PWM output pin, and by adjusting t
 
 
 
-We used these PWM output pins next to drive our servos, which would eventually mobilize our robot.  Including Arduino’s Servo library in the header of our program, we were able to write a range of rotation speeds to the servo.  Once more, we implemented our potentiometer/voltage divider circuit here, allowing us to physically adjust the Servo’s rotation speed during operation.
+Next, we used these PWM output pins to drive our servos, which would eventually mobilize our robot.  By including Arduino’s Servo library in the header of our program, we were able to write a range of rotation speeds to the servo.  Once more, we implemented our potentiometer/voltage divider circuit here, allowing us to physically adjust the Servo’s rotation speed during operation.
 
 *Servo Wiring Setup:*
 
@@ -218,7 +218,7 @@ We used these PWM output pins next to drive our servos, which would eventually m
 <iframe width="560" height="315" src="https://www.youtube.com/embed/B7ZHxNOI4Dc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-Finally, we programmed our robot to move in a square and complete its first autonomous task! 
+Finally, we programmed our robot to move in a square, its first autonomous task! 
 
 
 *Implementation of Autonomous Task:*
