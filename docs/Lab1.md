@@ -216,7 +216,7 @@ Next, we used these PWM output pins to drive our servos, which would eventually 
 
 *Servo Motor Controls Using Potentiometer:*
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/B7ZHxNOI4Dc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Yzg2YTF_dRs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
 Finally, we programmed our robot to move in a square, its first autonomous task! 
