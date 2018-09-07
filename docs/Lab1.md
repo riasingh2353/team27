@@ -14,7 +14,7 @@ We began this lab by retrieving the necessary materials for the operation of our
 
 After retrieving these components, we connected our Uno to the Arduino IDE, compiled, and uploaded the Blink example program to our microcontroller.  The function of this program is to cycle an on-board LED between on and off every second.
 
-Original blink code:
+*Original blink code:*
 
 ~~~c
 // the setup function runs once when you press reset or power the board
@@ -38,15 +38,19 @@ A video of the uploading process onto the Arduino Uno is shown for reference:
 <iframe width="560" height="315" src="https://www.youtube.com/embed/e6g0XYT9Gvw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
+<<<<<<< HEAD
 A video showing the on-board blinking mechanism is shown below. We were able to confirm that both the board and the Arduino IDE were functioning normally.
 
 
 On-board LED blinking:
+=======
+*On-board LED blinking:*
+>>>>>>> 6c5ab55d1a70d9db554a3a8e19bcecf0aca1d0b4
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/TRF9JSS3JlQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-Modifications to blink code:
+*Modifications to blink code:*
 
 ~~~c
 void setup() {
@@ -97,7 +101,7 @@ void loop() {
 }
 ~~~
 
-External Blinking LED:
+*External Blinking LED:*
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/J9jq3WLRFCI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
@@ -106,12 +110,12 @@ Lots of external blinking LEDs!!! (all analog outputs work):
 <iframe width="560" height="315" src="https://www.youtube.com/embed/70jK-FcvBzQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-Potentiometer Wiring Setup:
+*Potentiometer Wiring Setup:*
 
 ![Potentiometer Setup](/media/PotentiometerSetup.png)  
 
 
-Analog Read Function:
+*Analog Read Function:*
 
 ~~~c
 int analogPin = 0;
@@ -130,22 +134,22 @@ void loop() {
 }
 ~~~
 
-Potentiometer Analog Value Output:
+*Potentiometer Analog Value Output:*
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/4LRD3s4hR_s" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-Changing LED Brightness:
+*Changing LED Brightness:*
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/9KBB9-9VRFg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-Servo Wiring Setup:
+*Servo Wiring Setup:*
 
 ![Servo Wiring](/media/servo_wiring.png)
  
  
- Analog Write Function:
+ *Analog Write Function:*
 
 ~~~c
 int analogPin = 0;
@@ -168,12 +172,12 @@ void loop() {
 ~~~
 
 
-Servo Motor Controls Using Potentiometer:
+*Servo Motor Controls Using Potentiometer:*
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/B7ZHxNOI4Dc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-Implementation of Autonomous Task:
+*Implementation of Autonomous Task:*
 
 ~~~c
 #include <Servo.h>
