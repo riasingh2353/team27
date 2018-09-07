@@ -5,16 +5,27 @@ Subteam 1: Felicia, Ben, Ian
 
 Subteam 2: Michael, Ria
 
+Materials:  
+  * 2 Parallax Continuous Rotation Servos
+  * X Ω potentiometer
+  * Robot chassis
+  * 2 wheels
+  * Ball bearing (w/ housing)
+  * Breadboard
+  * LEDs
+  * 300 Ω Resistor
 
-The purpose of this lab is to familiarize the team with the functionality of the Arduino Uno, the Arduino IDE, the I/O capabilities, and its ability to perform simple tasks autonomously.  The tasks we set out to complete included blinking an external LED, controlling various systems via potentiometer, and assembling an autonomously-operated robot.
+The purpose of this lab was to familiarize the team with the functionality of the Arduino Uno, the Arduino IDE, and the Arduino's I/O capabilities.  
+
+The tasks we set out to complete included:
+  * Blinking an external LED 
+  * Controlling various systems via potentiometer 
+  * Assembling an autonomously-operated robot
 
 
-We began this lab by retrieving the necessary materials for the operation of our Uno: two Parallax Continuous Rotation Servos, a breadboard, several LEDs and 300 Ω resistors, a potentiometer, a chassis, two wheels, and a ball-bearing with housing.  
+After retrieving the necessary components, we connected our Uno to the Arduino IDE and uploaded the Blink example program to our microcontroller.  The function of this program is to cycle an on-board LED between on and off every second.
 
-
-After retrieving these components, we connected our Uno to the Arduino IDE, compiled, and uploaded the Blink example program to our microcontroller.  The function of this program is to cycle an on-board LED between on and off every second.
-
-*Original blink code:*
+*Original blink code: (not ours!)*
 
 ~~~c
 // the setup function runs once when you press reset or power the board
