@@ -101,7 +101,6 @@ Potentiometer Wiring Setup:
 
 Analog Read Function:
 
-
 ~~~c
 int analogPin = 0;
 void setup() {
@@ -164,7 +163,7 @@ Servo Motor Controls Using Potentiometer:
 
 Implementation of Autonomous Task:
 
-~~~
+~~~c
 #include <Servo.h>
 
 Servo servoL;
