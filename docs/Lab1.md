@@ -9,7 +9,10 @@ Subteam 2: Michael, Ria
 The purpose of this lab is to familiarize the team with the functionality of the Arduino Uno, including the Arduino IDE, the Uno’s I/O capabilities, and its ability to perform simple tasks autonomously.  A set of tasks was laid out in advance in order to facilitate this familiarization, including blinking an external LED, controlling various systems via potentiometer, and assembling an autonomously-operated robot.
 
 
-We began this lab by retrieving the necessary materials for the operation of our Uno, including two Parallax Continuous Rotation Servos, a breadboard, several LEDs and 300 Ω resistors, a potentiometer, a chassis, two wheels, and a ball-bearing with housing.  After retrieving these components, we connected our Uno to the Arduino IDE, compiled, and uploaded the Blink example program to our microcontroller.  The function of this program is to cycle an on-board LED between on and off every second.
+We began this lab by retrieving the necessary materials for the operation of our Uno, including two Parallax Continuous Rotation Servos, a breadboard, several LEDs and 300 Ω resistors, a potentiometer, a chassis, two wheels, and a ball-bearing with housing.  
+
+
+After retrieving these components, we connected our Uno to the Arduino IDE, compiled, and uploaded the Blink example program to our microcontroller.  The function of this program is to cycle an on-board LED between on and off every second.
 
 Original blink code:
 
@@ -33,6 +36,9 @@ A video of the uploading process onto the Arduino Uno is shown for reference:
 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/e6g0XYT9Gvw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
+A video showing the on-board blinking mechanism is shown below. We were able to confirm that both the board and the Arduino IDE were functioning normally.
 
 
 On-board LED blinking:
