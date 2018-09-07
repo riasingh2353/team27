@@ -101,7 +101,6 @@ Potentiometer Wiring Setup:
 
 Analog Read Function:
 
-![Analog read function](/media/analog_read.png)
 
 ~~~
 int analogPin = 0;
