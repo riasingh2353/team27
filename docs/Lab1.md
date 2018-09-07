@@ -39,6 +39,7 @@ A video of the uploading process onto the Arduino Uno is shown for reference:
 
 
 
+
 A video showing the on-board blinking mechanism is shown below. We were able to confirm that both the board and the Arduino IDE were functioning normally.
 
 
@@ -100,14 +101,15 @@ void loop() {
 }
 ~~~
 
-As shown below, all our external LEDs blink, meaning each digital pin was functioning as it should.
+First we tried it with one LED. Then we tried it with a bunch of LEDs. They all worked!
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/J9jq3WLRFCI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
 
-Lots of external blinking LEDs!!! (all analog outputs work):
 <iframe width="560" height="315" src="https://www.youtube.com/embed/70jK-FcvBzQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
 
 
 *Potentiometer Wiring Setup:*
