@@ -7,8 +7,6 @@ Subteam 2: Michael, Ria
 
 Original blink code:
 
-![Original blink code](/media/original_blink.png)
-
 ~~~
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -37,11 +35,6 @@ On-board LED blinking:
 
 
 Modifications to blink code:
- 
-![Modified blink code (setup)](/media/blink_setup.png)
- 
-
-![Modified blink code (loop)](/media/blink_loop.png)
 
 ~~~
 void setup() {
@@ -143,8 +136,6 @@ Servo Wiring Setup:
  
  
  Analog Write Function:
-
-![Analog write using potentiometer](/media/PWM.png)
 
 ~~~
 int analogPin = 0;
