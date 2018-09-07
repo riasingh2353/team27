@@ -49,7 +49,7 @@ Analog Read Function:
 
 Potentiometer Analog Value Output:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/9KBB9-9VRFg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4LRD3s4hR_s" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
 Changing LED Brightness:
