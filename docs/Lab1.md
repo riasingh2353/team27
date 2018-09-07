@@ -23,7 +23,7 @@ The tasks we set out to complete included:
   * Assembling an autonomously-operated robot
 
 
-After retrieving the necessary components, we connected our Uno to the Arduino IDE and uploaded the Blink example program to our microcontroller.  The function of this program is to cycle an on-board LED between on and off every second.
+After retrieving the necessary components, we connected our Uno to the Arduino IDE and uploaded the Blink example program to it.  The function of this program is to cycle an on-board LED on and off every second.
 
 *Original blink code: (not ours!)*
 
@@ -49,7 +49,7 @@ A video of the uploading process onto the Arduino Uno is shown for reference:
 <iframe width="560" height="315" src="https://www.youtube.com/embed/e6g0XYT9Gvw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>  
   
 
-A video showing the on-board blinking mechanism is shown below. We were able to confirm that both the board and the Arduino IDE were functioning normally.
+A video showing the on-board blinking mechanism is shown below. This confirmed that both the board and the Arduino IDE were functioning normally.
 
 
 *On-board LED blinking:*
@@ -57,7 +57,7 @@ A video showing the on-board blinking mechanism is shown below. We were able to 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/TRF9JSS3JlQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-The original blink code blinks the Arduino's built-in LED(corresponding to digital pin 13, referred to as LED_BUILTIN in the code above). We modified the original code so that we could blink LEDs connected to the board's other digital outputs. These LEDs were connected in series with 330Ω resistors to these digital output pins, in order to ensure that the arduino's max current wasn't exceeded. The modifications are shown below:
+We modified the original blink code so that we could blink LEDs connected to the board's other digital outputs. We connected the LEDs in series with 330Ω resistors to the Arduino's digital output pins, in order to ensure that its max current wasn't exceeded. The modifications are shown below:
 
 *Modifications to blink code:*
 
