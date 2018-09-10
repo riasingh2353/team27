@@ -1,0 +1,55 @@
+#include <Servo.h>
+#include <QTRSensors.h>
+
+Servo servoL;
+Servo servoR;
+QTRSensorsAnalog qtr((char[]){0,1,2},3);
+int lastError = 0;
+int Lspeed = 100;
+int Rspeed = 80;
+int adj = 0;
+
+void setup() {
+// put your setup code here, to run once:
+Serial.begin(9600);
+servoL.attach(3);
+servoR.attach(9);
+
+int i;
+for (i = 0; i < 84; i++)  // make the calibration take about 5 seconds
+  {
+    //servoL.write(180);
+    //servoR.write(0);
+    delay(20);  //Generic calibration delay
+    servoL.write(90);
+    servoR.write(90);
+    delay(20);
+    qtr.calibrate();
+    delay(20); //60ms * 84 ~ 5s
+  }
+}
+
+void loop() {
+// put your main code here, to run repeatedly:
+
+servoL.write(Lspeed);
+servoR.write(Rspeed);
+delay(5); //Not necessary
+
+adj = 0;
+unsigned int sensors[3];
+int position = qtr.readLine(sensors); //L = 0, R = 2000
+int error = position - 1000; // + is left, - is right
+int adj = 0.001 * error + 0 * (error - lastError);
+lastError = error;
+Serial.println(error);
+if(Lspeed < 90){
+  Lspeed = 91;
+}
+if(Rspeed > 90){
+  Rspeed = 89;
+}
+Lspeed = Lspeed + adj;
+Rspeed = Rspeed - adj;
+
+}
