@@ -4,24 +4,28 @@
 
 Servo servoL;
 Servo servoR;
-QTRSensorsAnalog qtr((unsigned char[]){0,2},2);
+QTRSensorsAnalog qtr((unsigned char[]){14,15},2);
 int lastError = 0;
 int Lspeed = 100;
 int Rspeed = 80;
 int adj = 0;
 unsigned int sensor_values[2];
+int countdown = 12;
 
 void setup() {
-
-  
 // put your setup code here, to run once:
 Serial.begin(9600);
 servoL.attach(3);
 servoR.attach(9);
 
-int i;
-for (i = 0; i < 84; i++)  // make the calibration take about 5 seconds
-  {
+}
+
+
+
+void loop() {
+
+// put your main code here, to run repeatedly:
+  if (countdown > 0) {
     //servoL.write(180);
     //servoR.write(0);
     delay(20);  //Generic calibration delay
@@ -30,24 +34,39 @@ for (i = 0; i < 84; i++)  // make the calibration take about 5 seconds
     delay(20);
     qtr.calibrate();
     delay(20); //60ms * 84 ~ 5s
+    Serial.println("CALIBRATING !!!!!");
+    countdown = countdown - 1;
   }
-}
 
+  else {
 
-
-void loop() {
-// put your main code here, to run repeatedly:
-
-servoL.write(Lspeed);
-servoR.write(Rspeed);
-delay(5); //Not necessary
-
-qtr.read(sensor_values);
-int diff = sensor_values[1]-sensor_values[0];
-delay(500);
-Serial.println(diff);
-//diff = sensor_values[1]-sensor_values[0];
-//make tolerance 50?
-//Serial.println(diff);
-
+      qtr.read(sensor_values);
+      
+      if (sensor_values[0] <= 900 && sensor_values[1] <= 900) { 
+                //drive straight
+        servoL.write(95);
+        servoR.write(85);
+        Serial.println("DRIVING STRAIGHT !!!!!");
+      }//if robot veers left
+      else if (sensor_values[1] > 900) { //if robot veers right
+        //veer left 
+        servoL.write(80);
+        servoR.write(55);
+        Serial.println("VEERING LEFT !!!!!");
+      }
+      else {
+        //veer right
+        servoL.write(125);
+        servoR.write(100);
+        Serial.println("VEERING RIGHT !!!!!");
+      }
+      
+      //delay(1);
+      Serial.println("LEFT:");
+      Serial.println(sensor_values[0]);
+      Serial.println("RIGHT:");
+      Serial.println(sensor_values[1]);
+      //make tolerance 50?
+      //Serial.println(diff);
+  }
 }
