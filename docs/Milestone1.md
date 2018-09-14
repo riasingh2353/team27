@@ -159,12 +159,6 @@ void turn_left(){
        Serial.println("Turning left!"); 
     } 
    countdown = 8000;
-
-     /*while (sensor_values[2] < (threshold+10)) {
-        servoL.write(90);
-        servoR.write(55);
-        Serial.println("Turning left! - on white");
-     }*/
 }
 
 void turn_right(){
@@ -185,13 +179,6 @@ void turn_right(){
     }
 
   countdown = 8000;
-    
-    /*while (sensor_values[2] < (threshold+10)) {  
-        servoL.write(125);
-        servoR.write(90);
-        //delay(500);
-        Serial.println("Turning right!- on white"); 
-    }*/
 }
 ```
 
