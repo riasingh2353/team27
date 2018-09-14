@@ -153,6 +153,7 @@ void turn_right(){
     }
 
   countdown = 8000;
+ }
 }
 ```
 
