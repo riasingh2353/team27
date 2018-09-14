@@ -150,11 +150,95 @@ void loop() {
 
 In order to complete a 90 degree turn, we use the third line sensor to tell the robot when to stop turning-- the idea is that the robot will stop turning once the back sensor sees white again. However, to deal with the fact that for a short time before the robot completely leaves the first white line, the sensor will still see white, a delay is put in by waiting until a change from black to white is detected, and then the turn is executed until the change from black to white is detected again. This delay is implemented using a countdown variable that executes at the processing speed of the Arduino and is calibrated to the speed of the wheels, and will be later optimized to increase the speed of our robot.
 
-Our software implementation is shown below:
+We implemented these turns using helper functions, which are shown below:
 
-// INCLUDE CODE HERE
+```c
+//HELPER FUNCTIONS
 
+void veer_left(){
+  servoL.write(80);
+  servoR.write(55);
+  sensor_values[0] = analogRead(A0);
+  sensor_values[1] = analogRead(A1);
+  sensor_values[2] = analogRead(A2);
+}
+
+void veer_right(){
+  servoL.write(125);
+  servoR.write(100);
+  sensor_values[0] = analogRead(A0);
+  sensor_values[1] = analogRead(A1);
+  sensor_values[2] = analogRead(A2);
+}
+
+void turn_left(){     
+  while (countdown > 0) {
+    servoL.write(87);
+    servoR.write(35);
+    countdown = countdown - 1;
+  }
+    
+   while (sensor_values[2] > 300){
+       servoL.write(87);
+       servoR.write(35);
+       sensor_values[0] = analogRead(A0);
+       sensor_values[1] = analogRead(A1);
+       sensor_values[2] = analogRead(A2);//delay(500);
+       Serial.println("Turning left!"); 
+    } 
+   countdown = 8000;
+
+     /*while (sensor_values[2] < (threshold+10)) {
+        servoL.write(90);
+        servoR.write(55);
+        Serial.println("Turning left! - on white");
+     }*/
+}
+
+void turn_right(){
+  while(countdown > 0){
+         servoL.write(105);
+        servoR.write(93);
+        countdown = countdown -1;
+  }
+  while (sensor_values[2] > threshold){
+        servoL.write(105);
+        servoR.write(93);
+        //delay(500); 
+            sensor_values[0] = analogRead(A0);
+          sensor_values[1] = analogRead(A1);
+         sensor_values[2] = analogRead(A2);
+        Serial.println("Turning right!");
+        Serial.println(sensor_values[2]);
+    }
+
+  countdown = 8000;
+    
+    /*while (sensor_values[2] < (threshold+10)) {  
+        servoL.write(125);
+        servoR.write(90);
+        //delay(500);
+        Serial.println("Turning right!- on white"); 
+    }*/
+}
+
+void drive_straight(){
+  servoL.write(95);
+  servoR.write(85);  
+   sensor_values[0] = analogRead(A0);
+    sensor_values[1] = analogRead(A1);
+    sensor_values[2] = analogRead(A2);   
+}
+
+void stop_drive(){
+  servoL.write(90);
+  servoR.write(90);
+    sensor_values[0] = analogRead(A0);
+    sensor_values[1] = analogRead(A1);
+    sensor_values[2] = analogRead(A2);
+}
+```
 
 Check out our robot trace an 8!!!
 
-// INCLUDE VIDEO HERE
+
