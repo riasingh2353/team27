@@ -22,11 +22,11 @@ These sensors have three pins, VIN, GND, and OUT. Each sensor outputs a voltage 
 In our setup, the OUT pin of each sensor is tied to a separate analog input of the Arduino Uno controlling our robot. As such, each of these analog inputs will read in a value between 0 and 1023 corresponding to the lightness or darkness of the area under it.
 ## Line Following
 
-We equipped our robot with two line sensors in its front, designed to be far enough apart to straddle a line of electrical tape. Our line following code is written with three cases in mind: 
+We equipped our robot with two line sensors in its front, designed to be far enough apart to straddle a line of electrical tape (see image below). 
 
-![Front of Robot](../media/FRONT\ OF\ ROBOT.jpg)
+![Front of Robot](./media/FRONTOFROBOT.jpg)
 
-
+Our line following code is written with three cases in mind: 
 * If the robot detects that neither of its sensors are on the line, it will drive straight
 * If the robot detects that its left sensor is on the line, it will veer left to correct course
 * If the robot detects that its right sensor is on the line, it will veer right to correct courses 
