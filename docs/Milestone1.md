@@ -71,67 +71,34 @@ The intersection-detection was accomplished by simply noting when both the left 
 
 At each intersection, the robot makes the following turns:
 
-        1) Left 
-        2) Right
-        3) Right
-        4) Right
-        5) Right
-        6) Left
-        7) Left
+    1) Left 
+    2) Right
+    3) Right
+    4) Right
+    5) Right
+    6) Left
+    7) Left
         
 The switch/case statements in our setup and loop are shown below:
 ```c
-void setup() {
-// put your setup code here, to run once:
-Serial.begin(9600);
-servoL.attach(3);
-servoR.attach(9);
+//Case: reaches intersection
+if (sensor_values[0] < 300 && sensor_values[1] < 300){
+    Serial.println("Intersection!");
+    switch(turn_num){
+      case 0:turn_left(); break;
+      case 1:turn_right(); break;
+      case 2:turn_right(); break;
+      case 3:turn_right(); break;
+      case 4:turn_right(); break;
+      case 5:turn_left(); break;
+      case 6:turn_left(); break;
+      case 7:turn_left(); break;
+      default: stop_drive(); break;
+    }
 
-}
+    turn_num += 1;    // increment number of turns
 
-// left, right, right, right, right, left, left
-
-void loop() {
-// put your main code here, to run repeatedly:
-
-// Read line sensor values continuously
-    sensor_values[0] = analogRead(A0);
-    sensor_values[1] = analogRead(A1);
-    sensor_values[2] = analogRead(A2);
-
-    //Case: reaches intersection
-    if (sensor_values[0] < 300 && sensor_values[1] < 300){
-        Serial.println("Intersection!");
-        switch(turn_num){
-          case 0:turn_left(); break;
-          case 1:turn_right(); break;
-          case 2:turn_right(); break;
-          case 3:turn_right(); break;
-          case 4:turn_right(); break;
-          case 5:turn_left(); break;
-          case 6:turn_left(); break;
-          case 7:turn_left(); break;
-          default: stop_drive(); break;
-        }
-        
-        turn_num += 1;    // increment number of turns
-        
-        if (turn_num == 8){ turn_num = 0;}   // reset number of turns after figure 8 completed
-      
-      }
-
-      //Case: traveling along line --> drive straight
-      else if (sensor_values[0] > 300 && sensor_values[1] > 300) { drive_straight();}
-      
-      //Case: drifting off to the right --> correct left
-      else if (sensor_values[0] < 300) { veer_left(); }
-
-      //Case: drifting off to the left --> correct right
-      else if (sensor_values[1] < 300) { veer_right(); }
-      
-      // Default: drive straight
-      else {drive_straight();}
-}
+    if (turn_num == 8){ turn_num = 0;}   // reset number of turns after figure 8 completed
 ```
 
 In order to complete a 90 degree turn, we use the third line sensor to tell the robot when to stop turning-- the idea is that the robot will stop turning once the back sensor sees white again. However, to deal with the fact that for a short time before the robot completely leaves the first white line, the sensor will still see white, a delay is put in by waiting until a change from black to white is detected, and then the turn is executed until the change from black to white is detected again. This delay is implemented using a countdown variable that executes at the processing speed of the Arduino and is calibrated to the speed of the wheels, and will be later optimized to increase the speed of our robot.
