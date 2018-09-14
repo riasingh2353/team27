@@ -20,6 +20,7 @@ The only materials used for this milestone that weren't used in lab one were 3 Q
 These sensors have three pins, VIN, GND, and OUT. Each sensor outputs a voltage at its OUT pin that corresponds with the lightness or darkness of the surface below it. 
 
 In our setup, the OUT pin of each sensor is tied to a separate analog input of the Arduino Uno controlling our robot. As such, each of these analog inputs will read in a value between 0 and 1023 corresponding to the lightness or darkness of the area under it.
+
 ## Line Following
 
 We equipped our robot with two line sensors in its front, designed to be far enough apart to straddle a line of electrical tape (see image below). 
@@ -105,7 +106,11 @@ if (sensor_values[0] < 300 && sensor_values[1] < 300){
     if (turn_num == 8){ turn_num = 0;}   // reset number of turns after figure 8 completed
 ```
 
-In order to complete a 90 degree turn, we use the third line sensor to tell the robot when to stop turning-- the idea is that the robot will stop turning once the back sensor sees white again. However, to deal with the fact that for a short time before the robot completely leaves the first white line, the sensor will still see white, a delay is put in by waiting until a change from black to white is detected, and then the turn is executed until the change from black to white is detected again. This delay is implemented using a countdown variable that executes at the processing speed of the Arduino and is calibrated to the speed of the wheels, and will be later optimized to increase the speed of our robot.
+In order to complete a 90 degree turn, we use the third line sensor to tell the robot when to stop turning-- the idea is that the robot will stop turning once the back sensor sees white again. However, to deal with the fact that for a short time before the robot completely leaves the first white line, the sensor will still see white, a delay is put in by waiting until a change from black to white is detected. Then, the turn is executed until the change from black to white is detected again. 
+
+This delay is implemented using a countdown variable that executes at the processing speed of the Arduino and is calibrated to the speed of the wheels that we chose. We can later optimize this countdown variable to increase the speed of our robot.
+
+The sensor values are also read during each action-- turning and line following--to ensure that the robot knows when to stop.
 
 We implemented these turns using helper functions, which are shown below:
 
@@ -136,7 +141,7 @@ void turn_right(){
         servoR.write(93);
         countdown = countdown -1;
   }
-  while (sensor_values[2] > threshold){
+  while (sensor_values[2] > 300){
         servoL.write(105);
         servoR.write(93);
         //delay(500); 
@@ -151,6 +156,6 @@ void turn_right(){
 }
 ```
 
-Check out our robot trace an 8!!! (including some tough love to demonstrate course correction abilities)
+Check out our robot trace a figure 8!!! (including some tough love to demonstrate course correction abilities)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/wixIh0njYuw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
