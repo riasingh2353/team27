@@ -83,18 +83,6 @@ At each intersection, the robot makes the following turns:
         
 The switch/case statements in our setup and loop are shown below:
 ```c
-#include <Servo.h>
-
-Servo servoL;                     //instantiate servos
-Servo servoR;
-unsigned int sensor_values[3];   //store sensor values
-
-int turn_num = 0;                //reset number of turns          
-int change = 0;                  //reset temp variable noting change from white/black
-int threshold = 300;            //cutoff value b/w white and not white
-bool turn_complete = true;
-int countdown = 8000;
-
 void setup() {
 // put your setup code here, to run once:
 Serial.begin(9600);
@@ -155,22 +143,6 @@ We implemented these turns using helper functions, which are shown below:
 ```c
 //HELPER FUNCTIONS
 
-void veer_left(){
-  servoL.write(80);
-  servoR.write(55);
-  sensor_values[0] = analogRead(A0);
-  sensor_values[1] = analogRead(A1);
-  sensor_values[2] = analogRead(A2);
-}
-
-void veer_right(){
-  servoL.write(125);
-  servoR.write(100);
-  sensor_values[0] = analogRead(A0);
-  sensor_values[1] = analogRead(A1);
-  sensor_values[2] = analogRead(A2);
-}
-
 void turn_left(){     
   while (countdown > 0) {
     servoL.write(87);
@@ -220,22 +192,6 @@ void turn_right(){
         //delay(500);
         Serial.println("Turning right!- on white"); 
     }*/
-}
-
-void drive_straight(){
-  servoL.write(95);
-  servoR.write(85);  
-   sensor_values[0] = analogRead(A0);
-    sensor_values[1] = analogRead(A1);
-    sensor_values[2] = analogRead(A2);   
-}
-
-void stop_drive(){
-  servoL.write(90);
-  servoR.write(90);
-    sensor_values[0] = analogRead(A0);
-    sensor_values[1] = analogRead(A1);
-    sensor_values[2] = analogRead(A2);
 }
 ```
 
