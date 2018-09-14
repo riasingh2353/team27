@@ -19,7 +19,7 @@ The only materials used for this milestone that weren't used in lab one were 3 Q
 
 These sensors have three pins, VIN, GND, and OUT. Each sensor outputs a voltage at its OUT pin that corresponds with the lightness or darkness of the surface below it. 
 
-In our setup, the OUT pin of each sensor is tied to a separate analog input of the Arduino Uno controlling our robot. As such, each of these analog inputs will read in a value between 0 and 1023 corresponding to the lightness or darkness of the area under it.
+In our setup, the OUT pin of each sensor is tied to a separate analog input of the Arduino Uno controlling our robot. As such, each of these analog inputs will read in a an analog voltage between VIN and GND, and output value between 0 and 1023, corresponding to the lightness or darkness of the area under it. Particularly, lighter areas will map to lower output values and darker areas will map higher output values.
 ## Line Following
 
 We equipped our robot with two line sensors in its front, designed to be far enough apart to straddle a line of electrical tape (see image below). 
