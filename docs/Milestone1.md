@@ -24,14 +24,14 @@ In our setup, the OUT pin of each sensor is tied to a separate analog input of t
 
 We equipped our robot with two line sensors in its front, designed to be far enough apart to straddle a line of electrical tape. Our line following code is written with three cases in mind: 
 
-![Front of Robot](/media/FRONT\ OF\ ROBOT.jpg)
+![Front of Robot](../media/FRONT\ OF\ ROBOT.jpg)
 
 
 * If the robot detects that neither of its sensors are on the line, it will drive straight
 * If the robot detects that its left sensor is on the line, it will veer left to correct course
 * If the robot detects that its right sensor is on the line, it will veer right to correct courses 
 
-A snippet of this code is below
+A snippet of this code is shown below
 (Please note: Our line-following code is written under the assumption that our robot will follow a grid of white tape on a black background. The threshold sensor values (300 in this case) will change under different circumstances.)
 
 ```c
@@ -45,7 +45,7 @@ A snippet of this code is below
       else if (sensor_values[1] < 300) { veer_right(); }
 ```
 
-Some code from the helper functions ```drive_straight()```, and ```veer_left()``` is shown below. ```veer_right()``` is nearly identifcal to ```veer_left()```, and as such is not shown below.
+Some code from the helper functions ```drive_straight()```, and ```veer_left()``` is shown below. 
 
 
 ```drive_straight()``` sets both wheels to rotate in the forward direction at a moderate speed.
@@ -56,7 +56,7 @@ void drive_straight(){
 }
 ```
 
-```veer_left()``` increases the speed of the right wheelrelative to its speed set by ```drive_straight()```, and rotates the left wheel backward.
+```veer_left()``` increases the speed of the right wheelrelative to its speed set by ```drive_straight()```, and rotates the left wheel backward. ```veer_right()``` is defined nearly identically to ```veer_left()```.
 ```c
 void veer_left(){
   servoL.write(80);
