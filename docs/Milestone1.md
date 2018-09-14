@@ -1,6 +1,8 @@
 # Milestone 1
 [Home](./index.md)
 
+## Goals
+
 The purpose of this milestone was to design a motion control system for our robot.
 
 The tasks we set out to complete included:
@@ -11,6 +13,8 @@ Additionally, we focused on:
   * Developing a robust control system, and
   * Getting our robot to complete these tasks at a reasonably high speed
     
+## Materials    
+
 The only materials used for this milestone that weren't used in lab one were 3 QTR-1A reflectance sensors ([datasheet here](https://www.pololu.com/product/958)). 
 
 These sensors have three pins, VIN, GND, and OUT. Each sensor outputs a voltage at its OUT pin that corresponds with the lightness or darkness of the surface below it. 
@@ -18,7 +22,11 @@ These sensors have three pins, VIN, GND, and OUT. Each sensor outputs a voltage 
 In our setup, the OUT pin of each sensor is tied to a separate analog input of the Arduino Uno controlling our robot. As such, each of these analog inputs will read in a value between 0 and 1023 corresponding to the lightness or darkness of the area under it.
 ## Line Following
 
-Our robot is equipped with two line sensors in its front, designed to be far enough apart to straddle a line of electrical tape. The line following code is written with three cases in mind: 
+We equipped our robot with two line sensors in its front, designed to be far enough apart to straddle a line of electrical tape. Our line following code is written with three cases in mind: 
+
+![Front of Robot](/media/FRONT\ OF\ ROBOT.jpg)
+
+
 * If the robot detects that neither of its sensors are on the line, it will drive straight
 * If the robot detects that its left sensor is on the line, it will veer left to correct course
 * If the robot detects that its right sensor is on the line, it will veer right to correct courses 
@@ -37,8 +45,23 @@ A snippet of this code is below
       else if (sensor_values[1] < 300) { veer_right(); }
 ```
 
-![Front of Robot](/media/FRONT\ OF\ ROBOT.jpg)
+Some code from the helper functions ```drive_straight()```, and ```veer_left()``` is shown below. ```veer_right()``` is nearly identifcal to ```veer_left()```, and as such is not shown below.
 
-![Potentiometer Setup](/media/PotentiometerSetup.png)  
+
+```drive_straight()``` sets both wheels to rotate in the forward direction at a moderate speed.
+```c
+void drive_straight(){
+  servoL.write(95);
+  servoR.write(85);     
+}
+```
+
+```veer_left()``` increases the speed of the right wheelrelative to its speed set by ```drive_straight()```, and rotates the left wheel backward.
+```c
+void veer_left(){
+  servoL.write(80);
+  servoR.write(55);
+}
+```
 
 ## Figure Eight
