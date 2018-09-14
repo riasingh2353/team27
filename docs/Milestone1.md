@@ -151,3 +151,6 @@ Check out our robot trace an 8!!!
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/3NlusjhVC3Q" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
+Check out our robot course-correct after we give it some tough love:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/697szeFLMhI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
