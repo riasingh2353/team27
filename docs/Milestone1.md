@@ -19,7 +19,7 @@ The only materials used for this milestone that weren't used in lab one were 3 Q
 
 These sensors have three pins, VIN, GND, and OUT. Each sensor outputs a voltage at its OUT pin that corresponds with the lightness or darkness of the surface below it. 
 
-In our setup, the OUT pin of each sensor is tied to a separate analog input of the Arduino Uno controlling our robot. As such, each of these analog inputs will read in a an analog voltage between VIN and GND, and output value between 0 and 1023, corresponding to the lightness or darkness of the area under it. Particularly, lighter areas will map to lower output values and darker areas will map higher output values.
+In our setup, the OUT pin of each sensor is tied to a separate analog input of the Arduino Uno controlling our robot. As such, each of these analog inputs will read in a value between 0 and 1023 corresponding to the lightness or darkness of the area under it.
 ## Line Following
 
 We equipped our robot with two line sensors in its front, designed to be far enough apart to straddle a line of electrical tape (see image below). 
@@ -65,3 +65,30 @@ void veer_left(){
 ```
 
 ## Figure Eight
+This part of the milestone builds upon our line-following implementation to recognize intersections and perform 90 degree turns, and perform them at the appropriate junctions. 
+
+The intersection-detection was accomplished by simply noting when both the left front and right front sensors saw white. Under this condition, our code enters a series of switch/case statements to determine whether to turn left or right. Each turn is numbered, and depending on the intersection number, the robot will execute a specific case statement. After completing a turn, the number of interesections detected is incremented so it will advance to the next case statement on the next turn it sees. 
+
+// INCLUDE DIAGRAM OF FIGURE EIGHT
+
+At each intersection, the robot makes the following turns:
+
+        1) Left 
+        2) Right
+        3) Right
+        4) Right
+        5) Right
+        6) Left
+        7) Left
+
+
+In order to complete a 90 degree turn, we use the third line sensor to tell the robot when to stop turning-- the idea is that the robot will stop turning once the back sensor sees white again. However, to deal with the fact that for a short time before the robot completely leaves the first white line, the sensor will still see white, a delay is put in by waiting until a change from black to white is detected, and then the turn is executed until the change from black to white is detected again.
+
+Our software implementation is shown below:
+
+// INCLUDE CODE HERE
+
+
+Check out our robot trace an 8!!!
+
+// INCLUDE VIDEO HERE
