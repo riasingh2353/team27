@@ -35,14 +35,14 @@ A snippet of this code is shown below
 (Please note: Our line-following code is written under the assumption that our robot will follow a grid of white tape on a black background. The threshold sensor values (300 in this case) will change under different circumstances.)
 
 ```c
-      //Case: traveling along line --> drive straight
-      if (sensor_values[0] > 300 && sensor_values[1] > 300) { drive_straight();}
-      
-      //Case: drifting off to the right --> correct left
-      else if (sensor_values[0] < 300) { veer_left(); }
+//Case: traveling along line --> drive straight
+if (sensor_values[0] > 300 && sensor_values[1] > 300) { drive_straight();}
 
-      //Case: drifting off to the left --> correct right
-      else if (sensor_values[1] < 300) { veer_right(); }
+//Case: drifting off to the right --> correct left
+else if (sensor_values[0] < 300) { veer_left(); }
+
+//Case: drifting off to the left --> correct right
+else if (sensor_values[1] < 300) { veer_right(); }
 ```
 
 Some code from the helper functions ```drive_straight()```, and ```veer_left()``` is shown below. 
