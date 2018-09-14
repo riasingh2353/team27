@@ -64,6 +64,10 @@ void veer_left(){
 }
 ```
 
+Check out our robot following this jagged line:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/HUTCxMMCKz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 ## Figure Eight
 This part of the milestone builds upon our line-following implementation to recognize intersections and perform 90 degree turns, and perform them at the appropriate junctions. 
 
@@ -147,10 +151,6 @@ void turn_right(){
 }
 ```
 
-Check out our robot trace an 8!!!
+Check out our robot trace an 8!!! (including some tough love to demonstrate course correction abilities)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/3NlusjhVC3Q" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-Check out our robot course-correct after we give it some tough love:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/697szeFLMhI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/wixIh0njYuw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
