@@ -69,8 +69,6 @@ This part of the milestone builds upon our line-following implementation to reco
 
 The intersection-detection was accomplished by simply noting when both the left front and right front sensors saw white. Under this condition, our code enters a series of switch/case statements to determine whether to turn left or right. Each turn is numbered, and depending on the intersection number, the robot will execute a specific case statement. After completing a turn, the number of interesections detected is incremented so it will advance to the next case statement on the next turn it sees. 
 
-// INCLUDE DIAGRAM OF FIGURE EIGHT
-
 At each intersection, the robot makes the following turns:
 
         1) Left 
