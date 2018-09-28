@@ -5,7 +5,7 @@
 
 void setup() {
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits 
-  ADCSRA |= bit (ADPS2);         // set ADC prescalar to be eight times faster than default
+  ADCSRA |= bit (ADPS2);         // set ADC prescalar to be eight times faster than default (from: http://www.gammon.com.au/adc)
   Serial.begin(115200); // use the serial port
 }
 int l = 0;
