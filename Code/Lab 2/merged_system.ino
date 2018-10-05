@@ -16,7 +16,6 @@ void setup() {
 }
 
 int l = 0;
-int count = 0;
 boolean start = 0;
 
 
@@ -25,7 +24,11 @@ void loop() {
   while(1) {
     cli();
     for (int i = 0 ; i < 512 ; i += 2) {
-      fft_input[i] = analogRead(A0); // <-- NOTE THIS LINE
+      if(start == 0){
+        fft_input[i] = analogRead(A1); // <-- NOTE THIS LINE
+      }else{
+        fft_input[i] = analogRead(A2);
+      }
       fft_input[i+1] = 0;
     }
     fft_window();
@@ -38,13 +41,11 @@ void loop() {
         if (fft_log_out[3] > 70){
           l = l + 1;
           digitalWrite(2, LOW);
-        }
-        else {
+        } else {
           l = 0;
           digitalWrite(2, LOW);
         }
         if (l >= 10) {
-          count = count + 1;
           start = 1;
           digitalWrite(2, HIGH);  //flip select bit
           digitalWrite(3, HIGH);  //turn on indicator LED
@@ -54,12 +55,16 @@ void loop() {
       
       if (start == 1) {
         digitalWrite(2, HIGH);
-        if (fft_log_out[26] > 60 || fft_log_out[25] > 60 || fft_log_out[27] > 60){
+        //Serial.println("Scanning:");
+        Serial.println(fft_log_out[25]);
+        Serial.println(fft_log_out[26]);
+        Serial.println(fft_log_out[27]);
+        if (fft_log_out[26] > 50 || fft_log_out[25] > 50 || fft_log_out[27] > 50){
           Serial.println("6KHz !!!!!");
           digitalWrite(4, HIGH); //turn on indicator LED
         }
         else {
-          digitalWrite(4, LOW); //turn off indicator LED
+          //digitalWrite(4, LOW); //turn off indicator LED
         }
       }
   }
