@@ -53,6 +53,23 @@ By dumping the output of these FFTs to serial, we were able to confirm that 660 
 
 As such, if our system perceives a signal in this bin above a certain threshold over 10 consecutive computations of the FFT, it will decide that it has recognized a 660 Hz signal. This implementation prevents our robot from perceiving 660 Hz as the result of noise spikes that fall in the third FFT bin.  In practice, our robot will use this tone as a starting signal to begin normal operations, so once 660 Hz has been detected once, we do not need to worry about subsequent detection.
 
+~~~c
+//if 660 Hz is detected over 10 cycles, then start
+if (start == 0) { 
+  if (fft_log_out[3] > 70){
+    l = l + 1;
+    digitalWrite(2, LOW);
+  }
+  else {
+    l = 0;
+    digitalWrite(2, LOW);
+  }
+  if (l >= 10) {
+    count = count + 1;
+    start = 1;
+}
+~~~
+
 In this video, we confirm the operation of our microphone under the noise of a crowd, an attempt to mimic the final competition conditions:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/bWo25RgRp0k" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
