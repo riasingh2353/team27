@@ -126,7 +126,7 @@ Having confirmed the functionality of the digital output pins, we turned next to
 
 *Potentiometer Wiring Setup:*
 
-![Potentiometer Setup](/media/PotentiometerSetup.png)  
+![Potentiometer Setup](/media/mic_circuit(1).png)  
 
 
 We initialized the serial monitor output to read the value of the analog pin every second:
