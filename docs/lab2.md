@@ -20,7 +20,7 @@ The purpose of this lab is to implement new hardware that allows our robot to â€
 
 We began this portion of the lab by retrieving the necessary materials and proceeding to power our electret microphone as instructed, detailed in the diagram below.
 
-![Mic Circuit](/media/mic_circuit(1).png)  
+![Mic Circuit](./media/mic_circuit(1).png)  
 
 This subteamâ€™s goal was to get our robot to identify an audio signal at 660 Hz.  However, upon connecting the output of our circuit to an oscilloscope, we soon discovered that playing loud audio signals into this microphone results in an output that is too low in voltage to be perceived.  As such, we processed the output of this circuit through a simple inverting amplifier (topology shown below), realized using an LM358 op-amp. 
 
