@@ -56,7 +56,7 @@ In this video, we confirm the operation of our microphone under the noise of a c
 
 Our robot will eventually be used to traverse a maze while other robots attempt to do the same, so our robot needs to be able to detect these other robots in order to prevent collisions.  In order to accomplish this, we used a phototransistor to output an IR-dependent voltage.
 
-We setup our phototransistor circuit as follows.
+We set up our phototransistor circuit as follows.  The phototransistor is a component that limits the current that passes through it depending on the light exposed to it.  In complete darkness, the phototransistor will act as an open circuit, and as more light shines on the component, more current will pass, and the output voltage will increase.
 
 ![Phototransistor Circuit](./media/phototransistor_circuit(1).png)
 
