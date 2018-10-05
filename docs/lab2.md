@@ -51,4 +51,4 @@ By dumping the output of these FFTs to serial, we were able to confirm that 660 
 Our robot will eventually be used to traverse a maze while other robots attempt to do the same, so our robot needs to be able to detect these other robots in order to prevent collisions.  In order to accomplish this, we used a phototransistor to output an IR-dependent voltage.  
 We measured the output of the phototransistor circuit when we turned our IR hat on. Since a visible peak to peak voltage was only observed when the IR hat was extremely close (about 3cm), we decided to include an amplifier in the circuit.
 
-![Inverting Amp](./media/inverting_amp_unit.png =450x)
+![Inverting Amp](./media/inverting_amp_unit.png)
