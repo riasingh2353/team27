@@ -58,14 +58,11 @@ As such, if our system perceives a signal in this bin above a certain threshold 
 if (start == 0) { 
   if (fft_log_out[3] > 70){
     l = l + 1;
-    digitalWrite(2, LOW);
   }
   else {
     l = 0;
-    digitalWrite(2, LOW);
   }
   if (l >= 10) {
-    count = count + 1;
     start = 1;
 }
 ~~~
