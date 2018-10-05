@@ -108,7 +108,9 @@ sei();
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/tw2DTEFJ99Q" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-By dumping the output of these FFTs to serial, we were able to confirm that 660 Hz signals fall in the 3rd FFT bin. As such, if our system perceives a signal in this bin above a certain threshold over 10 consecutive computations of the FFT, it will decide that it has recognized a 660 Hz signal. This helped detect a constant tone within an ambient noise signal.  In practice, our robot will use this tone as a starting signal to begin normal operations, so we do not need to worry about subsequent detection of a 660 Hz signal.
+By dumping the output of these FFTs to serial, we were able to confirm that 660 Hz signals fall in the 3rd FFT bin. (see image below:)
+![660 Hz FFT Output](./media/lab\ 2/660hz.png)
+As such, if our system perceives a signal in this bin above a certain threshold over 10 consecutive computations of the FFT, it will decide that it has recognized a 660 Hz signal. This helped detect a constant tone within an ambient noise signal.  In practice, our robot will use this tone as a starting signal to begin normal operations, so we do not need to worry about subsequent detection of a 660 Hz signal.
 
 In this video, we confirm the operation of our microphone under the noise of a crowd, an attempt to mimic the final competition conditions:
 
