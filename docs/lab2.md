@@ -2,9 +2,9 @@
 # Lab 2
 [Home](./index.md)
 
-Acoustic Subteam: Ben, Michael
+Acoustic Subteam: 
 
-Optical Subteam: Felicia, Ria, Ian
+Optical Subteam: 
 
 Materials:  
   * Arduino Uno
@@ -54,15 +54,17 @@ In this video, we confirm the operation of our microphone under the noise of a c
 
 ## Method - Optic:
 
-Our robot will eventually be used to traverse a maze while other robots attempt to do the same, so our robot needs to be able to detect these other robots in order to prevent collisions.  In order to accomplish this, we used a phototransistor to output an IR-dependent voltage.  
+Our robot will eventually be used to traverse a maze while other robots attempt to do the same, so our robot needs to be able to detect these other robots in order to prevent collisions.  In order to accomplish this, we used a phototransistor to output an IR-dependent voltage.
+
+We setup our phototransistor circuit as follows.
+
+![Phototransistor Circuit](./media/phototransistor_circuit(1).png)
+
 We measured the output of the phototransistor circuit when we turned our IR hat on. Since a visible peak to peak voltage was only observed when the IR hat was extremely close (about 3cm), we decided to include an amplifier in the circuit.
 
 ![Inverting Amp](./media/inverting_amp_unit.png)
 
 An inverting amplifier configuration was used. We first tested our amplifier circuit with a sinusoidal signal and a 2.5V DC offset to prevent clipping.
-
-A video of our working amplifier is shown below:
-<iframe width="560" height="315" src="https://www.youtube.com/embed/db3fsimdbAE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 We then connected the IR dependent voltage signal to the input of the op-amp. The DC offset was removed, and a capacitor was put in series with the voltage signal to eliminate the DC offset of the signal (about 4.6V directly from the IR sensor output) and prevent clipping. 
 
@@ -70,8 +72,3 @@ We then connected the IR dependent voltage signal to the input of the op-amp. Th
 
 When we tested again with the IR hat, for a sensor on one white line of the given grid, it could detect the IR hat on the line next to it.
 The next step was to get the Arduino to detect frequencies from our optical circuit output. For this we used the Open Music Library. 
-
-
-
-Our final system with the merged optical and audio circuits is shown below:
-<iframe width="560" height="315" src="https://www.youtube.com/embed/t8LybhyNJdY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
