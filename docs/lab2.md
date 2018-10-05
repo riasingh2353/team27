@@ -26,6 +26,20 @@ This subteam’s goal was to get our robot to identify an audio signal at 660 Hz
 
 ![OpAmp Topology](./media/OpAmpTopology.PNG)
 
-The output of this amplifier is in the proper voltage range to be detected by our arduino:
+The output of this amplifier is in the proper voltage range to be detected by our Arduino:
 
 ### Vout = VR + ((RF/R1)\*(V2-V1))
+
+Next, we focused on detecting the frequency of the signal reproduced by our microphone circuit. In order to do this, we used [Open Music Labs’s Arduino FFT library](http://wiki.openmusiclabs.com/wiki/ArduinoFFT) to compute an FFT on this signal. Using slightly-modified code from [Team Alpha’s write-up](https://cei-lab.github.io/ECE3400-2017-teamAlpha/lab2.html) of this lab, we were able to repeatedly compute a 256 point FFT on the microphone circuit’s output by continuously calling analogRead() on one of the Arduino’s analog inputs:
+
+~~~c
+for (int i = 0 ; i < 512 ; i += 2) {
+    fft_input[i] = analogRead(A0); 
+    fft_input[i+1] = 0;
+}
+fft_window();
+fft_reorder();
+fft_run();
+fft_mag_log();
+sei();
+~~~
