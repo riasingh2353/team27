@@ -18,6 +18,64 @@ The purpose of this lab is to implement new hardware that allows our robot to â€
 
 ## FFT Analysis:
 
+~~~c
+void setup() {
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(4, OUTPUT);
+  digitalWrite(2, LOW);
+  digitalWrite(3, LOW);
+  digitalWrite(4, LOW);
+  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits 
+  ADCSRA |= bit (ADPS2);         // set ADC prescalar to be eight times faster than default
+  Serial.begin(115200); // use the serial port
+}
+
+int l = 0;
+boolean start = 0;
+
+void loop() {
+  while(1) {
+    cli();
+    for (int i = 0 ; i < 512 ; i += 2) {
+      if(start == 0){
+        fft_input[i] = analogRead(A1); //
+      } else{
+        fft_input[i] = analogRead(A2);
+      }
+      fft_input[i+1] = 0;
+    }
+    fft_window();
+    fft_reorder();
+    fft_run();
+    fft_mag_log();
+    sei();
+      
+      if (start == 0) { 
+        if (fft_log_out[3] > 70){
+          l = l + 1;
+          digitalWrite(2, LOW);
+        } else {
+          l = 0;
+          digitalWrite(2, LOW);
+        }
+        if (l >= 10) {
+          start = 1;
+          digitalWrite(2, HIGH);  //flip select bit
+          digitalWrite(3, HIGH);  //turn on indicator LED
+          Serial.println("660 HURTS !!!!!");
+        }
+      }
+      
+      if (start == 1) {
+        digitalWrite(2, HIGH);
+        if (fft_log_out[26] > 50 || fft_log_out[25] > 50 || fft_log_out[27] > 50){
+          Serial.println("6KHz !!!!!");
+          digitalWrite(4, HIGH); //turn on indicator LED
+        }
+      }
+
+~~~
 
 
 ## Method - Acoustic:
