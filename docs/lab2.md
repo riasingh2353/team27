@@ -44,7 +44,11 @@ fft_mag_log();
 sei();
 ~~~
 
-By dumping the output of these FFTs to serial, we were able to confirm that 660 Hz signals fall in the 3rd FFT bin. As such, if our system perceives a signal in this bin above a certain threshold over 10 consecutive computations of the FFT, it will decide that it has recognized a 660 Hz signal.
+<iframe width="560" height="315" src="https://youtu.be/tw2DTEFJ99Q" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+By dumping the output of these FFTs to serial, we were able to confirm that 660 Hz signals fall in the 3rd FFT bin. As such, if our system perceives a signal in this bin above a certain threshold over 10 consecutive computations of the FFT, it will decide that it has recognized a 660 Hz signal. This helped detect a constant tone within an ambient noise signal.
+
+<iframe width="560" height="315" src="https://youtu.be/bWo25RgRp0k" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ## Method - Optic:
 
