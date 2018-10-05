@@ -4,4 +4,4 @@
 * [Team Contract](./teamContract.md)
 * [Lab 1](./Lab1.md)
 * [Milestone 1](./Milestone1.md)
-* [Lab 2](./Lab2.md)
+* [Lab 2](./lab2.md)
