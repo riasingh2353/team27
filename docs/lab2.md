@@ -49,7 +49,7 @@ sei();
 
 By dumping the output of these FFTs to serial, we were able to confirm that 660 Hz signals fall in the 3rd FFT bin. (see image below:)
 
-![660 Hz FFT Output](./media/lab\ 2/660hz.png)
+![660 Hz FFT Output](./media/lab2/660hz.png)
 
 As such, if our system perceives a signal in this bin above a certain threshold over 10 consecutive computations of the FFT, it will decide that it has recognized a 660 Hz signal. This implementation prevents our robot from perceiving 660 Hz as the result of noise spikes that fall in the third FFT bin.  In practice, our robot will use this tone as a starting signal to begin normal operations, so once 660 Hz has been detected once, we do not need to worry about subsequent detection.
 
