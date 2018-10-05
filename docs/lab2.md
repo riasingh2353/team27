@@ -16,6 +16,10 @@ Materials:
   
 The purpose of this lab is to implement new hardware that allows our robot to ‘see’ and interact with its surroundings to a greater extent.  These hardware additions include a microphone and an IR phototransistor and IR emitter ‘hat,’ which allows our robot to interpret audible and IR signal information and react accordingly.  When fully applied, our robot will have two additional functionalities that will assist us during our final project: the ability to start operation upon perceiving an audio signal at 660 Hz, and the ability to detect other robots outfitted with a similar IR emitter hat.
 
+## FFT Analysis:
+
+
+
 ## Method - Acoustic:
 
 We began this portion of the lab by retrieving the necessary materials and proceeding to power our electret microphone as instructed, detailed in the diagram below.
@@ -79,6 +83,8 @@ We then connected the IR dependent voltage signal to the input of the op-amp. Th
 When we tested again with the IR hat, for a sensor on one white line of the given grid, it could detect the IR hat on the line next to it.
 The next step was to get the Arduino to detect frequencies from our optical circuit output. For this we used the Open Music Library. 
 
+
+## Putting it all together:
 Our final circuit combining the optical and audio systems is shown below. The green LED will light up when the 660 Hz tone is detected, and the red LED will light up when only the 6.08kHz signal is detected.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/t8LybhyNJdY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
