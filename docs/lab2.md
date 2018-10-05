@@ -16,67 +16,6 @@ Materials:
   
 The purpose of this lab is to implement new hardware that allows our robot to ‘see’ and interact with its surroundings to a greater extent.  These hardware additions include a microphone and an IR phototransistor and IR emitter ‘hat,’ which allows our robot to interpret audible and IR signal information and react accordingly.  When fully applied, our robot will have two additional functionalities that will assist us during our final project: the ability to start operation upon perceiving an audio signal at 660 Hz, and the ability to detect other robots outfitted with a similar IR emitter hat.
 
-## FFT Analysis:
-
-~~~c
-void setup() {
-  pinMode(2, OUTPUT);
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  digitalWrite(2, LOW);
-  digitalWrite(3, LOW);
-  digitalWrite(4, LOW);
-  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits 
-  ADCSRA |= bit (ADPS2);         // set ADC prescalar to be eight times faster than default
-  Serial.begin(115200); // use the serial port
-}
-
-int l = 0;
-boolean start = 0;
-
-void loop() {
-  while(1) {
-    cli();
-    for (int i = 0 ; i < 512 ; i += 2) {
-      if(start == 0){
-        fft_input[i] = analogRead(A1); //
-      } else{
-        fft_input[i] = analogRead(A2);
-      }
-      fft_input[i+1] = 0;
-    }
-    fft_window();
-    fft_reorder();
-    fft_run();
-    fft_mag_log();
-    sei();
-      
-      if (start == 0) { 
-        if (fft_log_out[3] > 70){
-          l = l + 1;
-          digitalWrite(2, LOW);
-        } else {
-          l = 0;
-          digitalWrite(2, LOW);
-        }
-        if (l >= 10) {
-          start = 1;
-          digitalWrite(2, HIGH);  //flip select bit
-          digitalWrite(3, HIGH);  //turn on indicator LED
-          Serial.println("660 HURTS !!!!!");
-        }
-      }
-      
-      if (start == 1) {
-        digitalWrite(2, HIGH);
-        if (fft_log_out[26] > 50 || fft_log_out[25] > 50 || fft_log_out[27] > 50){
-          Serial.println("6KHz !!!!!");
-          digitalWrite(4, HIGH); //turn on indicator LED
-        }
-      }
-
-~~~
-
 
 ## Method - Acoustic:
 
@@ -143,8 +82,11 @@ We then connected the IR dependent voltage signal to the input of the op-amp. Th
 ![Optical Circuit](./media/optical_circuit.png)
 
 When we tested again with the IR hat, for a sensor on one white line of the given grid, it could detect the IR hat on the line next to it.
-The next step was to get the Arduino to detect frequencies from our optical circuit output. For this we used the Open Music Library. 
+The next step was to get the Arduino to detect frequencies from our optical circuit output. For this we used the same FFT implementation as the audio subteam. However, the 6 kHz IR signal was too high in frequency to be detected by the FFT computed at the Arduino's default ADC freqeuncy. We were able to overcome this by changing the ADC's prescalar value from its default value of 128 to a value of 16, in the manner explained by [this page](http://www.gammon.com.au/adc). This change essentially increased our sampling frequency by a factor of 8, allowing us to perceive the IR signal. 
 
+In the same manner as the audio subteam, we determined that the 6 kHz signal falls into the 25th FFT bin (see image below). As such, if our robot perceives a signal above a certain threshold in this bin, it'll indicate that it has perceived a 6 kHz signal.
+
+![6 kHz FFT Output](./media/lab2/6khz.png)
 
 ## Putting it all together:
 
