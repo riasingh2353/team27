@@ -2,9 +2,9 @@
 # Lab 2
 [Home](./index.md)
 
-Acoustic Subteam: 
+Acoustic Subteam: Ben, Michael
 
-Optical Subteam: 
+Optical Subteam: Felicia, Ria, Ian
 
 Materials:  
   * Arduino Uno
