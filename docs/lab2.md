@@ -60,7 +60,9 @@ We set up our phototransistor circuit as follows.  The phototransistor is a comp
 
 ![Phototransistor Circuit](./media/phototransistor_circuit(1).png)
 
-We measured the output of the phototransistor circuit when we turned our IR hat on. Since a visible peak to peak voltage was only observed when the IR hat was extremely close (about 3cm), we decided to include an amplifier in the circuit.
+As with the Acoustic portion of the lab, we are attempting to identify a certain frequency amid the background noise that we don't care about.  In this instance, that frequency is that of the IR hat.
+
+We measured the output of the phototransistor circuit when we turned our IR hat on, at first from a reasonable distance away, then up close. Since a visible peak to peak voltage was only observed when the IR hat was extremely close (about 3cm), we decided to include an amplifier in the circuit.
 
 ![Inverting Amp](./media/inverting_amp_unit.png)
 
