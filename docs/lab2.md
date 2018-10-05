@@ -52,3 +52,9 @@ Our robot will eventually be used to traverse a maze while other robots attempt 
 We measured the output of the phototransistor circuit when we turned our IR hat on. Since a visible peak to peak voltage was only observed when the IR hat was extremely close (about 3cm), we decided to include an amplifier in the circuit.
 
 ![Inverting Amp](./media/inverting_amp_unit.png)
+
+An inverting amplifier configuration was used. We first tested our amplifier circuit with a sinusoidal signal and a 2.5V DC offset to prevent clipping.
+
+We then connected the IR dependent voltage signal to the input of the op-amp. The DC offset was removed, and a capacitor was put in series with the voltage signal to eliminate the DC offset of the signal (about 4.6V directly from the IR sensor output) and prevent clipping. 
+
+![Optical Circuit](./media/optical_circuit.png)
