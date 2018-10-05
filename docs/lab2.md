@@ -58,3 +58,6 @@ An inverting amplifier configuration was used. We first tested our amplifier cir
 We then connected the IR dependent voltage signal to the input of the op-amp. The DC offset was removed, and a capacitor was put in series with the voltage signal to eliminate the DC offset of the signal (about 4.6V directly from the IR sensor output) and prevent clipping. 
 
 ![Optical Circuit](./media/optical_circuit.png)
+
+When we tested again with the IR hat, for a sensor on one white line of the given grid, it could detect the IR hat on the line next to it.
+The next step was to get the Arduino to detect frequencies from our optical circuit output. For this we used the Open Music Library. 
