@@ -2,9 +2,9 @@
 # Lab 2
 [Home](./index.md)
 
-Acoustic Subteam: 
+Acoustic Subteam: Ben, Michael
 
-Optical Subteam: 
+Optical Subteam: Felicia, Ria, Ian
 
 Materials:  
   * Arduino Uno
@@ -61,9 +61,17 @@ We measured the output of the phototransistor circuit when we turned our IR hat 
 
 An inverting amplifier configuration was used. We first tested our amplifier circuit with a sinusoidal signal and a 2.5V DC offset to prevent clipping.
 
+A video of our working amplifier is shown below:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/db3fsimdbAE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 We then connected the IR dependent voltage signal to the input of the op-amp. The DC offset was removed, and a capacitor was put in series with the voltage signal to eliminate the DC offset of the signal (about 4.6V directly from the IR sensor output) and prevent clipping. 
 
 ![Optical Circuit](./media/optical_circuit.png)
 
 When we tested again with the IR hat, for a sensor on one white line of the given grid, it could detect the IR hat on the line next to it.
 The next step was to get the Arduino to detect frequencies from our optical circuit output. For this we used the Open Music Library. 
+
+
+
+Our final system with the merged optical and audio circuits is shown below:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/t8LybhyNJdY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
