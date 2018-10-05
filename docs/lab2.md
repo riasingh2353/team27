@@ -24,8 +24,7 @@ We began this portion of the lab by retrieving the necessary materials and proce
 
 This subteam’s goal was to get our robot to identify an audio signal at 660 Hz.  However, upon connecting the output of our circuit to an oscilloscope, we soon discovered that playing loud audio signals into this microphone results in an output that is too low in voltage to be perceived.  As such, we processed the output of this circuit through a simple inverting amplifier (topology shown below), realized using an LM358 op-amp. 
 
-_OpAmp Topology Pic Here_
-
+![OpAmp Topology](./media/OpAmpTopology.png)
 The output of this amplifier is in the proper voltage range to be detected by our arduino:
 
 ### Vout = VR + ((RF/R1)\*(V2-V1))
