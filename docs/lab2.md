@@ -143,6 +143,7 @@ The next step was to get the Arduino to detect frequencies from our optical circ
 
 
 ## Putting it all together:
-Our final circuit combining the optical and audio systems is shown below. The green LED will light up when the 660 Hz tone is detected, and the red LED will light up when only the 6.08kHz signal is detected.
+
+Our final circuit combining the optical and audio systems is shown below. The green LED will light up when the 660 Hz tone is detected, and the red LED will light up when only the 6.08kHz signal is detected. The optical circuit and audio circuit outputs are each connected to an analog pin on the Arduino. 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/t8LybhyNJdY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
