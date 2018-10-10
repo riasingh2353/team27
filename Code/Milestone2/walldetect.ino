@@ -32,16 +32,13 @@ void loop() {
 
     if (sensor_values[0] < 300 && sensor_values[1] < 300){
         Serial.println("Intersection!");
-        if (wall_value > 100) {//this wall sensor threshold value is that which was set by last year's team 1, corresponding to approximately 20 cm
-          turn_right();
-      }
-        else {
-          drive_straight();
+        while (wall_value > 100) {//this wall sensor threshold value is that which was set by last year's team 1, corresponding to approximately 20 cm
+          turn_right(); //make this turn right in place
         }
-
+        drive_straight();
       }
 
-      //Case: traveling along line --> drive straight
+      //Case:s traveling along line --> drive straight
       else if (sensor_values[0] > 300 && sensor_values[1] > 300) { drive_straight();}
       
       //Case: drifting off to the right --> correct left
