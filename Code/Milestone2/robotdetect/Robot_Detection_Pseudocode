@@ -1,0 +1,46 @@
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(2, OUTPUT); //select bit 0
+  pinMode(4, OUTPUT); //select bit 1
+}
+
+boolean opticalSel = 0; //This variable corresponds with select bit 1
+                          //if optical == 0, the left optical sensor is used
+                          //if optical == 1, the right optical sensor is used
+int opticalCount   = 0; //This is a counter associated with optical 
+                          //signal detection
+int numFFTs        = 10;//This variable sets the number of consecutive 
+                          //FFTs that will be computed for each optical sensor
+boolean isRobotL   = 0; //true if a robot is detected to the left                        
+boolean isRobotR   = 0; //true if a robot is detected to the right
+
+void loop() {
+  //COMPUTE FFT
+  
+  if (start) { //execute only once the starting signal has been detected
+    look_for_robot();
+    opticalCount = opticalCount + 1;
+    if (opticalCount >= numFFTs) {//after numFFTs have been computed for a given side,
+                                  //start to compute for the other side
+      opticalSel = !opticalSel;
+      opticalCount = 0;
+    }
+    //should we implement some sort of delay? 
+    //can we just assume that the mux instantly switches 
+    //the value at its output?
+    if(!opticalSel) {digitalWrite(4, LOW);}
+    if(opticalSel) {digitalWrite(4, HIGH);}
+  }  
+}
+
+//will set isRobotL or isRobotR if a 6KHz signal is detected in the FFT output
+void look_for_robot(){
+    if (fft_log_out[26] > 60 || fft_log_out[25] > 60 || fft_log_out[27] > 60){
+      Serial.println("6KHz !!!!!");
+      if (!opticalSel) { //if the left sensor is being used
+        isRobotL = 1;
+      }
+      else {
+        isRobotR = 1;
+      }
+}
