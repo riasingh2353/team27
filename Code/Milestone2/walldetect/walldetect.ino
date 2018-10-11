@@ -4,11 +4,13 @@
 Servo servoL;                     //instantiate servos
 Servo servoR;
 unsigned int sensor_values[3];   //store sensor values
-int          wall_value;         //store wall sensor value
+int          wall_value;         //store front wall sensor value
+int          side_wall_value;    //store right wall sensor value
 int change = 0;                  //reset temp variable noting change from white/black
 int threshold = 300;            //cutoff value b/w white and not white
 bool turn_complete = true;
 int countdown = 8000;
+bool right_wall = false;
 
 void setup() {
 // put your setup code here, to run once:
@@ -26,18 +28,41 @@ void loop() {
     sensor_values[0] = analogRead(A0); //left line sensor
     sensor_values[1] = analogRead(A1); //right line sensor
     sensor_values[2] = analogRead(A2); //rear line sensor
-    wall_value       = analogRead(A3);
 
-    //Case: reaches intersection
 
-    if (sensor_values[0] < 300 && sensor_values[1] < 300){
+/*Wall Following Cases:
+ * Nothing on right or front: drive straight
+ * Only in the front: turn right
+ * In front and right: turn left
+ * Following wall on right then hit intersection: turn right
+ */
+
+    //Case: reaches intersection   
+      if (sensor_values[0] < 300 && sensor_values[1] < 300){
         Serial.println("Intersection!");
-        while (wall_value > 100) {//this wall sensor threshold value is that which was set by last year's team 1, corresponding to approximately 20 cm
-          turn_right(); //make this turn right in place
+        wall_value       = analogRead(A3);
+        side_wall_value  = analogRead(A4);
+        
+        if (wall_value > 100 && side_wall_value > 100) {    //Case where wall is detected in front and on the right
+          turn_left(); // make this turn left in place
         }
-        drive_straight();
-      }
 
+        else if (wall_value > 100) {   //this wall sensor threshold value is that which was set by last year's team 1, corresponding to approximately 20 cm
+          turn_right();   // make this turn right in place
+          right_wall = true;
+        }
+        else if (side_wall_value > 100) {
+          drive_straight();  //right hand wall following
+       }
+       else if (wall_value < 100 && side_wall_value < 100) {
+         if (right_wall) {
+          turn_right();
+          right_wall = false;   //reset afer turning
+         }
+         drive_straight(); // default case, then switches back to line following 
+       }
+     }
+    
       //Case:s traveling along line --> drive straight
       else if (sensor_values[0] > 300 && sensor_values[1] > 300) { drive_straight();}
       
@@ -49,14 +74,15 @@ void loop() {
       
       // Default: drive straight
       else {drive_straight();}
-      
-      
+
       Serial.println("LEFT:");
       Serial.println(sensor_values[0]);
       Serial.println("RIGHT:");
       Serial.println(sensor_values[1]);
       Serial.println("MIDDLE");
       Serial.println(sensor_values[2]);
+
+      right_wall = false;
       
 }
 

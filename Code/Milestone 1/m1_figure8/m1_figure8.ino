@@ -6,7 +6,8 @@ unsigned int sensor_values[3];   //store sensor values
 
 int turn_num = 0;                //reset number of turns          
 int change = 0;                  //reset temp variable noting change from white/black
-int threshold = 700;            //cutoff value b/w white and not white
+int threshold = 500;             //turning threshold
+int cutoff = 300;                //cutoff value b/w white and not white
 
 void setup() {
 // put your setup code here, to run once:
@@ -22,12 +23,12 @@ void loop() {
 // put your main code here, to run repeatedly:
 
 // Read line sensor values continuously
-    sensor_values[0] = analogRead(A0);
-    sensor_values[1] = analogRead(A1);
-    sensor_values[2] = analogRead(A2);
+    sensor_values[0] = analogRead(A0); //left
+    sensor_values[1] = analogRead(A1); //right
+    sensor_values[2] = analogRead(A2); //middle
 
     //Case: reaches intersection
-    if (sensor_values[0] < 300 && sensor_values[1] < 300){
+    if (sensor_values[0] < cutoff && sensor_values[1] < cutoff){
         Serial.println("Intersection!");
         switch(turn_num){
           case 0:turn_left(); break;
@@ -47,13 +48,13 @@ void loop() {
       }
 
       //Case: traveling along line --> drive straight
-      else if (sensor_values[0] > 300 && sensor_values[1] > 300) { drive_straight();}
+      else if (sensor_values[0] > cutoff && sensor_values[1] > cutoff) { drive_straight();}
       
       //Case: drifting off to the right --> correct left
-      else if (sensor_values[0] < 300) { veer_left(); }
+      else if (sensor_values[0] < cutoff) { veer_left(); }
 
       //Case: drifting off to the left --> correct right
-      else if (sensor_values[1] < 300) { veer_right(); }
+      else if (sensor_values[1] < cutoff) { veer_right(); }
       
       // Default: drive straight
       else {drive_straight();}
@@ -71,13 +72,13 @@ void loop() {
 //HELPER FUNCTIONS
 
 void veer_left(){
-  servoL.write(80);
-  servoR.write(55);
+  servoL.write(120);
+  servoR.write(60);
 }
 
 void veer_right(){
-  servoL.write(125);
-  servoR.write(100);
+  servoL.write(90);
+  servoR.write(60);
 }
 
 void turn_left(){
@@ -124,8 +125,8 @@ void turn_right(){
 }
 
 void drive_straight(){
-  servoL.write(95);
-  servoR.write(85);     
+  servoL.write(120);
+  servoR.write(60);     
 }
 
 
