@@ -75,18 +75,37 @@ The code will first check the right wall sensor such that right wall following t
 
 ## Avoiding Other Robots
 
-In order to detect other robots, we integrated our IR detection circuit from Lab 2 into our line following/wall detection system. We used one phototransistor, which will check if another robot is in front of our robot at intersections. If another robot is detected in front, then our robot will either:
+In order to detect other robots, we integrated our IR detection circuit from Lab 2 into our line following/wall detection system. We used one phototransistor, which will check if another robot is in front of our robot at intersections. If another robot is detected in front, then our robot will stop driving and wait for a set time until the robot has passed. Since our turning functions check for robots at the end of each turn, this process of checking for robots and turning will continue until no robot is detected, in which case the robot will drive straight. We decided to implement a single phototransistor circuit and will place blinders on either side of the phototransistor such that it sits at the vertex of a 45 degree angle. This will ensure that our robot is only capable of detecting robots in front of it.
 
-1) turn right if it had to turn right because of wall detection, or
-2) turn left otherwise. 
+The code used to implement this robot avoidance is shown below in the function fft_detect, called during intersections as well:
 
-Since our turning functions check for robots at the end of each turn, this process of checking for robots and turning will continue until no robot is detected, in which case the robot will drive straight. We decided to implement a single phototransistor circuit and will place blinders on either side of the phototransistor such that it sits at the vertex of a 45 degree angle. This will ensure that our robot is only capable of detecting robots in front of it.
+~~~c
+void fft_detect( int x ) {
+  cli();
 
-The code used to implement this robot avoidance is shown below:
-	(insert wall detection code but with IR stuff included)
+  for (int i = 0 ; i < 512 ; i += 2) {
+    fft_input[i] = analogRead(A5); // 
+    fft_input[i + 1] = 0;
+  }
 
-A demonstration of our robot avoiding other robots is shown in the following video:
-	(insert video of an IR signal causing our robot to turn)
+  fft_window();
+  fft_reorder();
+  fft_run();
+  fft_mag_log();
+  sei();
+
+// if 6kHz signal is detected
+
+  if (fft_log_out[26] > 60 || fft_log_out[25] > 60 || fft_log_out[27] > 60) {
+    stop_drive();
+    delay(2500);
+  }
+  else {
+    digitalWrite(6, LOW); //turn off indicator LED
+    drive_straight();
+  }
+}
+~~~
 
 ## Final System
 
@@ -96,8 +115,11 @@ In order to demonstrate what our robot is "thinking," we added three indicator L
 - Yellow: Right wall detected
 - Red: Other robot deteced
 
-A demonstration of the complete wall detection/robot avoidance system is shown in the following videos:
-	(insert video of complete system)
+A demonstration of the complete wall detection/robot avoidance system is shown in the following videos (two separate runs):
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/O-Vg5KvUeTA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/6OwpiuwGSlo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
