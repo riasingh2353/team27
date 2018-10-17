@@ -25,7 +25,7 @@ We used an IR sensor for our robot’s front wall detection, with output voltage
 
 In addition to the front wall detection, we added another Sharp GP2Y0A41SK0F IR sensor on the right side of our robot to accomplish right hand wall following. 
 
-After experimenting with different values, we decided to determine that a wall has been detected by setting a threshold reading of 100 (corresponding to 100*.0049 = .49 Volts) for the sensor: if the sensor output reads greater than 100, a wall has been detected. 
+After experimenting with different values, we decided to determine that a right wall has been detected by setting a threshold reading of 150 (corresponding to 150*.0049 = .735 Volts) for the sensor: if the sensor output reads greater than 150, a wall has been detected.
 
 The logic for wall following is as follows: 
 
@@ -41,7 +41,37 @@ Special case: If the robot was right-hand wall following and reaches an intersec
 
 ![Corner Case](./media/milestone2/cornercase.png/)
 
-We extended our line following code to include wall detection and right hand wall following, and chose to save processing time by only checking the wall sensors at intersections. 
+We extended our line following code to include wall detection and right hand wall following, and chose to save processing time by only checking the wall sensors at intersections. If our line sensors read that the robot is at an intersection, the wall detection code will take precedence over the line following code. The cases outlined above are shown in code below:
+
+~~~c
+
+if (right_wall_value >= 150) { 
+      if (front_wall_value > 150) { 
+        turn_left();
+      }
+      else { 
+        drive_straight();
+      }
+      wall_before = true;
+    }
+
+    if (right_wall_value < 150) { //no right wall
+      if (wall_before) {
+        turn_right();
+      }
+      else if (front_wall_value > 150) { // front wall
+        turn_left();
+      }
+      else {  //no front wall, check if need to turn right
+        drive_straight();
+      }
+      wall_before = false;
+    }
+   
+~~~
+
+The code will first check the right wall sensor such that right wall following takes precedence, and a right wall is indicated by a sensor reading below 150 based on experimental values. If both a front wall and right wall is detected, the robot will turn left, otherwise it will drive straight. If no right wall is detected, we must take into account the special case from above in which the robot was previously right hand following a wall but reaches an intersection and needs to turn to continue following that wall. This is accomplished in the code by using the boolean wall_before indicator, and setting it true when the robot was wall-following before the intersection. Otherwise, if only a front wall is detected, the robot will simply turn right, and if nothing is detected, the robot will drive straight.
+
 
 ## Avoiding Other Robots
 
