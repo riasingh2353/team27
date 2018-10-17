@@ -41,11 +41,33 @@ Special case: If the robot was right-hand wall following and reaches an intersec
 
 ![Corner Case](./media/milestone2/cornercase.png/)
 
+We extended our line following code to include wall detection and right hand wall following, and chose to save processing time by only checking the wall sensors at intersections. 
+
+## Avoiding Other Robots
+
+In order to detect other robots, we integrated our IR detection circuit from Lab 2 into our line following/wall detection system. We used one phototransistor, which will check if another robot is in front of our robot at intersections. If another robot is detected in front, then our robot will either:
+
+1) turn right if it had to turn right because of wall detection, or
+2) turn left otherwise. 
+
+Since our turning functions check for robots at the end of each turn, this process of checking for robots and turning will continue until no robot is detected, in which case the robot will drive straight. We decided to implement a single phototransistor circuit and will place blinders on either side of the phototransistor such that it sits at the vertex of a 45 degree angle. This will ensure that our robot is only capable of detecting robots in front of it.
+
+The code used to implement this robot avoidance is shown below:
+	(insert wall detection code but with IR stuff included)
+
+A demonstration of our robot avoiding other robots is shown in the following video:
+	(insert video of an IR signal causing our robot to turn)
+
+## Final System
+
+In order to demonstrate what our robot is "thinking," we added three indicator LEDs on top of our robot according to the following system:
+
+- Green: Front wall detected
+- Yellow: Right wall detected
+- Red: Other robot deteced
+
+A demonstration of the complete wall detection/robot avoidance system is shown in the following videos:
+	(insert video of complete system)
 
 
 
-## Final Integration
-
-The next part of milestone 2 required that wall detection be integrated with IR hat detection, such that the robot is able to react to the presence of other robots, which will be signified by the 6 kHz signal emitting from their IR hats. In order to demonstrate this functionality in our robot, we chose to make the robot stop driving for a set amount of time in order to let the other robot pass. We may improve upon this functionality at a later point as we discuss strategy more.
-
-In order to demonstrate what the robot is "thinking"
