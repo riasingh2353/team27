@@ -1,29 +1,33 @@
-# Milestone 1
+# Milestone 2
 [Home](./index.md)
 
 ## Goals
 
-The purpose of this milestone was to design a motion control system for our robot.
-
-The tasks we set out to complete included:
-  * Getting our robot to successfully follow a line
-  * Getting our robot to successfully traverse a grid in a figure eight.
+The purpose of this milestone was to enhance our robot's existing motion control system by applying our new hardware additions from Lab 2.  Specifically, the tasks we set out to complete included:
+  * Getting our robot to successfully circle an arbitrary set of walls, specifically through right-hand wall following
+  * Showing our robot successfully avoiding other robots (i.e. the IR-emitter 'hat' that is installed on each robot)
   
 Additionally, we focused on: 
-  * Developing a robust control system, and
-  * Getting our robot to complete these tasks at a reasonably high speed
+  * Optimizing our initial control algorithms to increase the robustness of the system
+  * General map-traversal speed of our robot
     
 ## Materials    
 
-The only materials used for this milestone that weren't used in lab one were 3 QTR-1A reflectance sensors ([datasheet here](https://www.pololu.com/product/958)). 
+In addition to the materials listed for Lab 2, we also implemented the Sharp GP2Y0A41SK0F IR sensor into our overall design, in order to accomplish wall detection and, ultimately, wall following.
 
-These sensors have three pins, VIN, GND, and OUT. Each sensor outputs a voltage at its OUT pin that corresponds with the lightness or darkness of the surface below it. 
+These sensors have three pins, VCC, GND, and VO (respectively Supply Voltage, Ground, and Output Voltage). Each sensor outputs a voltage at its VO pin that corresponds with the reflectiveness of the sensor's target.  Using this, our robot is able to measure the distance between itself and surrounding walls.
 
-In our setup, the OUT pin of each sensor is tied to a separate analog input of the Arduino Uno controlling our robot. As such, each of these analog inputs will read in a value between 0 and 1023 corresponding to the lightness or darkness of the area under it.
+## Sensor Implementation and Wall Detection
 
-## Line Following
+We used an IR sensor for our robot’s front wall detection, with output voltage vs. distance characteristic as shown below.
 
-We equipped our robot with two line sensors in its front, designed to be far enough apart to straddle a line of electrical tape (see image below). 
+![Distance vs. Voltage Chart](./media/IRChart.png)
+
+In addition to the front wall detection, we added another Sharp GP2Y0A41SK0F IR sensor on the right side of our robot to accomplish right hand wall following. 
+
+## Subject to Change:
+
+After experimenting with different values, we decided to determine that a wall has been detected by setting a threshold reading of 100 (corresponding to 100*.0049 = .49 Volts) for the sensor: if the sensor output reads greater than 100, a wall has been detected.  
 
 ![Front of Robot](./media/FRONTOFROBOT.jpg)
 
