@@ -101,7 +101,6 @@ void fft_detect( int x ) {
     delay(2500);
   }
   else {
-    digitalWrite(6, LOW); //turn off indicator LED
     drive_straight();
   }
 }
