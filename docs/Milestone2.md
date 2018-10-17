@@ -23,7 +23,7 @@ We used an IR sensor for our robot’s front wall detection, with output voltage
 
 ![Distance vs. Voltage Chart](./media/milestone2/sensorcharacteristics.png)
 
-In addition to the front wall detection, we added another Sharp GP2Y0A41SK0F IR sensor on the right side of our robot to accomplish right hand wall following. 
+In addition to the front wall detection, we added another Sharp GP2Y0A41SK0F IR sensor on the right side of our robot to accomplish right hand wall following (2 short range IR sensors, one on the front and one on the right of the robot). 
 
 After experimenting with different values, we decided to determine that a right wall has been detected by setting a threshold reading of 150 (corresponding to 150*.0049 = .735 Volts) for the sensor: if the sensor output reads greater than 150, a wall has been detected.
 
