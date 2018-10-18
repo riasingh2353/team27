@@ -15,7 +15,7 @@ Additionally, we focused on:
 
 In addition to the materials listed for Lab 2, we also implemented the Sharp GP2Y0A41SK0F IR sensor into our overall design, in order to accomplish wall detection and, ultimately, wall following.
 
-These sensors have three pins, VCC, GND, and VO (respectively Supply Voltage, Ground, and Output Voltage). Each sensor outputs a voltage at its VO pin that corresponds with the reflectiveness of the sensor's target.  Using this, our robot is able to measure the distance between itself and surrounding walls.
+These sensors have three pins; VCC, GND, and VO (respectively Supply Voltage, Ground, and Output Voltage). Each sensor outputs a voltage at its VO pin that corresponds with the reflectiveness of the sensor's target.  Using this, our robot is able to measure the distance between itself and surrounding walls.
 
 ## Sensor Implementation and Wall Detection
 
