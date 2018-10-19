@@ -6,3 +6,4 @@
 * [Milestone 1](./Milestone1.md)
 * [Lab 2](./lab2.md)
 * [Milestone 2](./Milestone2.md)
+* [Lab 3](./Lab3.md)
