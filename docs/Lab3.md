@@ -2,17 +2,10 @@
 # Lab 3 (Dummy)
 [Home](./index.md)
 
-Acoustic Subteam: Ben, Michael
-
-Optical Subteam: Felicia, Ria, Ian
-
 Materials:  
-  * Arduino Uno
-  * Electret Microphone
-  * IR Transistor (OP598)
-  * IR 'Hat'
-  * IR Decoy
-  * Various other components, as needed
+  * Arduino Uno (2)
+  * Nordic nRF24L01+ transceiver (2)
+  * 2 Breakout Boards w/ Headers
   
 The purpose of this lab is to implement new hardware that allows our robot to ‘see’ and interact with its surroundings to a greater extent.  These hardware additions include a microphone and an IR phototransistor and IR emitter ‘hat,’ which allows our robot to interpret audible and IR signal information and react accordingly.  When fully applied, our robot will have two additional functionalities that will assist us during our final project: the ability to start operation upon perceiving an audio signal at 660 Hz, and the ability to detect other robots outfitted with a similar IR emitter hat.
 
