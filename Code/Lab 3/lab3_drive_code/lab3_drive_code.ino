@@ -23,12 +23,16 @@ int fft_direction = 0; //0 is left, 1 is right
 void setup() {
   Serial.begin(9600);
   servoL.attach(3);
-  servoR.attach(9);
+  servoR.attach(5);
 
+  //Digital Output Pins
+  pinMode(1, OUTPUT); //Wall sensor mux select bit
   pinMode(2, OUTPUT); //FFT mux select bit
   pinMode(4, OUTPUT); //front wall detection
-  pinMode(5, OUTPUT); //right wall detection
+  
+  //LEDs:
   pinMode(6, OUTPUT); //robot detection
+  pinMode(7, OUTPUT); //right wall detection
 
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
   ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
@@ -47,7 +51,7 @@ void loop() {
     front_wall_value  = analogRead(A3);
     right_wall_value  = analogRead(A4);
     if (right_wall_value >= 150) { // *|
-      digitalWrite(5, HIGH);
+      digitalWrite(7, HIGH);
       if (front_wall_value > 150) { //-|
         digitalWrite(4, HIGH);
         turn_left();
@@ -61,7 +65,7 @@ void loop() {
     }
 
     if (right_wall_value < 150) { //no right wall
-      digitalWrite(5, LOW);
+      digitalWrite(7, LOW);
       if (wall_before) {
         turn_right();
       }
