@@ -1,12 +1,30 @@
+#include <nRF24L01.h>
+#include <RF24_config.h>
+#include <RF24.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <SPI.h>
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
+
 RF24 radio(9,10);
 //pipe addresses
 const uint64_t pipes[2] = { 0x0000000048LL, 0x0000000049LL };
 byte zero[3] = {0, 0, 0};
 byte data_before [3];
+int data_array[24];
+
+// Intialize strings to print
+String x = "0";
+String y = "1";
+String west;
+String east;
+String north;
+String south;
+String robot;
+
+
 void setup() {
   Serial.begin(57600);
   printf_begin();
@@ -59,43 +77,66 @@ void loop() {
         // Fetch the payload, and see if this was the last one.
         radio.read(&data,sizeof(data));
         if (data != zero){
+          printf("Reading data...\n\r");
            copy(data, data_before, 3);
+          //printf(data);
         }
         if (data == zero && data_before != zero){
           decipher();
         }
         // Spew it
-        printf("Got payload %lu...",data);
+        printf("Got payload %lu...\n\r",data);
         // Delay just a little bit to let the other unit
         // make the transition to receiver
         delay(20);
       }
     }
-}
-void decipher(){
-  byte data_array[23];
-  for (int i = 0; i<3; i++){
-    for (int j = 0; j<8; j++){
-      int x = i*j+j;
-      data_array[x] = bitRead(data_before[i], j);
-    }
-  }
-      char west; 
-      if (data_array[19]) {
-        char west_c = "west = true";
-        copy(west, west_c, sizeof(west_c));
-      }
-      else {
-        char west_c = "west = false";
-        copy(west, west_c, sizeof(west_c));
-      }
+    
+//Final output to serial
 
-   
-    }
-  }
-  
-  
+
+//  Serial.println(data_before[1]);
+//  for(int i=0; i<24;i++) {
+//    Serial.print(data_array[i]);
+//  }
+//  Serial.println("");
+// Serial.println(x+","+y+","+"north="+north+","+"east="+east+","+"south="+south+","+"west="+west+","+"robot="+robot);
+
 }
+
+void decipher(){
+  for (int i = 0; i<3; i++){
+    for (int j = 0; j < 8; j++){
+      int x = 8*i + j;
+      data_array[x] = int(bitRead(data_before[i], 7-j));
+      //Serial.println(x);
+      //Serial.print(data_array[x]);
+     }
+   }
+   //Serial.println("");
+//   for(int i = 0; i<24; i++)
+//   {
+//      Serial.print(data_array[i]);
+//   }
+//   Serial.println("");
+ 
+ if (data_array[1]==1) {robot = "true";}
+ else {robot = "false";}  
+   
+ if (data_array[4]==1) {north = "true";}
+ else {north = "false";}
+ 
+ if (data_array[5]==1) {east = "true";}
+ else {east = "false";}
+ 
+ if (data_array[6]==1) {south = "true";}  
+ else {south = "false";}
+ 
+ if (data_array[7]==1) {west = "true";}
+ else {west = "false";}
+ 
+}
+
 void copy(byte* src, byte* dst, int len) {
     memcpy(dst, src, sizeof(src[0])*len);
 }
