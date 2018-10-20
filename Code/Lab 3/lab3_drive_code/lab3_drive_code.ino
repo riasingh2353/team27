@@ -12,10 +12,15 @@ int          right_wall_value;    //store right wall sensor value
 int          left_wall_value;     //store left wall sensor value
 int change = 0;                  //reset temp variable noting change from white/black
 int line_threshold = 300;            //cutoff value b/w white and not white
+int wall_threshold = 150;         //NOT IMPLEMENTED EVERYWHERE. A wall exists if a 
+                                  //wall sensor detects a value above this
 bool turn_complete = true;
 int countdown = 3000;
 bool wall_before = false;
 bool start = 0;
+
+int dir = 1;                    //direction the robot is traveling in.
+                                //0 -> N; 1 -> E; 2 -> S; 3 -> W;
 
 int l = 0;
 int count = 0;
@@ -55,7 +60,7 @@ void loop() {
 
   if (sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) {
     Serial.println("Intersection!");
-    getWallValues();
+    get_wall_values();
     if (right_wall_value >= 150) { // *|
       digitalWrite(7, HIGH);
       if (front_wall_value > 150) { //-|
@@ -115,7 +120,7 @@ void loop() {
 //HELPER FUNCTIONS
 void check_wall() {
   delay(25);
-  getWallValues();
+  get_wall_values();
   if (right_wall_value >= 150) { // *|
     digitalWrite(5, HIGH);
     if (front_wall_value > 150) { //-|
@@ -150,7 +155,7 @@ void check_wall() {
 }
 
 void move_back() {
-  getWallValues();
+  get_wall_values();
   if (sensor_values[0] < line_threshold ) {
     veer_left();
   }
@@ -186,7 +191,7 @@ void veer_right() {
 }
 
 void turn_left() {
-  getWallValues();
+  get_wall_values();
   while (countdown > 0) {
     servoL.write(88);
     servoR.write(80);
@@ -207,7 +212,7 @@ void turn_left() {
 }
 
 void turn_right() {
-  getWallValues();
+  get_wall_values();
   while (countdown > 0) {
     servoL.write(100);
     servoR.write(92);
@@ -290,10 +295,81 @@ void fft_detect() {
 }
 
 //obtains front_wall_value, right_wall_value and left_wall_value
-void getWallValues() {
+void get_wall_values() {
   front_wall_value  = analogRead(A3);
   digitalWrite(1, LOW);
   right_wall_value  = analogRead(A4);
   digitalWrite(1, HIGH);
   left_wall_value   = analogRead(A4);
+}
+
+//packs information about a given intersection (presence of
+// /treasures at walls, direction, etc) into a 24-bit array
+// refer to github for encoding of this array
+//NOTE: get_wall_values() must be called beforehand
+byte[3] pack_intersection_info() {
+  byte[3] info = {0, 0, 0};   //stores maze info
+  info[0] = pack_bit_one(dir);
+  //implement code to find treasures once we install the camera.
+}
+
+//helper for pack_intersection_info()
+//takes the direction the robot is facing as an input
+//returns a byte in the following form:  [0|0|DIR|DIR|N|E|S|W]
+// where N,E,S, and W are 1 if walls exist in those directions, 0 o/w
+// DIR is a 2 bit value indicating the direction the robot is facing
+// 00 -> N; 01 -> E; 10 -> S; 11 -> W;
+
+byte pack_bit_one(int dir) {
+  byte info = 0;
+  int n = 0;
+  int e = 0;
+  int s = 0;
+  int w = 0;
+  int lwall = 0;
+  int rwall = 0;
+  int fwall = 0;
+      if (left_wall_value > wall_threshold) {
+        lwall = 1;
+      }
+      if (front_wall_value > wall_threshold) {
+        fwall = 1;
+      }
+      if (right_wall_value > wall_threshold) {
+        rwall = 1;
+      }
+  switch (dir) {
+    case 0; //ROBOT IS FACING NORTH
+      w = lwall;
+      n = fwall;
+      e = rwall;
+      //(i know i don't need to explicitly write zeros to locations
+      //initialized to be zero but it makes it more clear what is happening)
+      bitWrite(info, 4, 0);
+      bitWrite(info, 5, 0);
+    case 1: //ROBOT IS FACING EAST
+      n = lwall;
+      e = fwall;
+      s = rwall;
+      bitWrite(info, 4, 1);
+      bitWrite(info, 5, 0);
+    case 2: //ROBOT IS FACING SOUTH
+      e = lwall;
+      s = fwall;
+      w = rwall;
+      bitWrite(info, 4, 0);
+      bitWrite(info, 5, 1);
+    case 3: //ROBOT IS FACING WEST
+      s = lwall;
+      w = fwall;
+      n = rwall;
+      bitWrite(info, 4, 1);
+      bitWrite(info, 5, 1);
+    }
+  bitWrite(info, 0, w);
+  bitWrite(info, 1, s);
+  bitWrite(info, 2, e);
+  bitWrite(info, 3, n);
+  return info;
+}
 }
