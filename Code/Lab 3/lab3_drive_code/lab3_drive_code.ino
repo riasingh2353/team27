@@ -9,6 +9,7 @@ Servo servoR;
 unsigned int sensor_values[3];   //store sensor values
 int          front_wall_value;         //store front wall sensor value
 int          right_wall_value;    //store right wall sensor value
+int          left_wall_value;     //store left wall sensor value
 int change = 0;                  //reset temp variable noting change from white/black
 int line_threshold = 300;            //cutoff value b/w white and not white
 bool turn_complete = true;
@@ -27,6 +28,7 @@ void setup() {
 
   //Digital Output Pins
   pinMode(1, OUTPUT); //Wall sensor mux select bit
+                      //LOW reads right sensor, HIGH reads left sensor
   pinMode(2, OUTPUT); //FFT mux select bit
   pinMode(4, OUTPUT); //front wall detection
   
@@ -48,8 +50,7 @@ void loop() {
 
   if (sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) {
     Serial.println("Intersection!");
-    front_wall_value  = analogRead(A3);
-    right_wall_value  = analogRead(A4);
+    getWallValues();
     if (right_wall_value >= 150) { // *|
       digitalWrite(7, HIGH);
       if (front_wall_value > 150) { //-|
@@ -109,8 +110,7 @@ void loop() {
 //HELPER FUNCTIONS
 void check_wall() {
   delay(25);
-  front_wall_value  = analogRead(A3);
-  right_wall_value  = analogRead(A4);
+  getWallValues();
   if (right_wall_value >= 150) { // *|
     digitalWrite(5, HIGH);
     if (front_wall_value > 150) { //-|
@@ -145,8 +145,7 @@ void check_wall() {
 }
 
 void move_back() {
-  front_wall_value  = analogRead(A3);
-  right_wall_value  = analogRead(A4);
+  getWallValues();
   if (sensor_values[0] < line_threshold ) {
     veer_left();
   }
@@ -182,8 +181,7 @@ void veer_right() {
 }
 
 void turn_left() {
-  front_wall_value  = analogRead(A3);
-  right_wall_value  = analogRead(A4);
+  getWallValues();
   while (countdown > 0) {
     servoL.write(88);
     servoR.write(80);
@@ -204,8 +202,7 @@ void turn_left() {
 }
 
 void turn_right() {
-  front_wall_value  = analogRead(A3);
-  right_wall_value  = analogRead(A4);
+  getWallValues();
   while (countdown > 0) {
     servoL.write(100);
     servoR.write(92);
@@ -284,4 +281,13 @@ void fft_detect( int x ) {
     }
   }
   }
+}
+
+//obtains front_wall_value, right_wall_value and left_wall_value
+void getWallValues() {
+  front_wall_value  = analogRead(A3);
+  digitalWrite(1, LOW);
+  right_wall_value  = analogRead(A4);
+  digitalWrite(1, HIGH);
+  left_wall_value   = analogRead(A4);
 }
