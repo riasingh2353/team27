@@ -30,6 +30,7 @@ void setup() {
   pinMode(1, OUTPUT); //Wall sensor mux select bit
                       //LOW reads right sensor, HIGH reads left sensor
   pinMode(2, OUTPUT); //FFT mux select bit
+                      //LOW reads microphone, HIGH reads IR circuit
   pinMode(4, OUTPUT); //front wall detection
   
   //LEDs:
@@ -47,6 +48,10 @@ void loop() {
   sensor_values[0] = analogRead(A0); //left line sensor
   sensor_values[1] = analogRead(A1); //right line sensor
   sensor_values[2] = analogRead(A2); //rear line sensor
+
+  while (start == 0) {
+    fft_detect();
+  }
 
   if (sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) {
     Serial.println("Intersection!");
@@ -237,7 +242,9 @@ void stop_drive() {
   sensor_values[2] = analogRead(A2);
 }
 
-void fft_detect( int x ) {
+
+//detect fft signal
+void fft_detect() {
   cli();
 
   for (int i = 0 ; i < 512 ; i += 2) {
@@ -270,13 +277,12 @@ void fft_detect( int x ) {
     if (fft_log_out[26] > 60 || fft_log_out[25] > 60 || fft_log_out[27] > 60) {
       Serial.println("6KHz !!!!!");
       stop_drive();
-      digitalWrite(6, HIGH); //turn on indicator LED
+      //digitalWrite(6, HIGH); //turn on indicator LED
       delay(2500);
-      //if (x) turn_right();
       //else turn_left();
     }
     else {
-      digitalWrite(6, LOW); //turn off indicator LED
+      //digitalWrite(6, LOW); //turn off indicator LED
       drive_straight();
     }
   }
