@@ -21,6 +21,8 @@ bool start = 0;
 
 int dir = 1;                    //direction the robot is traveling in.
                                 //0 -> N; 1 -> E; 2 -> S; 3 -> W;
+                                //We assume the robot starts in the northwest corner
+                                // traveling east by default
 
 int l = 0;
 int count = 0;
@@ -206,9 +208,10 @@ void turn_left() {
     sensor_values[2] = analogRead(A2);//delay(500);
   }
   countdown = 3000;
-  
+  update_direction(dir, 1);
   fft_detect(0);
   check_wall();
+  
 }
 
 void turn_right() {
@@ -226,9 +229,10 @@ void turn_right() {
     sensor_values[2] = analogRead(A2);
   }
   countdown = 3000;
-
+  update_direction(dir, 0);
   fft_detect(1);
   check_wall();
+  
 }
 
 void drive_straight() {
