@@ -314,13 +314,13 @@ byte[3] pack_intersection_info() {
 }
 
 //helper for pack_intersection_info()
-//takes the direction the robot is facing as an input
+//takes the direction the robot is facing as an input (pass global dir var to this function)
 //returns a byte in the following form:  [0|0|DIR|DIR|N|E|S|W]
 // where N,E,S, and W are 1 if walls exist in those directions, 0 o/w
 // DIR is a 2 bit value indicating the direction the robot is facing
 // 00 -> N; 01 -> E; 10 -> S; 11 -> W;
 
-byte pack_bit_one(int dir) {
+byte pack_bit_one(int facing) {
   byte info = 0;
   int n = 0;
   int e = 0;
@@ -338,7 +338,7 @@ byte pack_bit_one(int dir) {
       if (right_wall_value > wall_threshold) {
         rwall = 1;
       }
-  switch (dir) {
+  switch (facing) {
     case 0; //ROBOT IS FACING NORTH
       w = lwall;
       n = fwall;
@@ -371,5 +371,41 @@ byte pack_bit_one(int dir) {
   bitWrite(info, 2, e);
   bitWrite(info, 3, n);
   return info;
+}
+
+//call this after a turn to update global dir (direction) variable.
+//takes as input the direction the robot is facing (pass global dir var),
+//and the direction the robot is turning (0 -> Right turn, 1-> left turn)
+void update_direction(int facing, int turn_dir) {
+  switch (facing) {
+    case 0; //ROBOT IS FACING NORTH
+        if (turn_dir == 0) { // if robot is turning right
+          dir = 1;
+        }
+        else {               // if robot is turning left
+          dir = 3;
+        }
+    case 1: //ROBOT IS FACING EAST
+        if (turn_dir == 0) { // if robot is turning right
+          dir = 2;
+        }
+        else {               // if robot is turning left
+          dir = 0;
+        }
+    case 2: //ROBOT IS FACING SOUTH
+        if (turn_dir == 0) { // if robot is turning right
+          dir = 3;
+        }
+        else {               // if robot is turning left
+          dir = 1;
+        }
+    case 3: //ROBOT IS FACING WEST
+        if (turn_dir == 0) { // if robot is turning right
+          dir = 0;
+        }
+        else {               // if robot is turning left
+          dir = 2;
+        }
+    }
 }
 }
