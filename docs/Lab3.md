@@ -33,7 +33,7 @@ Since the maximum payload for the transceivers is 32 bytes, we decided to choose
 SHOW DIAGRAM OF ENCODING SCHEME
 
 
-
+## ADD STUFF ABOUT TRANSMIT AND RECEIVE CODE
 
 A video of the maze simulation and GUI updating is shown below:
 
