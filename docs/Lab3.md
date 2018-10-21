@@ -22,7 +22,7 @@ The first task of this lab was to ensure the functionality of the RF24 transceiv
 
 SHOW SCREENSHOTS OF SERIAL PRINTOUTS FOR GETTING STARTED SKETCH
 
-## Encoding the Maze:
+## Encoding the Maze and Updating the GUI:
 
 The maze we chose to simulate for the first part of this lab is a 4x3 maze shown below:
 
@@ -34,6 +34,20 @@ SHOW DIAGRAM OF ENCODING SCHEME
 
 The data structure which we chose to encode our maze information is a 3 byte array. 
 
+A video of the 
+
 ## Robot Detection
 
-The second part of this lab is to integrate the microphone circuit in order to detect the starting 660 Hz tone that was built in Lab 2. This circuit was implemented using a multiplexer to switch between the 
+The second part of this lab is to integrate the microphone circuit in order to detect the starting 660 Hz tone that was built in Lab 2. This circuit was implemented using a multiplexer to switch between the optical and audio circuits on order to save on analog pins beng used. The select bit starts low until the tone is heard, and then the select bit is switched high for the rest of the time to accomplish robot detection. The modifications to the FFT detection code are shown below and the code to start on the 660 Hz tone is shown below:
+
+SHOW FFT CODE 
+
+A video of the robot starting on the 660 Hz tone is shown below:
+
+SHOW VIDEO OF ROBOT STARTING ON 660 HZ TONE
+
+In order to improve upon wall detection from Milestone 2, we decided to add a third wall sensor to the left side of the robot. Not only would this improve turning and decision making at intersections, but it reduces the number of turns needed in a square in order to map all sides. We also used a multiplexer to switch between the analog outputs of the three wall sensors, accounting for the fact that this switching between select bits occurs on the scale of nanoseconds, and shouldn't slow down our processing speed too much. This modified code is shown below:
+
+SHOW WALL SENSOR CODE
+
+
