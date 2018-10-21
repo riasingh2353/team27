@@ -28,11 +28,10 @@ The maze we chose to simulate for the first part of this lab is a 4x3 maze shown
 
 SHOW DIAGRAM OF MAZE
 
-Since the maximum payload for the transceivers is 32 bytes, we decided to choose a 3 byte encoding scheme that is efficient but not too restrictive such that the base station would have to infer a lot of information. A diagram of the encoding scheme is shown below:
+Since the maximum payload for the transceivers is 32 bytes, we decided to choose a 3 byte encoding scheme that is efficient but not too restrictive such that the base station would have to infer a lot of information. The data structure we chose to contain this information in is a byte array, since the first byte is related specifically to wall information and the last two bytes are related to treasure information. A diagram of the encoding scheme is shown below:
 
 SHOW DIAGRAM OF ENCODING SCHEME
 
-The data structure which we chose to encode our maze information is a 3 byte array. In order to transmit information between 
 
 
 
