@@ -1,5 +1,3 @@
-//this version of the drive_code utilizes the left wall sensor in its intersection turn logic.
-
 #include <Servo.h>
 
 #define LOG_OUT 1 // use the log output function
@@ -46,6 +44,7 @@ void setup() {
   pinMode(4, OUTPUT); //front wall detection
   pinMode(6, OUTPUT); //robot detection
   pinMode(7, OUTPUT); //right wall detection
+  pinMode(8, OUTPUT); //left wall detection
 
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
   ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
@@ -104,7 +103,7 @@ void check_wall() {
     }
     else { // |
       digitalWrite(4, LOW);
-      fft_detect(0); //check if need to turn left
+      fft_detect(); //check if need to turn left
       drive_straight();
     }
   }
@@ -121,7 +120,7 @@ void check_wall() {
       turn_left();
     }
     else {
-      fft_detect(1);
+      fft_detect();
       drive_straight();
     }             //no front wall, check if need to turn right
     digitalWrite(4, LOW);
@@ -181,7 +180,7 @@ void turn_left() {
   }
   countdown = 3000;
   update_direction(dir, 1);
-  fft_detect(0);
+  fft_detect();
   check_wall();
   
 }
@@ -202,7 +201,7 @@ void turn_right() {
   }
   countdown = 3000;
   update_direction(dir, 0);
-  fft_detect(1);
+  fft_detect();
   check_wall();
   
 }
@@ -238,22 +237,21 @@ void fft_detect() {
   fft_run();
   fft_mag_log();
   sei();
-  
-     if (fft_log_out[3] > 70){
-          l = l + 1;
-        }
-        else {
-          l = 0;
-        }
-       if (l >= 10) {
-         count = count + 1;
-         start = 1;
-         drive_straight();
-         digitalWrite(2, HIGH);  //flip select bit
-         //Serial.println("660 HURTS !!!!!");
-        }
+    if (!start) {
+      if (fft_log_out[3] > 70){
+        l = l + 1;
       }
-  
+      else {
+        l = 0;
+      }
+     if (l >= 10) {
+       count = count + 1;
+       start = 1;
+       drive_straight();
+       digitalWrite(2, HIGH);  //flip select bit
+       //Serial.println("660 HURTS !!!!!");
+      }
+    }
   if (start) {
     if (fft_log_out[26] > 60 || fft_log_out[25] > 60 || fft_log_out[27] > 60) {
       Serial.println("6KHz !!!!!");
@@ -267,25 +265,34 @@ void fft_detect() {
       drive_straight();
     }
   }
-  }
 }
 
 //obtains front_wall_value, right_wall_value and left_wall_value
 void get_wall_values() {
   front_wall_value  = analogRead(A3);
-  digitalWrite(1, LOW);
+  digitalWrite(1, LOW);//set wall sensor select bit to read right wall sensor
   right_wall_value  = analogRead(A4);
-  digitalWrite(1, HIGH);
+  digitalWrite(1, HIGH);//set wall sensor select bit to read left wall sensor
   left_wall_value   = analogRead(A4);
+  
+  //set wall sensor indicator LEDs
+  if(front_wall_value > wall_threshold) digitalWrite(4, HIGH);
+  else digitalWrite(4, LOW);
+  if(right_wall_value > wall_threshold) digitalWrite(7, HIGH);
+  else digitalWrite(7, LOW);
+  if(left_wall_value > wall_threshold) digitalWrite(8, HIGH);
+  else digitalWrite(8, LOW);
 }
 
 //packs information about a given intersection (presence of
 // /treasures at walls, direction, etc) into a 24-bit array
 // refer to github for encoding of this array
 //NOTE: get_wall_values() must be called beforehand
-byte[3] pack_intersection_info() {
-  byte[3] info = {0, 0, 0};   //stores maze info
+
+byte *pack_intersection_info() {
+  static byte[3] info = {0, 0, 0};   //stores maze info
   info[0] = pack_bit_one(dir);
+  return info;
   //implement code to find treasures once we install the camera.
 }
 
@@ -315,7 +322,7 @@ byte pack_bit_one(int facing) {
         rwall = 1;
       }
   switch (facing) {
-    case 0; //ROBOT IS FACING NORTH
+    case 0: //ROBOT IS FACING NORTH
       w = lwall;
       n = fwall;
       e = rwall;
@@ -354,7 +361,7 @@ byte pack_bit_one(int facing) {
 //and the direction the robot is turning (0 -> Right turn, 1-> left turn)
 void update_direction(int facing, int turn_dir) {
   switch (facing) {
-    case 0; //ROBOT IS FACING NORTH
+    case 0: //ROBOT IS FACING NORTH
         if (turn_dir == 0) { // if robot is turning right
           dir = 1;
         }
@@ -389,6 +396,8 @@ void update_direction(int facing, int turn_dir) {
 //whether to turn or drive straight. Also sets wall_before to appropriate values
 void intersection() {
   get_wall_values();
+  
+  //determine whether to turn
   if(front_wall_value > wall_threshold) {
     if (right_wall_value > wall_threshold && left_wall_value > wall_threshold) { //WALLS ON ALL SIDES
       turn_right();
@@ -412,7 +421,7 @@ void intersection() {
     turn_right();
     wall_before = false;
   }
-  else() {//default case -- occurs when there is no wall, or wall only on right/left side
+  else {//default case -- occurs when there is no wall, or wall only on right/left side
     drive_straight();
     if(right_wall_value > wall_threshold) {
       wall_before = true;
