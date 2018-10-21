@@ -13,22 +13,21 @@ The purpose of this lab is to integrate the individual components completed in t
 
  * Have the robot navigate a small maze and map the maze by wirelessly communicating to a base station
  * Integrate the microphone circuit from Lab 2 to start the robot on a 660 Hz tone
- * Successfully avoiding other robots and ignoring decoys
-
+ * Successfully avoiding other robots while ignoring decoys
 
 ## Testing the Radios:
 
-The first task of this lab was to ensure the functionality of the RF24 transceivers- this was done by running the provided Getting Started sketch to check that the transceivers would be able to communicate a timestamp between each other and print it to the Serial. The Serial printouts demonstrating the functionality of these transceivers are shown below:
+We began ensuring the functionality of the RF24 transceivers by running the provided Getting Started sketch.  This sketch ensures that the transceivers are able to pass a timestamp to each other and print it to the Serial Monitor. These sample printouts are shown below.
 
 SHOW SCREENSHOTS OF SERIAL PRINTOUTS FOR GETTING STARTED SKETCH
 
 ## Encoding the Maze and Updating the GUI:
 
-The maze we chose to simulate for the first part of this lab is a 4x3 maze shown below:
+We created the below 4X3 maze to demonstrate our robot's new capabilities:
 
-SHOW DIAGRAM OF MAZE
+SHOW DIAGRAM OF MAZE/PHOTO OF MAZE
 
-Since the maximum payload for the transceivers is 32 bytes, we decided to choose a 3 byte encoding scheme that is efficient but not too restrictive such that the base station would have to infer a lot of information. The data structure we chose to contain this information in is a byte array, since the first byte is related specifically to wall information and the last two bytes are related to treasure information. A diagram of the encoding scheme is shown below:
+Since the maximum payload for the transceivers is 32 bytes, we decided that a 3 byte encoding scheme would be efficient without restricting the base station's ability to interpret and process accurate information. We decided to package our information payload in a byte array, since the first byte is related specifically to wall information, while the last two bytes will be related to treasure information. A diagram of the encoding scheme of the first byte is shown below:
 
 SHOW DIAGRAM OF ENCODING SCHEME
 
