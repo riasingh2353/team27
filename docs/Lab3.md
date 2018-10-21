@@ -39,11 +39,41 @@ A video of the maze simulation and GUI updating is shown below:
 
 SHOW VIDEO OF GUI UPDATING
 
-## Robot Detection
+## Audio Detection and Robot Activation
 
-The second part of this lab is to integrate the microphone circuit in order to detect the starting 660 Hz tone that was built in Lab 2. This circuit was implemented using a multiplexer to switch between the optical and audio circuits on order to save on analog pins beng used. The select bit starts low until the tone is heard, and then the select bit is switched high for the rest of the time to accomplish robot detection. The modifications to the FFT detection code are shown below and the code to start on the 660 Hz tone is shown below:
+The second part of this lab was to integrate the microphone circuit that was built in Lab 2.  The purpose of this circuit, as expressed in the past, is to detect a 660 Hz tone and susequently activate the robot.  We implemented this circuit using a multiplexer to switch between the optical and audio circuits in order to save on analog pins beng used. The select bit starts low until the tone is heard, and then the select bit is switched high for the rest of the time to accomplish robot detection. The modifications to the FFT detection code are shown below and the code to start on the 660 Hz tone is shown below:
 
-SHOW FFT CODE 
+~~~c
+void fft_detect() {
+      cli();
+    
+      for (int i = 0 ; i < 512 ; i += 2) {
+        fft_input[i] = analogRead(A5); // <-- NOTE THIS LINE
+        fft_input[i + 1] = 0;
+      }
+    
+      fft_window();
+      fft_reorder();
+      fft_run();
+      fft_mag_log();
+      sei();
+        if (!start) {
+          if (fft_log_out[3] > 70){
+            l = l + 1;
+          }
+          else {
+            l = 0;
+          }
+         if (l >= 10) {
+           start = 1;
+           drive_straight();
+           digitalWrite(2, HIGH);  //flip select bit
+           //Serial.println("660 HURTS !!!!!");
+          }
+}
+~~~
+
+        
 
 A video of the robot starting on the 660 Hz tone is shown below:
 
