@@ -32,9 +32,12 @@ Since the maximum payload for the transceivers is 32 bytes, we decided to choose
 
 SHOW DIAGRAM OF ENCODING SCHEME
 
-The data structure which we chose to encode our maze information is a 3 byte array. 
+The data structure which we chose to encode our maze information is a 3 byte array.
 
-A video of the 
+
+A video of the maze simulation and GUI updating is shown below:
+
+SHOW VIDEO OF GUI UPDATING
 
 ## Robot Detection
 
