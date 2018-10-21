@@ -94,6 +94,7 @@ void loop() {
   if (sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) { //INTERSECTION
     Serial.println("Intersection!");
     intersection();
+    radio_transmit_sim();
   } 
   //Case:s traveling along line --> drive straight
   else if (sensor_values[0] > line_threshold && sensor_values[1] > line_threshold ) {
@@ -365,7 +366,7 @@ void loop() {
     // refer to github for encoding of this array
     //NOTE: get_wall_values() must be called beforehand
 
-    void radio_transmit_sim(byte *info) {//maybe issues with the way info is referenced
+    void radio_transmit_sim() {
       // First, stop listening so we can talk.
       byte info[3] = {0, 0, 0};   //stores maze info.
       info[0] = pack_bit_one(dir);
