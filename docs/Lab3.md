@@ -29,7 +29,7 @@ SHOW DIAGRAM OF MAZE/PHOTO OF MAZE
 
 Since the maximum payload for the transceivers is 32 bytes, we decided that a 3 byte encoding scheme would be efficient without restricting the base station's ability to interpret and process accurate information. We decided to package our information payload in a byte array, since the first byte is related specifically to wall information, while the last two bytes will be related to treasure information. A diagram of the encoding scheme of the first byte is shown below:
 
-SHOW DIAGRAM OF ENCODING SCHEME
+![Byte 0 Bitmap](./media/lab3/BitMap.PNG)
 
 
 ## ADD STUFF ABOUT TRANSMIT AND RECEIVE CODE
