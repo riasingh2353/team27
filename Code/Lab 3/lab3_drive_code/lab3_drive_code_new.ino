@@ -46,15 +46,11 @@ void setup() {
   servoR.attach(5);
 
   //Digital Output Pins
-  pinMode(1, OUTPUT); //Wall sensor mux select bit
-  //LOW reads right sensor, HIGH reads left sensor
-  pinMode(2, OUTPUT); //FFT mux select bit
-  //LOW reads microphone, HIGH reads IR circuit
-  //LEDs:
-  pinMode(4, OUTPUT); //front wall detection
-  pinMode(6, OUTPUT); //robot detection
-  pinMode(7, OUTPUT); //right wall detection
-  pinMode(8, OUTPUT); //left wall detection
+  pinMode(6, OUTPUT); //Wall sensor mux select bit
+                      //LOW reads right sensor, HIGH reads left sensor
+  pinMode(7, OUTPUT); //FFT mux select bit
+                      //LOW reads microphone, HIGH reads IR circuit
+    digitalWrite(7, LOW);
 
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
   ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
@@ -197,27 +193,27 @@ void loop() {
       delay(25);
       get_wall_values();
       if (right_wall_value >= 150) { // *|
-        digitalWrite(5, HIGH);
+        //digitalWrite(5, HIGH);
         if (front_wall_value > 150) { //-|
-          digitalWrite(4, HIGH);
+          //digitalWrite(4, HIGH);
           move_back();
           turn_left();
         }
         else { // |
-          digitalWrite(4, LOW);
+          //digitalWrite(4, LOW);
           fft_detect(); //check if need to turn left
           drive_straight();
         }
       }
     
       if (right_wall_value < 150) { //no right wall
-        digitalWrite(5, LOW);
+        //digitalWrite(5, LOW);
         if (wall_before) {
           move_back();
           turn_right();
         }
         else if (front_wall_value > 150) { // front wall
-          digitalWrite(4, HIGH);
+          //digitalWrite(4, HIGH);
           move_back();
           turn_left();
         }
@@ -225,7 +221,7 @@ void loop() {
           fft_detect();
           drive_straight();
         }             //no front wall, check if need to turn right
-        digitalWrite(4, LOW);
+        //digitalWrite(4, LOW);
       }
     }
     
@@ -256,11 +252,12 @@ void loop() {
     //also writes to wall detection indicator LEDs
     void get_wall_values() {
       front_wall_value  = analogRead(A3);
-      digitalWrite(1, LOW);//set wall sensor select bit to read right wall sensor
+      digitalWrite(6, LOW);//set wall sensor select bit to read right wall sensor
       right_wall_value  = analogRead(A4);
-      digitalWrite(1, HIGH);//set wall sensor select bit to read left wall sensor
+      digitalWrite(6, HIGH);//set wall sensor select bit to read left wall sensor
       left_wall_value   = analogRead(A4);
       
+      /*
       //set wall sensor indicator LEDs
       if(front_wall_value > wall_threshold) digitalWrite(4, HIGH);
       else digitalWrite(4, LOW);
@@ -268,6 +265,7 @@ void loop() {
       else digitalWrite(7, LOW);
       if(left_wall_value > wall_threshold) digitalWrite(8, HIGH);
       else digitalWrite(8, LOW);
+      */
     }
     
     //obtains left, right, and rear wall sensor values
@@ -645,7 +643,7 @@ void fft_detect() {
          if (l >= 10) {
            start = 1;
            drive_straight();
-           digitalWrite(2, HIGH);  //flip select bit
+           digitalWrite(7, HIGH);  //flip select bit
            //Serial.println("660 HURTS !!!!!");
           }
         }
