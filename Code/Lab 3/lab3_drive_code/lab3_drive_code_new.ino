@@ -9,7 +9,7 @@
 #include "RF24.h"
 #include "printf.h"
 
-Servo servoL;                     //instantiate servos
+Servo servoL;                    //instantiate servos
 Servo servoR;
 unsigned int sensor_values[3];   //store sensor values
                                  //sensor_values[0] -> left sensor; sensor_values[1] -> right sensor;
@@ -18,7 +18,8 @@ int          front_wall_value;   //store front wall sensor value
 int          right_wall_value;   //store right wall sensor value
 int          left_wall_value;    //store left wall sensor value
 
-int line_threshold = 300;        //cutoff value b/w white and not white
+int line_threshold = 300;        //cutoff value b/w white and not white. white surfaces correspond with
+                                 //values above this threshold, black with values below.
 int wall_threshold = 150;        //A wall exists if a wall sensor reads a value greater than this threshold
 
 int countdown = 3000;
