@@ -323,7 +323,8 @@ void loop() {
       
       //determine whether to turn
       if(front_wall_value > wall_threshold) {
-        if (right_wall_value > wall_threshold && left_wall_value > wall_threshold) { //WALLS ON ALL SIDES
+        if (right_wall_value > wall_threshold && left_wall_value > wall_threshold) {
+          //NEED A TURN 180• function
           turn_right();
           turn_right();
           wall_before = true;
