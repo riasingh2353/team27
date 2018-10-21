@@ -32,7 +32,8 @@ Since the maximum payload for the transceivers is 32 bytes, we decided to choose
 
 SHOW DIAGRAM OF ENCODING SCHEME
 
-The data structure which we chose to encode our maze information is a 3 byte array.
+The data structure which we chose to encode our maze information is a 3 byte array. In order to transmit information between 
+
 
 
 A video of the maze simulation and GUI updating is shown below:
@@ -48,6 +49,10 @@ SHOW FFT CODE
 A video of the robot starting on the 660 Hz tone is shown below:
 
 SHOW VIDEO OF ROBOT STARTING ON 660 HZ TONE
+
+Moreover, in order to encode the maze information using the encoding scheme detailed above, information is recorded by reading the wall sensors and updating the byte array using the built-in Arduino functions relating to the byte type. The transmitting code from the robot is shown below:
+
+SHOW CODE FOR TRANSMITTING INFO FROM ROBOT TO BASE STATION
 
 In order to improve upon wall detection from Milestone 2, we decided to add a third wall sensor to the left side of the robot. Not only would this improve turning and decision making at intersections, but it reduces the number of turns needed in a square in order to map all sides. We also used a multiplexer to switch between the analog outputs of the three wall sensors, accounting for the fact that this switching between select bits occurs on the scale of nanoseconds, and shouldn't slow down our processing speed too much. This modified code is shown below:
 
