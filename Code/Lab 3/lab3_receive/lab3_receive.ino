@@ -101,12 +101,6 @@ void decipher() {
 
    Serial.println(ystring+","+xstring+","+"north="+north+","+"east="+east+","+"south="+south+","+"west="+west+","+"robot="+robot);
 
-   if ( x == 1 && y == 2) {
-    Serial.println("reset");
-    x=0;
-    y=0; 
-   }
-   
    if (data_array[2] == 0) {
      if (data_array[3] == 0) { facing = 0; }
      else { facing = 1; }
