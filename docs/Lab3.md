@@ -31,6 +31,7 @@ Since the maximum payload for the transceivers is 32 bytes, we decided that a 3 
 
 ![Byte 0 Bitmap](./media/lab3/BitMap.PNG)
 
+These payloads are transferred each time the robot enters a new square, and stored on the base station in a 9X9 2D array.  Despite the actual starting location of the robot, the GUI is updated and information is handled such that the robot begins in the 'Northwest' corner of the map, facing 'East'.  It is understood that the directions are ordinal, and do not have any relation to the Cardinal directions of the same names.
 
 ## ADD STUFF ABOUT TRANSMIT AND RECEIVE CODE
 
