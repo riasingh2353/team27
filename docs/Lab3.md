@@ -50,4 +50,12 @@ In order to improve upon wall detection from Milestone 2, we decided to add a th
 
 SHOW WALL SENSOR CODE
 
+A video of our robot navigating the test maze is shown below. The robot successfully stops upon detecting another robot and ignores decoys:
+
+SHOW VID
+
+A video of the robot wirelessly communicating the maze information to the base station and updating the GUI is shown below: 
+
+SHOW VID
+
 
