@@ -354,207 +354,56 @@ void loop() {
         }
       }
     }
-<<<<<<< HEAD
-  }
-}
-
-////////////////////////////////////////
-//RADIO TRANSMISSION HELPER FUNCTIONS://
-////////////////////////////////////////
-
-//packs information about a given intersection (presence of walls,
-//treasures at walls, direction, etc) into a 24-bit array
-//then sends this array to the base station
-// refer to github for encoding of this array
-//NOTE: get_wall_values() must be called beforehand
-
-void radio_transmit_sim(byte *info) {//maybe issues with the way info is referenced
-  // First, stop listening so we can talk.
-  byte info[3] = {0, 0, 0};   //stores maze info.
-  info[0] = pack_bit_one(dir);
-  radio.stopListening();
-  // NOTE: the maze array is defined here
-  // Send the maze in a single payload
-  printf(count);
-  if (role == role_ping_out) {
-    // First, stop listening so we can talk.
-    radio.stopListening();
-
-    // NOTE: the maze array is defined here
-
-    // Send the maze in a single payload
-    printf("Sending\n");
-    bool ok = radio.write( info, sizeof(info) );
-
-    if (ok) {
-      printf("ok, sending. \n");
-      for (int i = 0; i < 3; i++) {
-      //  Serial.println(transmit[i],BIN);
-      }
-      printf(count);
-    }
-    else {
-      printf("failed.\n\r");
-      for (int i = 0; i < 3; i++) {
-      //  Serial.println(transmit[i]);
-      }
-    }
-    delay(1000); //give time for other end to receive
-  }
-}
-
-void copy(byte* src, byte* dst, int len) {
-  memcpy(dst, src, sizeof(src[0])*len);
-}
-
-//helper for send_intersection_info()
-//takes the direction the robot is facing as an input (pass global dir var to this function)
-//returns a byte in the following form:  [0|0|DIR|DIR|N|E|S|W]
-// where N,E,S, and W are 1 if walls exist in those directions, 0 o/w
-// DIR is a 2 bit value indicating the direction the robot is facing
-// 00 -> N; 01 -> E; 10 -> S; 11 -> W;
-byte pack_bit_one(int facing) {
-  byte info = 0;
-  int n = 0;
-  int e = 0;
-  int s = 0;
-  int w = 0;
-  int lwall = 0;
-  int rwall = 0;
-  int fwall = 0;
-  if (left_wall_value > wall_threshold) {
-    lwall = 1;
-  }
-  if (front_wall_value > wall_threshold) {
-    fwall = 1;
-  }
-  if (right_wall_value > wall_threshold) {
-    rwall = 1;
-  }
-  switch (facing) {
-    case 0: //ROBOT IS FACING NORTH
-      w = lwall;
-      n = fwall;
-      e = rwall;
-      //(i know i don't need to explicitly write zeros to locations
-      //initialized to be zero but it makes it more clear what is happening)
-      bitWrite(info, 4, 0);
-      bitWrite(info, 5, 0);
-    case 1: //ROBOT IS FACING EAST
-      n = lwall;
-      e = fwall;
-      s = rwall;
-      bitWrite(info, 4, 1);
-      bitWrite(info, 5, 0);
-    case 2: //ROBOT IS FACING SOUTH
-      e = lwall;
-      s = fwall;
-      w = rwall;
-      bitWrite(info, 4, 0);
-      bitWrite(info, 5, 1);
-    case 3: //ROBOT IS FACING WEST
-      s = lwall;
-      w = fwall;
-      n = rwall;
-      bitWrite(info, 4, 1);
-      bitWrite(info, 5, 1);
-  }
-  bitWrite(info, 0, w);
-  bitWrite(info, 1, s);
-  bitWrite(info, 2, e);
-  bitWrite(info, 3, n);
-  return info;
-}
-////////
-//MISC//
-////////
-
-
-//detect fft signal
-void fft_detect() {
-  cli();
-
-  for (int i = 0 ; i < 512 ; i += 2) {
-    fft_input[i] = analogRead(A5); // <-- NOTE THIS LINE
-    fft_input[i + 1] = 0;
-  }
-
-  fft_window();
-  fft_reorder();
-  fft_run();
-  fft_mag_log();
-  sei();
-  if (!start) {
-    if (fft_log_out[3] > 70) {
-      l = l + 1;
-    }
-    else {
-      l = 0;
-=======
 
   ////////////////////////////////////////
   //RADIO TRANSMISSION HELPER FUNCTIONS://
   ////////////////////////////////////////
-    
-    void radio_transmit_sim(byte *info) {//maybe issues with the way info is referenced
-          // First, stop listening so we can talk.
-          radio.stopListening();
-          // NOTE: the maze array is defined here
-          // Send the maze in a single payload
-          printf("Sending\n");
-          bool ok = radio.write(&info, sizeof(info)); //do i need to write each byte individually??
-          //do i need to pass a pointer to info or will this work?
 
-          if (ok) { //if payload is successfully delivered
-            printf("ok, sending. \n");
-          }
-          else {
-            printf("failed.\n\r");
-          }
-          delay(1000); //give time for other end to receive
-
-          /* for (int i = 0; i < 5; i++) {
-             byte zero[3] = {0, 0, 0};
-             bool ok = radio.write( &zero, sizeof(zero) );
-             if (ok){
-               printf("ok, sending. \n");
-               for(int i = 0; i<3; i++){
-                 Serial.println(zero[i]);
-               }
-             }
-             else{
-               printf("failed.\n\r");
-               for(int i = 0; i<3; i++){
-                 Serial.println(zero[i]);
-               }
-             }
-             delay(1000); //give time for other end to receive
-            }//send zeros to indicate moving on */
-
-          // Now, continue listening
-          radio.startListening();
-          // Try again 1s later
-          //delay(1000);
-        }
-    
-    void copy(byte* src, byte* dst, int len) {
-      memcpy(dst, src, sizeof(src[0])*len);
->>>>>>> 9b4cb276e681012e6c72c45f6dedfc14ce7c9486
-    }
-    
     //packs information about a given intersection (presence of walls,
     //treasures at walls, direction, etc) into a 24-bit array
     //then sends this array to the base station
     // refer to github for encoding of this array
     //NOTE: get_wall_values() must be called beforehand
-    void send_intersection_info() {
+
+    void radio_transmit_sim(byte *info) {//maybe issues with the way info is referenced
+      // First, stop listening so we can talk.
       byte info[3] = {0, 0, 0};   //stores maze info.
       info[0] = pack_bit_one(dir);
-    
-      //SEND TO BASE STATION
-      //implement code to find treasures once we install the camera.
+      radio.stopListening();
+      // NOTE: the maze array is defined here
+      // Send the maze in a single payload
+      printf(count);
+      if (role == role_ping_out) {
+        // First, stop listening so we can talk.
+        radio.stopListening();
+
+        // NOTE: the maze array is defined here
+
+        // Send the maze in a single payload
+        printf("Sending\n");
+        bool ok = radio.write( info, sizeof(info) );
+
+        if (ok) {
+          printf("ok, sending. \n");
+          for (int i = 0; i < 3; i++) {
+          //  Serial.println(transmit[i],BIN);
+          }
+          printf(count);
+        }
+        else {
+          printf("failed.\n\r");
+          for (int i = 0; i < 3; i++) {
+          //  Serial.println(transmit[i]);
+          }
+        }
+        delay(1000); //give time for other end to receive
+      }
     }
-    
+
+    void copy(byte* src, byte* dst, int len) {
+      memcpy(dst, src, sizeof(src[0])*len);
+    }
+
     //helper for send_intersection_info()
     //takes the direction the robot is facing as an input (pass global dir var to this function)
     //returns a byte in the following form:  [0|0|DIR|DIR|N|E|S|W]
@@ -570,15 +419,15 @@ void fft_detect() {
       int lwall = 0;
       int rwall = 0;
       int fwall = 0;
-          if (left_wall_value > wall_threshold) {
-            lwall = 1;
-          }
-          if (front_wall_value > wall_threshold) {
-            fwall = 1;
-          }
-          if (right_wall_value > wall_threshold) {
-            rwall = 1;
-          }
+      if (left_wall_value > wall_threshold) {
+        lwall = 1;
+      }
+      if (front_wall_value > wall_threshold) {
+        fwall = 1;
+      }
+      if (right_wall_value > wall_threshold) {
+        rwall = 1;
+      }
       switch (facing) {
         case 0: //ROBOT IS FACING NORTH
           w = lwall;
@@ -606,13 +455,14 @@ void fft_detect() {
           n = rwall;
           bitWrite(info, 4, 1);
           bitWrite(info, 5, 1);
-        }
+      }
       bitWrite(info, 0, w);
       bitWrite(info, 1, s);
       bitWrite(info, 2, e);
       bitWrite(info, 3, n);
       return info;
     }
+
 
   ////////
   //MISC//
