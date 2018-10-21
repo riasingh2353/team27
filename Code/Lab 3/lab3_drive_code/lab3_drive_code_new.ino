@@ -59,14 +59,7 @@ void setup() {
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
   ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
 
- printf_begin();
-  printf("\n\rRF24/examples/GettingStarted/\n\r");
-  printf("*** PRESS 'T' to begin transmitting to the other node\n\r");
-
-  //
   // Setup and configure rf radio
-  //
-
   radio.begin();
 
   // optionally, increase the delay between retries & # of retries
@@ -79,36 +72,17 @@ void setup() {
   radio.setPALevel(RF24_PA_MIN);
   //RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
   radio.setDataRate(RF24_250KBPS);
-
   // optionally, reduce the payload size.  seems to
   // improve reliability
   //radio.setPayloadSize(8);
 
-  //
   // Open pipes to other nodes for communication
-  //
-
-  // This simple sketch opens two pipes for these two nodes to communicate
-  // back and forth.
-  // Open 'our' pipe for writing
-  // Open the 'other' pipe for reading, in position #1 (we can have up to 5 pipes open for reading)
 
   radio.openWritingPipe(pipes[0]);
   radio.openReadingPipe(1, pipes[1]);
 
-  //
-  // Start listening
-  //
-
-  //radio.startListening();
-
-  //
   // Dump the configuration of the rf unit for debugging
-  //
-
   radio.printDetails();
-
-  //unsigned long transmit;
 }
 
 
