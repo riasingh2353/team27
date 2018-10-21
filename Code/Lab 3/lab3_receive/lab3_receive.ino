@@ -44,8 +44,6 @@ void setup() {
   radio.openReadingPipe(1,pipes[0]);    
 
   radio.startListening();
-
-  radio.printDetails();
 }
 void loop() {
   // put your main code here, to run repeatedly:
@@ -53,11 +51,13 @@ void loop() {
       bool done = false;
       while (!done) {
         done=radio.read(&data,sizeof(data));
-        if (check_data()){
-           decipher();
+        if (!check_zeros()) {
+          if (check_data()){
+             decipher();
+          }
+          copy(data, data_before, 3);
+          delay(20);
         }
-        copy(data, data_before, 3);
-        delay(20);
       }
     }
 }
@@ -67,42 +67,10 @@ void decipher() {
   for (int i = 0; i<3; i++){
     for (int j = 0; j < 8; j++){
       int k = 8*i + j;
-      data_array[k] = int(bitRead(data_before[i], 7-j));
+      data_array[k] = int(bitRead(data[i], 7-j));
      }
    }
-
- // Position Information
-  if (data[2] == 0) {
-     if (data[3] == 0) { facing = 0; }
-     else { facing = 1; }
-  }
-  else {
-    if (data[3] == 0) { facing = 2; }
-    else { facing = 3; } 
-  }
-
-// North = 0; East = 1; South = 2; West = 3
-  switch(facing) {
-    case 0: x++;
-    case 1: y--;
-    case 2: x--;
-    case 3: y++;
-  }
-
-  //reset x and y values
-  if (x > 2 || x < 0) { x = 0; }
-  if (y > 3 || y < 0) { y = 0; }  
-
- // Start at 0 and mark first false
-  if (first) {
-    x = 0;
-    y = 0;
-    first = false;
-  }
-  
-   xstring = String(x);
-   ystring = String(y);
-
+   
    // Other Robot Information
    if (data_array[1]==1) {robot = "true";}
    else {robot = "false";}  
@@ -120,15 +88,47 @@ void decipher() {
    if (data_array[7]==1) {west = "true";}
    else {west = "false";}
 
-   Serial.println(xstring+","+ystring+","+"north="+north+","+"east="+east+","+"south="+south+","+"west="+west+","+"robot="+robot);
- 
+   // Start at 0 and mark first false
+  if (first) {
+    x = 0;
+    y = 0;
+    first = false;
+   }
+   
+   xstring = String(x);
+   ystring = String(y);
+
+
+   Serial.println(ystring+","+xstring+","+"north="+north+","+"east="+east+","+"south="+south+","+"west="+west+","+"robot="+robot);
+
+   if ( x == 1 && y == 2) {
+    Serial.println("reset");
+    x=0;
+    y=0; 
+   }
+   
+   if (data_array[2] == 0) {
+     if (data_array[3] == 0) { facing = 0; }
+     else { facing = 1; }
+   }
+  else {
+    if (data_array[3] == 0) { facing = 2; }
+    else { facing = 3; } 
+  }
+
+  switch(facing) {
+    case 0: y--; break;
+    case 1: x++; break;
+    case 2: y++; break;
+    case 3: x--; break;
+  }
+ }
 }
 
 void copy(byte* src, byte* dst, int len) {
     memcpy(dst, src, sizeof(src[0])*len);
 }
 
-// True if all zeros
 bool check_data(){
   if (first) {
     return true;
@@ -144,4 +144,18 @@ bool check_data(){
     return false; 
   }
 }
+
+bool check_zeros () {
+ // Serial.println("checking if all zeros");
+  byte zero = 0;
+  for (int i=0; i<3; i++) {
+    if (data[i] != zero) {
+ //     Serial.println("not zero");
+      return false;
+    }
+  }
+ // Serial.println("all zero");
+  return true;
+}
+
 
