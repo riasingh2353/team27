@@ -67,7 +67,7 @@ void fft_detect() {
          if (l >= 10) {
            start = 1;
            drive_straight();
-           digitalWrite(2, HIGH);  //flip select bit
+           digitalWrite(2, HIGH);  //flip MUX select bit
            //Serial.println("660 HURTS !!!!!");
           }
 }
