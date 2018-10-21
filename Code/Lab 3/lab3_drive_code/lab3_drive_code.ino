@@ -38,9 +38,10 @@ void setup() {
                       //LOW reads right sensor, HIGH reads left sensor
   pinMode(2, OUTPUT); //FFT mux select bit
                       //LOW reads microphone, HIGH reads IR circuit
-  pinMode(4, OUTPUT); //front wall detection
+  
   
   //LEDs:
+  pinMode(4, OUTPUT); //front wall detection
   pinMode(6, OUTPUT); //robot detection
   pinMode(7, OUTPUT); //right wall detection
 
@@ -69,7 +70,7 @@ void loop() {
         digitalWrite(4, HIGH);
         turn_left();
       }
-      else { // |
+      else { // 
         fft_detect(0); //check if need to turn left
         digitalWrite(4, LOW);
         drive_straight();
