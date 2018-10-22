@@ -37,7 +37,7 @@ These payloads are transferred each time the robot enters a new square, and stor
 
 A video of the maze simulation and GUI updating is shown below:
 
-SHOW VIDEO OF GUI UPDATING
+<iframe width="560" height="315" src="https://www.youtube.com/embed/u13swiZ8vGE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ## Audio Detection and Robot Activation
 
