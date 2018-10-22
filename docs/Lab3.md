@@ -33,7 +33,121 @@ Since the maximum payload for the transceivers is 32 bytes, we decided that a 3 
 
 These payloads are transferred each time the robot enters a new square, and stored on the base station in a 9X9 2D array.  Despite the actual starting location of the robot, the GUI is updated and information is handled such that the robot begins in the 'Northwest' corner of the map, facing 'East'.  It is understood that the directions are ordinal, and do not have any relation to the Cardinal directions of the same names.
 
-## ADD STUFF ABOUT TRANSMIT AND RECEIVE CODE
+The transmission code is shown below:
+
+The receiving code is shown below:
+~~~ c
+void setup() {
+  Serial.begin(9600);
+  printf_begin();
+  radio.begin();
+  radio.setRetries(15,15);
+  radio.setAutoAck(true);
+  radio.setChannel(0x50);
+  radio.setPALevel(RF24_PA_MIN);
+  radio.setDataRate(RF24_250KBPS);
+  
+  radio.openWritingPipe(pipes[1]);
+  radio.openReadingPipe(1,pipes[0]);    
+
+  radio.startListening();
+}
+void loop() {
+  // put your main code here, to run repeatedly:
+    if ( radio.available() ) {
+      bool done = false;
+      while (!done) {
+        done=radio.read(&data,sizeof(data));
+        if (!check_zeros()) {
+          if (check_data()){
+             decipher();
+          }
+          copy(data, data_before, 3);
+          delay(20);
+        }
+      }
+    }
+}
+~~~
+
+The helper function *decipher* parses the received byte array into a 1D array of ints, such that its elements can be easily accessed through indexing in constant time according to the encoding scheme detailed above:
+
+~~~ c
+void decipher() {
+  for (int i = 0; i<3; i++){
+    for (int j = 0; j < 8; j++){
+      int k = 8*i + j;
+      data_array[k] = int(bitRead(data[i], 7-j));
+     }
+   }
+   
+   // Other Robot Information
+   if (data_array[1]==1) {robot = "true";}
+   else {robot = "false";}  
+
+   // Wall information
+   if (data_array[4]==1) {north = "true";}
+   else {north = "false";}
+   
+   if (data_array[5]==1) {east = "true";}
+   else {east = "false";}
+   
+   if (data_array[6]==1) {south = "true";}  
+   else {south = "false";}
+   
+   if (data_array[7]==1) {west = "true";}
+   else {west = "false";}
+
+   // Start at 0 and mark first false
+  if (first) {
+    x = 0;
+    y = 0;
+    first = false;
+   }
+   
+   xstring = String(x);
+   ystring = String(y);
+
+
+   Serial.println(ystring+","+xstring+","+"north="+north+","+"east="+east+","+"south="+south+","+"west="+west+","+"robot="+robot);
+
+   if (data_array[2] == 0) {
+     if (data_array[3] == 0) { facing = 0; }
+     else { facing = 1; }
+   }
+  else {
+    if (data_array[3] == 0) { facing = 2; }
+    else { facing = 3; } 
+  }
+
+  switch(facing) {
+    case 0: y--; break;
+    case 1: x++; break;
+    case 2: y++; break;
+    case 3: x--; break;
+  }
+ }
+}
+~~~
+The function check data checks the parity bit of the instruction in order to detect whether new data is received. The data is transmitted multiple times per square in order to account for possible dropped packets. The data is only parsed when the parity bit is flipped compared to the last received data in order to indicate that the robot is on a new square.
+
+~~~ c
+bool check_data(){
+  if (first) {
+    return true;
+  }
+
+  int last = int(bitRead(data_before[0],7));
+  int now = int(bitRead(data[0],7));
+
+  if (last != now) {
+      return true;
+  }
+  else{
+    return false; 
+  }
+}
+~~~
 
 A video of the maze simulation and GUI updating is shown below:
 
