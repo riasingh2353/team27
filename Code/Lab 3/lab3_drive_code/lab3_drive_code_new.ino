@@ -140,41 +140,61 @@ void loop() {
     
     void turn_left() {
       get_wall_values();
-      while (countdown > 0) {
-        servoL.write(88);
-        servoR.write(80);
-        countdown = countdown - 1;
-      }
-    
-      while (sensor_values[2] > line_threshold && sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) {
-        servoL.write(88);
-        servoR.write(80);
+
+      drive_straight();
+      delay(200);
+
+      servoL.write(90);
+      servoR.write(90);
+      delay(500);
+
+      servoL.write(88);
+      servoR.write(80);
+      delay(300);
+
+      servoL.write(90);
+      servoR.write(90);
+      delay(500);
+
+      servoL.write(88);
+      servoR.write(80);
+      get_line_values();
+      while(sensor_values[2] > line_threshold-75) {
         get_line_values();
       }
-      countdown = 3000;
-      update_direction(dir, 1);
-      fft_detect();
-      check_wall();
-      
+      servoL.write(90);
+      servoR.write(90);
+      delay(500);
     }
-    
+
     void turn_right() {
       get_wall_values();
-      while (countdown > 0) {
-        servoL.write(100);
-        servoR.write(92);
-        countdown = countdown - 1;
-      }
-      while (sensor_values[2] > line_threshold && sensor_values[0] < line_threshold && sensor_values[1] < line_threshold) {
-        servoL.write(100);
-        servoR.write(92);
+
+      drive_straight();
+      delay(200);
+
+      servoL.write(90);
+      servoR.write(90);
+      delay(500);
+
+      servoL.write(100);
+      servoR.write(92);
+      delay(300);
+
+      servoL.write(90);
+      servoR.write(90);
+      delay(500);
+
+      servoL.write(100);
+      servoR.write(92);
+      get_line_values();
+      while(sensor_values[2] > line_threshold-75) {
         get_line_values();
       }
-      countdown = 3000;
-      update_direction(dir, 0);
-      fft_detect();
-      check_wall();
-      
+      servoL.write(90);
+      servoR.write(90);
+      delay(500);
+
     }
     
     void drive_straight() {
