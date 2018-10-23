@@ -90,8 +90,6 @@ void setup() {
 void loop() {
 
   if (start == 0) {
-    servoL.detach();
-    servoR.detach();
     fft_detect();
   }
   // Read line sensor values continuously
@@ -168,6 +166,7 @@ void turn_left() {
     get_line_values();
     //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
   }
+  fft_detect();
 }
 
 void turn_right() {
@@ -189,6 +188,7 @@ void turn_right() {
     get_line_values();
     //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
   }
+ fft_detect();
   
 }
 
@@ -398,6 +398,7 @@ void update_direction(int facing, int turn_dir) {
 //whether to turn or drive straight. Also sets wall_before to appropriate values
 void intersection() {
   get_wall_values();
+  fft_detect();
   //determine whether to turn
   if (front_wall_value > wall_threshold) {
     if (right_wall_value > wall_threshold && left_wall_value > wall_threshold) {
@@ -549,6 +550,9 @@ void intersection() {
 
 //detect fft signal
 void fft_detect() {
+   servoL.detach();
+   servoR.detach();
+  
   cli();
 
   for (int i = 0 ; i < 512 ; i += 2) {
@@ -562,7 +566,7 @@ void fft_detect() {
   fft_mag_log();
   sei();
   if (!start) {
-    if (fft_log_out[3] > 60) {
+    if (fft_log_out[3] > 65) {
       l = l + 1;
     }
     else {
@@ -578,17 +582,21 @@ void fft_detect() {
       Serial.println("660 HURTS !!!!!");
     }
   }
-  if (start) {
+  else if (start) {
     if (fft_log_out[26] > 60 || fft_log_out[25] > 60 || fft_log_out[27] > 60) {
       Serial.println("6KHz !!!!!");
-      //stop_drive();
+      servoL.attach(3);
+      servoR.attach(5);
+      stop_drive();
       //digitalWrite(6, HIGH); //turn on indicator LED
       delay(2500);
       //else turn_left();
     }
     else {
       //digitalWrite(6, LOW); //turn off indicator LED
-      //drive_straight();
+      servoL.attach(3);
+      servoR.attach(5);
+      drive_straight();
     }
   }
    Serial.println(start);

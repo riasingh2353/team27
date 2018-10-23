@@ -7,7 +7,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
         Serial.println("loop");
-         digitalWrite(6,HIGH);
+         digitalWrite(6,LOW);
         int line_l = analogRead(A0);
         int line_r = analogRead(A1);
         int line_m = analogRead(A2);
@@ -21,7 +21,7 @@ void loop() {
         Serial.println(line_m);
         Serial.print("Front: ");
         Serial.println(front_wall_value);
-        Serial.print("Left: ");
+        Serial.print("Right: ");
         Serial.println(right_wall_value);
         delay(500);
 }
