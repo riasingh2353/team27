@@ -12,17 +12,17 @@ int          right_wall_value;    //store right wall sensor value
 int          left_wall_value;     //store left wall sensor value
 int change = 0;                  //reset temp variable noting change from white/black
 int line_threshold = 300;            //cutoff value b/w white and not white
-int wall_threshold = 150;         //NOT IMPLEMENTED EVERYWHERE. A wall exists if a 
-                                  //wall sensor detects a value above this
+int wall_threshold = 150;         //NOT IMPLEMENTED EVERYWHERE. A wall exists if a
+//wall sensor detects a value above this
 bool turn_complete = true;
 int countdown = 3000;
 bool wall_before = false;
 bool start = 0;
 
 int dir = 1;                    //direction the robot is traveling in.
-                                //0 -> N; 1 -> E; 2 -> S; 3 -> W;
-                                //We assume the robot starts in the northwest corner
-                                // traveling east by default
+//0 -> N; 1 -> E; 2 -> S; 3 -> W;
+//We assume the robot starts in the northwest corner
+// traveling east by default
 
 int l = 0;
 int count = 0;
@@ -35,11 +35,11 @@ void setup() {
 
   //Digital Output Pins
   pinMode(1, OUTPUT); //Wall sensor mux select bit
-                      //LOW reads right sensor, HIGH reads left sensor
+  //LOW reads right sensor, HIGH reads left sensor
   pinMode(2, OUTPUT); //FFT mux select bit
-                      //LOW reads microphone, HIGH reads IR circuit
-  
-  
+  //LOW reads microphone, HIGH reads IR circuit
+
+
   //LEDs:
   pinMode(4, OUTPUT); //front wall detection
   pinMode(6, OUTPUT); //robot detection
@@ -70,7 +70,7 @@ void loop() {
         digitalWrite(4, HIGH);
         turn_left();
       }
-      else { // 
+      else { //
         fft_detect(0); //check if need to turn left
         digitalWrite(4, LOW);
         drive_straight();
@@ -121,6 +121,7 @@ void loop() {
 }
 
 //HELPER FUNCTIONS
+
 void check_wall() {
   delay(25);
   get_wall_values();
@@ -212,7 +213,7 @@ void turn_left() {
   update_direction(dir, 1);
   fft_detect(0);
   check_wall();
-  
+
 }
 
 void turn_right() {
@@ -233,7 +234,7 @@ void turn_right() {
   update_direction(dir, 0);
   fft_detect(1);
   check_wall();
-  
+
 }
 
 void drive_straight() {
@@ -267,46 +268,37 @@ void fft_detect() {
   fft_run();
   fft_mag_log();
   sei();
-  
-     if (fft_log_out[3] > 70){
-          l = l + 1;
-        }
-        else {
-          l = 0;
-        }
-       if (l >= 10) {
-         count = count + 1;
-         start = 1;
-         drive_straight();
-         digitalWrite(2, HIGH);  //flip select bit
-         //Serial.println("660 HURTS !!!!!");
-        }
-      }
-  
-  if (start) {
-    if (fft_log_out[26] > 60 || fft_log_out[25] > 60 || fft_log_out[27] > 60) {
-      Serial.println("6KHz !!!!!");
-      stop_drive();
-      //digitalWrite(6, HIGH); //turn on indicator LED
-      delay(2500);
-      //else turn_left();
-    }
-    else {
-      //digitalWrite(6, LOW); //turn off indicator LED
-      drive_straight();
-    }
+
+  if (fft_log_out[3] > 70) {
+    l = l + 1;
+  }
+  else {
+    l = 0;
+  }
+  if (l >= 10) {
+    count = count + 1;
+    start = 1;
+    drive_straight();
+    digitalWrite(2, HIGH);  //flip select bit
+    //Serial.println("660 HURTS !!!!!");
+  }
+
+
+if (start) {
+  if (fft_log_out[26] > 60 || fft_log_out[25] > 60 || fft_log_out[27] > 60) {
+    Serial.println("6KHz !!!!!");
+    stop_drive();
+    //digitalWrite(6, HIGH); //turn on indicator LED
+    delay(2500);
+    //else turn_left();
+  }
+  else {
+    //digitalWrite(6, LOW); //turn off indicator LED
+    drive_straight();
   }
   }
 }
 
-//obtains front_wall_value, right_wall_value and left_wall_value
-void get_wall_values() {
-  front_wall_value  = analogRead(A3);
-  digitalWrite(1, LOW);
-  right_wall_value  = analogRead(A4);
-  digitalWrite(1, HIGH);
-  left_wall_value   = analogRead(A4);
-}
 
 //packs information about a given intersection (presence of
 // /treasures at walls, direction, etc) into a 24-bit array
@@ -334,15 +326,15 @@ byte pack_bit_one(int facing) {
   int lwall = 0;
   int rwall = 0;
   int fwall = 0;
-      if (left_wall_value > wall_threshold) {
-        lwall = 1;
-      }
-      if (front_wall_value > wall_threshold) {
-        fwall = 1;
-      }
-      if (right_wall_value > wall_threshold) {
-        rwall = 1;
-      }
+  if (left_wall_value > wall_threshold) {
+    lwall = 1;
+  }
+  if (front_wall_value > wall_threshold) {
+    fwall = 1;
+  }
+  if (right_wall_value > wall_threshold) {
+    rwall = 1;
+  }
   switch (facing) {
     case 0; //ROBOT IS FACING NORTH
       w = lwall;
@@ -370,7 +362,7 @@ byte pack_bit_one(int facing) {
       n = rwall;
       bitWrite(info, 4, 1);
       bitWrite(info, 5, 1);
-    }
+  }
   bitWrite(info, 0, w);
   bitWrite(info, 1, s);
   bitWrite(info, 2, e);
@@ -384,33 +376,33 @@ byte pack_bit_one(int facing) {
 void update_direction(int facing, int turn_dir) {
   switch (facing) {
     case 0; //ROBOT IS FACING NORTH
-        if (turn_dir == 0) { // if robot is turning right
-          dir = 1;
-        }
-        else {               // if robot is turning left
-          dir = 3;
-        }
+      if (turn_dir == 0) { // if robot is turning right
+        dir = 1;
+      }
+      else {               // if robot is turning left
+        dir = 3;
+      }
     case 1: //ROBOT IS FACING EAST
-        if (turn_dir == 0) { // if robot is turning right
-          dir = 2;
-        }
-        else {               // if robot is turning left
-          dir = 0;
-        }
+      if (turn_dir == 0) { // if robot is turning right
+        dir = 2;
+      }
+      else {               // if robot is turning left
+        dir = 0;
+      }
     case 2: //ROBOT IS FACING SOUTH
-        if (turn_dir == 0) { // if robot is turning right
-          dir = 3;
-        }
-        else {               // if robot is turning left
-          dir = 1;
-        }
+      if (turn_dir == 0) { // if robot is turning right
+        dir = 3;
+      }
+      else {               // if robot is turning left
+        dir = 1;
+      }
     case 3: //ROBOT IS FACING WEST
-        if (turn_dir == 0) { // if robot is turning right
-          dir = 0;
-        }
-        else {               // if robot is turning left
-          dir = 2;
-        }
-    }
+      if (turn_dir == 0) { // if robot is turning right
+        dir = 0;
+      }
+      else {               // if robot is turning left
+        dir = 2;
+      }
+  }
 }
 }

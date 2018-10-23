@@ -15,7 +15,7 @@ void setup() {
 // put your setup code here, to run once:
 Serial.begin(9600);
 servoL.attach(3);
-servoR.attach(9);
+servoR.attach(5);
 
 }
 
