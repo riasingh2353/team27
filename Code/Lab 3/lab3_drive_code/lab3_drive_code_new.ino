@@ -144,17 +144,9 @@ void loop() {
       drive_straight();
       delay(200);
 
-      servoL.write(90);
-      servoR.write(90);
-      delay(500);
-
       servoL.write(88);
       servoR.write(80);
       delay(300);
-
-      servoL.write(90);
-      servoR.write(90);
-      delay(500);
 
       servoL.write(88);
       servoR.write(80);
@@ -162,9 +154,6 @@ void loop() {
       while(sensor_values[2] > line_threshold-75) {
         get_line_values();
       }
-      servoL.write(90);
-      servoR.write(90);
-      delay(500);
     }
 
     void turn_right() {
@@ -172,18 +161,10 @@ void loop() {
 
       drive_straight();
       delay(200);
-
-      servoL.write(90);
-      servoR.write(90);
-      delay(500);
-
+      
       servoL.write(100);
       servoR.write(92);
       delay(300);
-
-      servoL.write(90);
-      servoR.write(90);
-      delay(500);
 
       servoL.write(100);
       servoR.write(92);
@@ -191,10 +172,41 @@ void loop() {
       while(sensor_values[2] > line_threshold-75) {
         get_line_values();
       }
-      servoL.write(90);
-      servoR.write(90);
+    }
+
+    void turn_around() {
+      get_wall_values();
+
+      drive_straight();
+      delay(200);
+
+      servoL.write(100);
+      servoR.write(92);
+      delay(300);
+
+      servoL.write(100);
+      servoR.write(92);
+      get_line_values();
+      while(sensor_values[2] > line_threshold-75) {
+        get_line_values();
+        //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
+      }
+
+      servoL.write(80);
+      servoR.write(100);
       delay(500);
 
+      servoL.write(110);
+      servoR.write(90);
+      delay(700);
+
+      servoL.write(100);
+      servoR.write(92);
+      get_line_values();
+      while(sensor_values[2] > line_threshold-75) {
+        get_line_values();
+        //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
+      }
     }
     
     void drive_straight() {
@@ -345,9 +357,7 @@ void loop() {
       //determine whether to turn
       if(front_wall_value > wall_threshold) {
         if (right_wall_value > wall_threshold && left_wall_value > wall_threshold) {
-          //NEED A TURN 180• function
-          turn_right();
-          turn_right();
+          turn_around();
           wall_before = true;
         }
         else if (right_wall_value > wall_threshold) {//WALLS ON FRONT AND RIGHT
