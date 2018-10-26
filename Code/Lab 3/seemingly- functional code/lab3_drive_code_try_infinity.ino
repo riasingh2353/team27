@@ -7,7 +7,6 @@
 #include <SPI.h>
 #include "nRF24L01.h"
 #include "RF24.h"
-
 RF24 radio(9, 10);
 //pipe addresses
 const uint64_t pipes[2] = { 0x0000000048LL, 0x0000000049LL };
@@ -40,9 +39,11 @@ int countdown = 5000;
 int max_countdown_value = 5000;
 bool wall_before = false;
 int dir = 1;                     //direction the robot is traveling in.
+int dir_old = 1;
 //0 -> N; 1 -> E; 2 -> S; 3 -> W;
 //We assume the robot starts in the northwest corner
 // traveling east by default
+bool success = false;
 
 
 void setup() {
@@ -60,9 +61,9 @@ void setup() {
   radio.setChannel(0x50);
   // set the power
   // RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_MED=-6dBM, and RF24_PA_HIGH=0dBm.
-  radio.setPALevel(RF24_PA_MIN);
+  radio.setPALevel(RF24_PA_HIGH);
   //RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
-  radio.setDataRate(RF24_250KBPS);
+  radio.setDataRate(RF24_1MBPS);
 
   radio.openWritingPipe(pipes[0]);
   radio.openReadingPipe(1, pipes[1]);
@@ -83,6 +84,12 @@ void setup() {
 
   servoL.write(90);
   servoR.write(90);
+
+  get_wall_values();
+  radio_transmit(); //receiver always seems to drop first sent payload
+  //byte zeros[3] = {0,0,0};
+  //bool ok = radio.write(zeros,3);
+  //Serial.println(ok);
 }
 
 void loop() {
@@ -157,8 +164,8 @@ void turn_left() {
     //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
   }
   fft_detect();
-  radio_transmit();
   update_direction(dir, 1);
+  radio_transmit();
 }
 
 void turn_right() {
@@ -179,8 +186,8 @@ void turn_right() {
     //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
   }
   fft_detect();
-  radio_transmit();
   update_direction(dir, 0);
+  radio_transmit();
 }
 
 void turn_around() {
@@ -189,17 +196,17 @@ void turn_around() {
   drive_straight();
   delay(200);
 
-  servoL.write(90);
-  servoR.write(90);
-  delay(500);
+  //servoL.write(90);
+  //servoR.write(90);
+  //delay(500);
 
   servoL.write(100);
   servoR.write(92);
   delay(300);
 
-  servoL.write(90);
-  servoR.write(90);
-  delay(500);
+  //servoL.write(90);
+  //servoR.write(90);
+  //delay(500);
 
   servoL.write(100);
   servoR.write(92);
@@ -208,25 +215,25 @@ void turn_around() {
     get_line_values();
     //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
   }
-  servoL.write(90);
-  servoR.write(90);
-  delay(500);
+  //servoL.write(90);
+  //servoR.write(90);
+  //delay(500);
 
   servoL.write(80);
   servoR.write(100);
   delay(500);
 
-  servoL.write(90);
-  servoR.write(90);
-  delay(500);
+  //servoL.write(90);
+  //servoR.write(90);
+  //delay(500);
 
   servoL.write(110);
   servoR.write(90);
   delay(700);
 
-  servoL.write(90);
-  servoR.write(90);
-  delay(500);
+  //servoL.write(90);
+  //servoR.write(90);
+  //delay(500);
 
   servoL.write(100);
   servoR.write(92);
@@ -239,9 +246,8 @@ void turn_around() {
   servoL.write(90);
   servoR.write(90);
   delay(500);
+  update_direction_turn_around();
   radio_transmit();
-  update_direction(dir, 1);
-  update_direction(dir, 1);
 }
 
 void drive_straight() {
@@ -289,7 +295,7 @@ void get_line_values() {
 void radio_transmit() {
   // First, stop listening so we can talk.
   byte info[3] = {0, 0, 0};   //stores maze info.
-  info[0] = pack_bit_one(dir);
+  info[0] = pack_bit_one(dir_old);
   Serial.println("VALUE SENT TO BASE:");
   Serial.println(info[0]);
   radio.stopListening();
@@ -299,24 +305,23 @@ void radio_transmit() {
     // First, stop listening so we can talk.
     radio.stopListening();
     radio.openWritingPipe(pipes[0]);
-    bool ok = radio.write( info, sizeof(info) );
-    Serial.println("OK:");
+    servoL.write(90);
+    servoR.write(90);
+      bool ok = radio.write( info, sizeof(info) );
+
+    //servoL.write(90);
+    //servoR.write(90);
+    radio.startListening();
     Serial.println(ok);
-    if (ok) {
-      //printf("ok, sending. \n");
-      for (int i = 0; i < 3; i++) {
-        //  Serial.println(transmit[i],BIN);
-      }
-      //printf(count);
-    }
-    else {
-      //printf("failed.\n\r");
-      for (int i = 0; i < 3; i++) {
-        //Serial.println(transmit[i]);
-      }
+    //delay(250);
+    //while(!success) {
+    if (!ok) {
+      radio.stopListening();
+      bool ok = radio.write(info, sizeof(info));
     }
     radio.startListening();
-    delay(1000); //give time for other end to receive
+    drive_straight();
+    //delay(1000); //give time for other end to receive
   }
 }
 
@@ -414,33 +419,41 @@ byte pack_bit_one(int facing) {
   if (right_wall_value > wall_threshold) {
     rwall = 1;
   }
-  if (dir == 0) {//ROBOT IS FACING NORTH
+  if (facing == 0) {//ROBOT IS FACING NORTH
       w = lwall;
       n = fwall;
       e = rwall;
       //(i know i don't need to explicitly write zeros to locations
       //initialized to be zero but it makes it more clear what is happening)
-      bitWrite(info, 4, 0);
-      bitWrite(info, 5, 0);
   }
-  if (dir == 1) {//ROBOT IS FACING EAST
+  if (facing == 1) {//ROBOT IS FACING EAST
       n = lwall;
       e = fwall;
       s = rwall;
-      bitWrite(info, 4, 1);
-      bitWrite(info, 5, 0);
   }
-  if (dir == 2){//ROBOT IS FACING SOUTH
+  if (facing == 2){//ROBOT IS FACING SOUTH
       e = lwall;
       s = fwall;
       w = rwall;
-      bitWrite(info, 4, 0);
-      bitWrite(info, 5, 1);
   }
-  if (dir == 3){//ROBOT IS FACING WEST
+  if (facing == 3){//ROBOT IS FACING WEST
       s = lwall;
       w = fwall;
       n = rwall;
+  }
+  if (dir == 0) {
+      bitWrite(info, 4, 0);
+      bitWrite(info, 5, 0);
+  }
+  if (dir == 1) {
+      bitWrite(info, 4, 1);
+      bitWrite(info, 5, 0);
+  }
+  if (dir == 2) {
+      bitWrite(info, 4, 0);
+      bitWrite(info, 5, 1);
+  }
+  if (dir == 3) {
       bitWrite(info, 4, 1);
       bitWrite(info, 5, 1);
   }
@@ -485,6 +498,7 @@ byte pack_bit_one(int facing) {
 //takes as input the direction the robot is facing (pass global dir var),
 //and the direction the robot is turning (0 -> Right turn, 1-> left turn)
 void update_direction(int facing, int turn_dir) {
+    dir_old = dir;
     if (facing == 0) {//ROBOT IS FACING NORTH
       if (turn_dir == 0) { // if robot is turning right
         dir = 1;
@@ -517,6 +531,22 @@ void update_direction(int facing, int turn_dir) {
         dir = 2;
       }
     }
+}
+void update_direction_turn_around() {
+  dir_old = dir;
+  if (dir == 0) {
+    dir = 2;
+  }
+  if (dir == 1) {
+    dir = 3;
+  }
+  if (dir == 2) {
+    dir = 0;
+  }
+  if (dir == 3) {
+    dir = 1;
+  }
+  
 }
 
 //Called when the robot reaches an intersection. reads wall sensor values and determines
@@ -593,7 +623,7 @@ void fft_detect() {
   if (!start) {
     digitalWrite(7, LOW);
     Serial.println(fft_log_out[3]);
-    if (fft_log_out[3] > 65) {
+    if (fft_log_out[3] > 75) {
       l = l + 1;
     }
     else {
