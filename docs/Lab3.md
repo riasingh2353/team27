@@ -34,6 +34,31 @@ Since the maximum payload for the transceivers is 32 bytes, we decided that a 3 
 These payloads are transferred each time the robot enters a new square, and stored on the base station in a 9X9 2D array.  Despite the actual starting location of the robot, the GUI is updated and information is handled such that the robot begins in the 'Northwest' corner of the map, facing 'East'.  It is understood that the directions are ordinal, and do not have any relation to the Cardinal directions of the same names.
 
 The transmission code is shown below:
+~~~c
+void radio_transmit() {
+  // First, stop listening so we can talk.
+  byte info[3] = {0, 0, 0};   //stores maze info.
+  info[0] = pack_bit_one(dir_old);
+  radio.stopListening();
+
+  if (role == role_ping_out) {
+    radio.stopListening();
+    radio.openWritingPipe(pipes[0]);
+    servoL.write(90);
+    servoR.write(90);
+    bool ok = radio.write( info, sizeof(info) );
+
+    radio.startListening();
+
+    if (!ok) {
+      radio.stopListening();
+      bool ok = radio.write(info, sizeof(info));
+    }
+    radio.startListening();
+    drive_straight();
+  }
+}
+~~~
 
 The receiving code is shown below:
 ~~~ c
