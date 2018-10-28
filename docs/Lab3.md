@@ -352,9 +352,11 @@ A video of our robot navigating the test maze is shown below and starting on the
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/T9XkBmMHUW4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
+
 A video of our robot navigating this same test maze and successfully avoiding other robots (and ignoring decoys) is shown below. The first obstacle shown is the decoy, which the robot ignores completely. The next obstacle is the 6 kHz IR hat that will be mounted on top of other robots. When held about an intersection away from the robot, the signal is detected and the robot stops for a set amount of time :
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/N3oxxHGkETE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 
 Also, a video of the robot wirelessly communicating the maze information to the base station and updating the GUI is shown below: 
 
