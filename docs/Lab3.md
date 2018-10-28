@@ -348,15 +348,15 @@ void fft_detect() {
 
 In order to improve upon wall detection from Milestone 2, we decided to add a third wall sensor to the left side of the robot. Not only would this improve turning and decision making at intersections, but it reduces the number of turns needed in a square in order to map all sides. We also used a multiplexer to switch between the analog outputs of the three wall sensors, accounting for the fact that this switching between select bits occurs on the scale of nanoseconds, and shouldn't slow down our processing speed too much. 
 
-A video of our robot navigating the test maze is shown below. 
+A video of our robot navigating the test maze is shown below and starting on the 660 Hz tone is shown below: 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/T9XkBmMHUW4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-A video of our robot navigating this same test maze and successfully avoiding other robots (and ignoring decoys) is shown below:
+A video of our robot navigating this same test maze and successfully avoiding other robots (and ignoring decoys) is shown below. The first obstacle shown is the decoy, which the robot ignores completely. The next obstacle is the 6 kHz IR hat that will be mounted on top of other robots. When held about an intersection away from the robot, the signal is detected and the robot stops for a set amount of time :
 
-INSERT THIS VIDEO HERE
+<iframe width="560" height="315" src="https://www.youtube.com/embed/N3oxxHGkETE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-A video of the robot wirelessly communicating the maze information to the base station and updating the GUI is shown below: 
+Also, a video of the robot wirelessly communicating the maze information to the base station and updating the GUI is shown below: 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/TUGIHtneEjM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
