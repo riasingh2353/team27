@@ -33,6 +33,8 @@ Since the maximum payload for the transceivers is 32 bytes, we decided that a 3 
 
 These payloads are transferred each time the robot enters a new square, and stored on the base station in a 9X9 2D array.  Despite the actual starting location of the robot, the GUI is updated and information is handled such that the robot begins in the 'Northwest' corner of the map, facing 'East'.  It is understood that the directions are ordinal, and do not have any relation to the Cardinal directions of the same names.
 
+## Transmission
+
 The transmission code is shown below:
 ~~~c
 void radio_transmit() {
@@ -60,6 +62,128 @@ void radio_transmit() {
 }
 ~~~
 
+The specific data that we are sending is written into this 3 byte array using the following helper functions. The two functions below update the direction that the robot is facing to be entered into our byte array, and the base station will use this information to calculate the correct coordinates of the robot on the maze GUI. A specific case for our turn-around function is used based on the fact that the end direction will be the exact opposite of the starting direction.
+
+~~~c
+void update_direction(int facing, int turn_dir) {
+    dir_old = dir;
+    if (facing == 0) {//ROBOT IS FACING NORTH
+      if (turn_dir == 0) { // if robot is turning right
+        dir = 1;
+      }
+      else {               // if robot is turning left
+        dir = 3;
+      }
+    }
+    if (facing == 1) {//ROBOT IS FACING EAST
+      if (turn_dir == 0) { // if robot is turning right
+        dir = 2;
+      }
+      else {               // if robot is turning left
+        dir = 0;
+      }
+    }
+    if (facing == 2) {//ROBOT IS FACING SOUTH
+      if (turn_dir == 0) { // if robot is turning right
+        dir = 3;
+      }
+      else {               // if robot is turning left
+        dir = 1;
+      }
+    }
+    if (facing == 3) {//ROBOT IS FACING WEST
+      if (turn_dir == 0) { // if robot is turning right
+        dir = 0;
+      }
+      else {               // if robot is turning left
+        dir = 2;
+      }
+    }
+}
+void update_direction_turn_around() {
+  dir_old = dir;
+  if (dir == 0) {
+    dir = 2;
+  }
+  if (dir == 1) {
+    dir = 3;
+  }
+  if (dir == 2) {
+    dir = 0;
+  }
+  if (dir == 3) {
+    dir = 1;
+  }
+}
+~~~
+
+The helper function below writes the correct values based on logic and sensor readings to the byte array being transmitted to the base station:
+~~~c
+byte pack_bit_one(int facing) {
+  byte info = 0;
+  int n = 0;
+  int e = 0;
+  int s = 0;
+  int w = 0;
+  int lwall = 0;
+  int rwall = 0;
+  int fwall = 0;
+  if (left_wall_value > wall_threshold) {
+    lwall = 1;
+  }
+  if (front_wall_value > wall_threshold) {
+    fwall = 1;
+  }
+  if (right_wall_value > wall_threshold) {
+    rwall = 1;
+  }
+  if (facing == 0) {//ROBOT IS FACING NORTH
+      w = lwall;
+      n = fwall;
+      e = rwall;
+  }
+  if (facing == 1) {//ROBOT IS FACING EAST
+      n = lwall;
+      e = fwall;
+      s = rwall;
+  }
+  if (facing == 2){//ROBOT IS FACING SOUTH
+      e = lwall;
+      s = fwall;
+      w = rwall;
+  }
+  if (facing == 3){//ROBOT IS FACING WEST
+      s = lwall;
+      w = fwall;
+      n = rwall;
+  }
+  if (dir == 0) {
+      bitWrite(info, 4, 0);
+      bitWrite(info, 5, 0);
+  }
+  if (dir == 1) {
+      bitWrite(info, 4, 1);
+      bitWrite(info, 5, 0);
+  }
+  if (dir == 2) {
+      bitWrite(info, 4, 0);
+      bitWrite(info, 5, 1);
+  }
+  if (dir == 3) {
+      bitWrite(info, 4, 1);
+      bitWrite(info, 5, 1);
+  }
+  bitWrite(info, 0, w);
+  bitWrite(info, 1, s);
+  bitWrite(info, 2, e);
+  bitWrite(info, 3, n);
+  
+  return info;
+
+}
+~~~
+
+## Receiving
 The receiving code is shown below:
 ~~~ c
 void setup() {
