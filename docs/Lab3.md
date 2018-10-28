@@ -17,15 +17,15 @@ The purpose of this lab is to integrate the individual components completed in t
 
 ## Testing the Radios:
 
-We began ensuring the functionality of the RF24 transceivers by running the provided Getting Started sketch.  This sketch ensures that the transceivers are able to pass a timestamp to each other and print it to the Serial Monitor. These sample printouts are shown below.
+We began ensuring the functionality of the RF24 transceivers by running the provided Getting Started sketch.  This sketch ensures that the transceivers are able to pass a timestamp to each other and print it to the Serial Monitor. Screenshots of this process are shown below:
 
-SHOW SCREENSHOTS OF SERIAL PRINTOUTS FOR GETTING STARTED SKETCH
+![Getting Started Screenshot](./media/lab3/transmit_gettingstarted.png)
 
 ## Encoding the Maze and Updating the GUI:
 
 We created the below 4X3 maze to demonstrate our robot's new capabilities:
 
-SHOW DIAGRAM OF MAZE/PHOTO OF MAZE
+![Simulated Maze Map](./media/lab3/mazemap.png)
 
 Since the maximum payload for the transceivers is 32 bytes, we decided that a 3 byte encoding scheme would be efficient without restricting the base station's ability to interpret and process accurate information. We decided to package our information payload in a byte array, since the first byte is related specifically to wall information, while the last two bytes will be related to treasure information. A diagram of the encoding scheme of the first byte is shown below:
 
@@ -35,7 +35,16 @@ These payloads are transferred each time the robot enters a new square, and stor
 
 ## Transmission
 
-The transmission code is shown below:
+The transmission code is shown below. In our simulated version, the only change was that the data we send is a predetermined byte array that follows our encoding scheme for our sample maze. The encodings for our test maze are shown below:
+~~~c
+byte wall_encodings[12][3] = {{0b00011011, 0, 0},
+  {0b10011010, 0, 0}, {0b00101100, 0, 0}, {0b10100101, 0, 0}, {0b00100101, 0, 0}, {0b10110110, 0, 0}, {0b00111010, 0, 0},
+  {0b10000011, 0, 0}, {0b00000101, 0, 0}, {0b10011001, 0, 0}, {0b00101100, 0, 0}, {0b10000111, 0, 0}
+} ;
+~~~
+
+Our transmission code is shown below:
+
 ~~~c
 void radio_transmit() {
   // First, stop listening so we can talk.
@@ -336,26 +345,19 @@ void fft_detect() {
 }
 ~~~
 
-        
+## Robot Movement
 
-A video of the robot starting on the 660 Hz tone is shown below:
+In order to improve upon wall detection from Milestone 2, we decided to add a third wall sensor to the left side of the robot. Not only would this improve turning and decision making at intersections, but it reduces the number of turns needed in a square in order to map all sides. We also used a multiplexer to switch between the analog outputs of the three wall sensors, accounting for the fact that this switching between select bits occurs on the scale of nanoseconds, and shouldn't slow down our processing speed too much. 
 
-SHOW VIDEO OF ROBOT STARTING ON 660 HZ TONE
+A video of our robot navigating the test maze is shown below. 
 
-Moreover, in order to encode the maze information using the encoding scheme detailed above, information is recorded by reading the wall sensors and updating the byte array using the built-in Arduino functions relating to the byte type. The transmitting code from the robot is shown below:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/T9XkBmMHUW4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-SHOW CODE FOR TRANSMITTING INFO FROM ROBOT TO BASE STATION
+A video of our robot navigating this same test maze and successfully avoiding other robots (and ignoring decoys) is shown below:
 
-In order to improve upon wall detection from Milestone 2, we decided to add a third wall sensor to the left side of the robot. Not only would this improve turning and decision making at intersections, but it reduces the number of turns needed in a square in order to map all sides. We also used a multiplexer to switch between the analog outputs of the three wall sensors, accounting for the fact that this switching between select bits occurs on the scale of nanoseconds, and shouldn't slow down our processing speed too much. This modified code is shown below:
-
-SHOW WALL SENSOR CODE
-
-A video of our robot navigating the test maze is shown below. The robot successfully stops upon detecting another robot and ignores decoys:
-
-SHOW VID
+INSERT THIS VIDEO HERE
 
 A video of the robot wirelessly communicating the maze information to the base station and updating the GUI is shown below: 
 
-SHOW VID
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/TUGIHtneEjM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
