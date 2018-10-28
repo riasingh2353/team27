@@ -37,9 +37,9 @@ These payloads are transferred each time the robot enters a new square, and stor
 
 The transmission code is shown below. In our simulated version, the only change was that the data we send is a predetermined byte array that follows our encoding scheme for our sample maze. The encodings for our test maze are shown below:
 ~~~c
-byte wall_encodings[12][3] = {{0b00011011, 0, 0},
+byte wall_encodings[12][3] = { {0b00011011, 0, 0},
   {0b10011010, 0, 0}, {0b00101100, 0, 0}, {0b10100101, 0, 0}, {0b00100101, 0, 0}, {0b10110110, 0, 0}, {0b00111010, 0, 0},
-  {0b10000011, 0, 0}, {0b00000101, 0, 0}, {0b10011001, 0, 0}, {0b00101100, 0, 0}, {0b10000111, 0, 0}} ;
+  {0b10000011, 0, 0}, {0b00000101, 0, 0}, {0b10011001, 0, 0}, {0b00101100, 0, 0}, {0b10000111, 0, 0} } ;
 ~~~
 
 Our transmission code is shown below:
