@@ -20,7 +20,12 @@ void setup() {
   Serial.begin(9600);
   Serial.println("HELLO WORLD !");
   // TODO: READ KEY REGISTERS
-  
+
+  pinMode(4, INPUT); //input from FPGA
+  pinMode(8, OUTPUT); //output to FPGA saying it wants image info
+
+  digitalWrite(8, LOW);
+    
   delay(100);
   
   // TODO: WRITE KEY REGISTERS
@@ -38,9 +43,14 @@ void setup() {
   OV7670_write_register(0x0F, 0b00110000);
   //WRITE GFIX (WHAT GAIN TO USE???)
   read_key_registers();
+
+  set_color_matrix();
+
+  get_FPGA_data();
 }
 
 void loop(){
+  
  }
 
 
@@ -148,4 +158,28 @@ void set_color_matrix(){
     OV7670_write_register(0x6e, 0x11);
     OV7670_write_register(0x6f, 0x9f);
     OV7670_write_register(0xb0, 0x84);
+}
+
+//info about treasure shape and color sent to arduino
+//this information is transmitted as four bits in the form shown below:
+// |X|X|X|X|shp|shp|col|col|
+//where shp is a 2 bit value corresponding with shape info
+//and col is a 2 bit value corresponding with color info
+byte get_FPGA_data(){
+  byte treasure = 0b00000000;
+  digitalWrite(8, HIGH);
+  delay(5); //wait for FPGA to compute treasure data
+  bitWrite(treasure, 3, digitalRead(4)); //store MSB (shape bit 1)
+  digitalWrite(8, LOW);
+  digitalWrite(8, HIGH);
+  bitWrite(treasure, 2, digitalRead(4)); //store shape bit 2
+  digitalWrite(8, LOW);
+  digitalWrite(8, HIGH);
+  bitWrite(treasure, 1, digitalRead(4)); //store color bit 1
+  digitalWrite(8, LOW);
+  digitalWrite(8, HIGH);
+  bitWrite(treasure, 0, digitalRead(4)); //store color bit 2
+  digitalWrite(8, LOW);
+  Serial.println(treasure);
+  return treasure;
 }
