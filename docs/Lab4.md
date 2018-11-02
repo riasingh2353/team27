@@ -7,6 +7,11 @@ The purpose of this lab is to begin the process of enabling our robot with compu
 
 ### Materials
 
+* Our Arduino Uno
+* Two (2) DE0-Nano - Altera Cyclone IV Field-Programmable Gate Arrays (FPGA)
+* CMOS VGA OV7670 Digital Camera
+* 
+
 ## Subteams:
 
 
