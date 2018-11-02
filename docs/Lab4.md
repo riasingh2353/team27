@@ -18,6 +18,9 @@ The purpose of this lab is to begin the process of enabling our robot with compu
 Team FPGA:
 Team Arduino:
 
+## PLL:
+With all the different components to drive for this lab, each of which requiring different clock speeds, we needed to setup Phase-Locked Loops on our FPGAs to create a set of 'virtual' clocks  
+
 ## Team Arduino:
 
 
