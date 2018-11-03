@@ -47,6 +47,7 @@ void setup() {
   set_color_matrix();
 
   get_FPGA_data();
+  get_FPGA_data();
 }
 
 void loop(){
@@ -181,5 +182,34 @@ byte get_FPGA_data(){
   bitWrite(treasure, 0, digitalRead(4)); //store color bit 2
   digitalWrite(8, LOW);
   Serial.println(treasure);
+  decode_treasure_info(treasure);
   return treasure;
+}
+
+void decode_treasure_info(byte t){
+  if (bitRead(t, 3)){
+    if (bitRead(t, 2)){
+      Serial.println("triangle");
+    }
+    else Serial.println("square");
+  }
+  else {
+    if (bitRead(t, 2)){
+      Serial.println("circle");
+    }
+    else Serial.println("None");
+  }
+
+  if (bitRead(t, 1)){
+    if (bitRead(t, 0)){
+      Serial.println("blue");
+    }
+    else Serial.println("green");
+  }
+  else {
+    if (bitRead(t, 0)){
+      Serial.println("red");
+    }
+    else Serial.println("None");
+  }  
 }
