@@ -1,4 +1,4 @@
-.`define SCREEN_WIDTH 176
+`define SCREEN_WIDTH 176
 `define SCREEN_HEIGHT 144
 
 ///////* DON'T CHANGE THIS PART *///////
