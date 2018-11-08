@@ -29,19 +29,19 @@ void setup() {
   Serial.begin(9600);
   Serial.println("HELLO WORLD !");
   // TODO: READ KEY REGISTERS
-
-  pinMode(4, INPUT); //input from FPGA
-  pinMode(8, OUTPUT); //output to FPGA saying it wants image info
-
-  digitalWrite(8, LOW);
-    
-  delay(100);
+//
+//  pinMode(4, INPUT); //input from FPGA
+//  pinMode(8, OUTPUT); //output to FPGA saying it wants image info
+//
+//  digitalWrite(8, LOW);
+//    
+//  delay(100);
 
   // Write to bit 7 to reset registers
   OV7670_write_register(COM7, 0x80); 
-
-  delay(200); 
-  
+//
+//  delay(100); 
+//  
   set_color_matrix(); 
   
   //Write to bit 3 to enable scaling
@@ -54,7 +54,7 @@ void setup() {
   OV7670_write_register(CLKRC, 0xC0);
   
   // Enable color bar test
-  OV7670_write_register(COM17, 0x08);
+  OV7670_write_register(COM17, 0x0C);
   
   // Mirror/flip image
   OV7670_write_register(MVFP, 0x30);
@@ -63,7 +63,7 @@ void setup() {
  // y scaling
 
   read_key_registers();
-  read_color_registers();
+//  read_color_registers();
 
  // get_FPGA_data();
  // get_FPGA_data();
@@ -76,52 +76,37 @@ void loop(){
 
 ///////// Function Definition //////////////
 void read_key_registers(){
-  /*TODO: DEFINE THIS FUNCTION*/
-  //READ COM7
+  byte regval;
+  
+  Serial.println("Value at COM3:");
+  regval = read_register_value(COM3);
+  Serial.println(regval,HEX);
+  
   Serial.println("Value at COM7:");
-  Serial.println(read_register_value(0x12),HEX);
-  byte regval = 1;
-  Serial.print(regval,HEX);
-  for (int k = 7; k >= 0; k--) {
-    Serial.print(bitRead(regval, k));
-  }
-  Serial.println();
+  regval = read_register_value(COM7);
+  Serial.println(regval,HEX);
+
   //READ COM14
-  Serial.println("Value at COM14:");
-  regval = read_register_value(0x1F);
-  for (int k = 7; k >= 0; k--) {
-    Serial.print(bitRead(regval, k));
-  }
-  Serial.println();
+  Serial.println("Value at COM15:");
+  regval = read_register_value(COM15);
+  Serial.println(regval,HEX);
+  
   //READ COM17
   Serial.println("Value at COM17:");
-  regval = read_register_value(0x21);
-  for (int k = 7; k >= 0; k--) {
-    Serial.print(bitRead(regval, k));
-  }
-  Serial.println();
+  regval = read_register_value(COM17);
+  Serial.println(regval,HEX);
 
   //READ CLKRC
   Serial.println("Value at CLKRC:");
-  regval = read_register_value(0x11);
-  for (int k = 7; k >= 0; k--) {
-    Serial.print(bitRead(regval, k));
-  }
-  Serial.println();
+  regval = read_register_value(CLKRC);
+  Serial.println(regval,HEX);
+  
   //READ MVFP
   Serial.println("Value at MVFP:");
-  regval = read_register_value(0x1E);
-  for (int k = 7; k >= 0; k--) {
-    Serial.print(bitRead(regval, k));
-  }
-  Serial.println();
-  //READ GFIX
-  Serial.println("Value at GFIX:");
-  regval = read_register_value(0x34);
-  for (int k = 7; k >= 0; k--) {
-    Serial.print(bitRead(regval, k));
-  }
-  Serial.println();
+  regval = read_register_value(MVFP);
+  Serial.println(regval,HEX);
+
+
 }
 
 byte read_register_value(int register_address){
