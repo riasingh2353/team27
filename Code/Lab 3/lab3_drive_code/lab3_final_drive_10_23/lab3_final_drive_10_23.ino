@@ -23,7 +23,7 @@ int wall_threshold = 150;        //A wall exists if a wall sensor reads a value 
 int countdown = 5000;
 int max_countdown_value = 5000;
 bool wall_before = false;
-bool start = 0;                  //0 if 660Hz has not been detected. 1 o/w
+bool start = 1;                  //0 if 660Hz has not been detected. 1 o/w
 int dir = 1;                     //direction the robot is traveling in.
 //0 -> N; 1 -> E; 2 -> S; 3 -> W;
 //We assume the robot starts in the northwest corner
@@ -31,14 +31,14 @@ int dir = 1;                     //direction the robot is traveling in.
 
 int l = 0;                       //counter used in fft_detect()
 
-//RF24 radio(9, 10);
-////pipe addresses
-//const uint64_t pipes[2] = { 0x0000000048LL, 0x0000000049LL };
-//byte transmit[3] = {10, 20, 30};//wall_encodings[x][3];
-//
-//int count = 0;
-//typedef enum { role_ping_out = 1, role_pong_back } role_e;
-//role_e role = role_ping_out;
+RF24 radio(9, 10);
+//pipe addresses
+const uint64_t pipes[2] = { 0x0000000048LL, 0x0000000049LL };
+byte transmit[3] = {10, 20, 30};//wall_encodings[x][3];
+
+int count = 0;
+typedef enum { role_ping_out = 1, role_pong_back } role_e;
+role_e role = role_ping_out;
 
 void setup() {
   Serial.begin(57600);
@@ -58,7 +58,7 @@ void setup() {
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
   ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
 
-  /*
+  
     // Setup and configure rf radio
     radio.begin();
 
@@ -83,7 +83,7 @@ void setup() {
 
     // Dump the configuration of the rf unit for debugging
     radio.printDetails();
-  */
+  
 }
 
 
@@ -444,103 +444,103 @@ void intersection() {
 // refer to github for encoding of this array
 //NOTE: get_wall_values() must be called beforehand
 
-//void radio_transmit_sim() {
-//  // First, stop listening so we can talk.
-//  byte info[3] = {0, 0, 0};   //stores maze info.
-//  info[0] = pack_bit_one(dir);
-//  radio.stopListening();
-//  // NOTE: the maze array is defined here
-//  // Send the maze in a single payload
-//  printf(count);
-//  if (role == role_ping_out) {
-//    // First, stop listening so we can talk.
-//    radio.stopListening();
-//
-//    // NOTE: the maze array is defined here
-//
-//    // Send the maze in a single payload
-//    printf("Sending\n");
-//    bool ok = radio.write( info, sizeof(info) );
-//
-//    if (ok) {
-//      printf("ok, sending. \n");
-//      for (int i = 0; i < 3; i++) {
-//        //  Serial.println(transmit[i],BIN);
-//      }
-//      printf(count);
-//    }
-//    else {
-//      printf("failed.\n\r");
-//      for (int i = 0; i < 3; i++) {
-//        //  Serial.println(transmit[i]);
-//      }
-//    }
-//    delay(1000); //give time for other end to receive
-//  }
-//}
-//
-//void copy(byte* src, byte* dst, int len) {
-//  memcpy(dst, src, sizeof(src[0])*len);
-//}
-//
-////helper for send_intersection_info()
-////takes the direction the robot is facing as an input (pass global dir var to this function)
-////returns a byte in the following form:  [0|0|DIR|DIR|N|E|S|W]
-//// where N,E,S, and W are 1 if walls exist in those directions, 0 o/w
-//// DIR is a 2 bit value indicating the direction the robot is facing
-//// 00 -> N; 01 -> E; 10 -> S; 11 -> W;
-//byte pack_bit_one(int facing) {
-//  byte info = 0;
-//  int n = 0;
-//  int e = 0;
-//  int s = 0;
-//  int w = 0;
-//  int lwall = 0;
-//  int rwall = 0;
-//  int fwall = 0;
-//  if (left_wall_value > wall_threshold) {
-//    lwall = 1;
-//  }
-//  if (front_wall_value > wall_threshold) {
-//    fwall = 1;
-//  }
-//  if (right_wall_value > wall_threshold) {
-//    rwall = 1;
-//  }
-//  switch (facing) {
-//    case 0: //ROBOT IS FACING NORTH
-//      w = lwall;
-//      n = fwall;
-//      e = rwall;
-//      //(i know i don't need to explicitly write zeros to locations
-//      //initialized to be zero but it makes it more clear what is happening)
-//      bitWrite(info, 4, 0);
-//      bitWrite(info, 5, 0);
-//    case 1: //ROBOT IS FACING EAST
-//      n = lwall;
-//      e = fwall;
-//      s = rwall;
-//      bitWrite(info, 4, 1);
-//      bitWrite(info, 5, 0);
-//    case 2: //ROBOT IS FACING SOUTH
-//      e = lwall;
-//      s = fwall;
-//      w = rwall;
-//      bitWrite(info, 4, 0);
-//      bitWrite(info, 5, 1);
-//    case 3: //ROBOT IS FACING WEST
-//      s = lwall;
-//      w = fwall;
-//      n = rwall;
-//      bitWrite(info, 4, 1);
-//      bitWrite(info, 5, 1);
-//  }
-//  bitWrite(info, 0, w);
-//  bitWrite(info, 1, s);
-//  bitWrite(info, 2, e);
-//  bitWrite(info, 3, n);
-//  return info;
-//}
+void radio_transmit_sim() {
+  // First, stop listening so we can talk.
+  byte info[3] = {0, 0, 0};   //stores maze info.
+  info[0] = pack_bit_one(dir);
+  radio.stopListening();
+  // NOTE: the maze array is defined here
+  // Send the maze in a single payload
+  printf(count);
+  if (role == role_ping_out) {
+    // First, stop listening so we can talk.
+    radio.stopListening();
+
+    // NOTE: the maze array is defined here
+
+    // Send the maze in a single payload
+    printf("Sending\n");
+    bool ok = radio.write( info, sizeof(info) );
+
+    if (ok) {
+      printf("ok, sending. \n");
+      for (int i = 0; i < 3; i++) {
+        //  Serial.println(transmit[i],BIN);
+      }
+      printf(count);
+    }
+    else {
+      printf("failed.\n\r");
+      for (int i = 0; i < 3; i++) {
+        //  Serial.println(transmit[i]);
+      }
+    }
+    delay(1000); //give time for other end to receive
+  }
+}
+
+void copy(byte* src, byte* dst, int len) {
+  memcpy(dst, src, sizeof(src[0])*len);
+}
+
+//helper for send_intersection_info()
+//takes the direction the robot is facing as an input (pass global dir var to this function)
+//returns a byte in the following form:  [0|0|DIR|DIR|N|E|S|W]
+// where N,E,S, and W are 1 if walls exist in those directions, 0 o/w
+// DIR is a 2 bit value indicating the direction the robot is facing
+// 00 -> N; 01 -> E; 10 -> S; 11 -> W;
+byte pack_bit_one(int facing) {
+  byte info = 0;
+  int n = 0;
+  int e = 0;
+  int s = 0;
+  int w = 0;
+  int lwall = 0;
+  int rwall = 0;
+  int fwall = 0;
+  if (left_wall_value > wall_threshold) {
+    lwall = 1;
+  }
+  if (front_wall_value > wall_threshold) {
+    fwall = 1;
+  }
+  if (right_wall_value > wall_threshold) {
+    rwall = 1;
+  }
+  switch (facing) {
+    case 0: //ROBOT IS FACING NORTH
+      w = lwall;
+      n = fwall;
+      e = rwall;
+      //(i know i don't need to explicitly write zeros to locations
+      //initialized to be zero but it makes it more clear what is happening)
+      bitWrite(info, 4, 0);
+      bitWrite(info, 5, 0);
+    case 1: //ROBOT IS FACING EAST
+      n = lwall;
+      e = fwall;
+      s = rwall;
+      bitWrite(info, 4, 1);
+      bitWrite(info, 5, 0);
+    case 2: //ROBOT IS FACING SOUTH
+      e = lwall;
+      s = fwall;
+      w = rwall;
+      bitWrite(info, 4, 0);
+      bitWrite(info, 5, 1);
+    case 3: //ROBOT IS FACING WEST
+      s = lwall;
+      w = fwall;
+      n = rwall;
+      bitWrite(info, 4, 1);
+      bitWrite(info, 5, 1);
+  }
+  bitWrite(info, 0, w);
+  bitWrite(info, 1, s);
+  bitWrite(info, 2, e);
+  bitWrite(info, 3, n);
+  return info;
+}
 
 
 ////////
