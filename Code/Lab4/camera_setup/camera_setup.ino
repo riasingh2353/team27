@@ -6,8 +6,8 @@
 #define COM3 0x0C        // ENABLE SCALING
 #define COM7 0x12        // RESET REGISTERS, SET OUTPUT FORMAT
 #define COM9 0x14        // SET AUTOMATIC GAIN CEILING
-#define COM15 0xC0       // SET RGB OPTION
-#define COM17 0x0C       // ENABLE COLOR BAR TEST
+#define COM15 0x40       // SET RGB OPTION
+#define COM17 0x42       // ENABLE COLOR BAR TEST
 #define SCALING_XSC 0x70 // 8-BAR COLOR
 #define SCALING_YSC 0x71 // 8-BAR COLOR
 #define MVFP 0x1E        // FLIP/MIRROR IMAGE
@@ -43,6 +43,9 @@ void setup() {
 //  delay(100); 
 //  
   set_color_matrix(); 
+
+  // Set RGB option to RGB565
+  OV7670_write_register(COM15,0xF0); 
   
   //Write to bit 3 to enable scaling
   OV7670_write_register(COM3, 0x08); 
