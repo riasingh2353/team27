@@ -22,8 +22,11 @@ Team Arduino:
 With all the different components to drive for this lab, each of which requiring different clock speeds, we needed to setup Phase-Locked Loops on our FPGAs to create a set of 'virtual' clocks.  While our FPGA can generate a 50 MHz internal clock, we need a 24 MHz clock to drive the camera and a 25 MHz clock for the VGA module to drive the screen output for debugging.  Out onboard memory also needs clocks associated with reading and writing data.  So, we created a phase-locked loop (PLL) to generate three clock lines at 24, 25, and 50 MHz, all in phase with each other.  This was accomplished using the _Altera_ IP that is packaged with Quartus II, the environment in which we programmed the FPGA.
 
 ## Team Arduino:
+Team Arduino set up the camera registers and I2C protocol to allow communication between the FPGA and the Arduino.
 
+Our first step was to initialize camera registers using information from the OV7670 datasheet. In all, we had to be able to reset all registers, enable scaling, use the external FPGA clock as an internal clock, set the camera to the correct resolution and pixel format, enable a color bar test, and set gain (Automatic Gain Ceiling) parameters on the OV7670.
 
+A table of the addresses of these registers and the values that must be written to them to achieve the above functions is shown below:
 
 ## Team FPGA:
 We began by opening the provided _Lab4_FPGA_Template.zip_ file and setting up the project in Quartus II, as well as initializing the PLL as described above.  After reading through the associated project files, we instantiated the PLL within the project's top-level module, _DE0_NANO.v_.
@@ -61,7 +64,7 @@ always @ (VGA_PIXEL_X, VGA_PIXEL_Y) begin
 end
 ~~~
 
-To ensure that our memory array is set up correctly, we created test patterns that could be injected into memory and output on our display.  The following code block creates an output resembling St. George's Cross:
+To ensure that our memory array is set up correctly, we created test patterns that could be injected into memory and output on our display.  The following code block creates an output resembling St. George's Cross in the top left corner, surrounded by blue:
 
 ~~~c
 always @ (posedge PCLK) begin
@@ -94,6 +97,26 @@ always @ (posedge PCLK) begin
 end
 ~~~
 
+After confirming the operation of our memory buffer reader, we needed to create a downsampler that could contract the data output by the OV7670 camera into a single byte.  We opted to have our OV7670 sample data using the RGB565 format, which delivers pixel data in a two-byte package; since the camera only has 8 output pins, this means it takes two clock cycles to fully read data from a single pixel.  Specifically, the memory layout is as follows: RRRRRGGG/GGGBBBBB where the five least significant bits contain Blue pixel data, bits 5-10 contain Green pixel Data, and bits 11-15 Red pixel data.  Our downsampler takes data from each of the camera's eight data pins (D0-D7), and then, dependent on which byte is currently being tramitted, the register 'pixel_data_RGB332' is updated accordingly.  This register contains the RGB332 "translation" for the given pixel, with the following memory layout: RRRGGGBB.  The following code block takes the most-significant bits of each color from the RGB565 format and places them in the 'pixel_data_RGB332' register:
 
+~~~c
+if (~byte_num) begin
+	pixel_data_RGB332[7:2] <= {D7,D6,D5,D2,D1,D0};
+	pixel_data_RGB332[1:0] <= pixel_data_RGB332[1:0];
+	byte_num <= W_EN;
+	X_ADDR <= X_ADDR;	
+	W_EN <= 0;      
+end
+
+else begin
+	pixel_data_RGB332[7:2] <=pixel_data_RGB332[7:2];
+	pixel_data_RGB332[1:0] <= {D4,D3}; 
+	X_ADDR <= X_ADDR + 1;		
+	byte_num <= W_EN;
+	W_EN <= 1;	  
+end
+~~~
+
+The 'byte_num' bit keeps track of which of the two bytes that OV7670 outputs is currently being processed.
 
 ## Final Integration:
