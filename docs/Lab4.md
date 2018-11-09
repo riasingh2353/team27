@@ -28,6 +28,15 @@ Our first step was to initialize camera registers using information from the OV7
 
 A table of the addresses of these registers and the values that must be written to them to achieve the above functions is shown below:
 
+| Register | Address (Camera) | Address (Arduino) | Value Written (bin) | Additional Comments                                                                                                     |
+|----------|------------------|-------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------|
+| COM7     | 0x12             | 0x09              | 10000110            | bit 7: Reset all registers bit 1: Enable color bar test Setting bit 2 and bit 0 high sets the OV7670 to output RGB data |
+| COM14    | 0x3E             | 0x1F              | N/A                 | Enable Scaling                                                                                                          |
+| COM17    | 0x42             | 0x21              | 00001000            | Bit 3: High to enable color bar test (requires two registers)                                                           |
+| CLKRC    | 0x11             | 0x08              | 10000000            | Use external clock (i.e. 24 MHz clock from FPGA)                                                                        |
+| MVFP     | 0x1E             | 0x0F              | 00110000            | Vertical/Mirror Flip                                                                                                    |
+| GFIX     | 0x69             | 0x34              | N/A                 | Setting gain parameters                                                                                                 |
+
 ## Team FPGA:
 We began by opening the provided _Lab4_FPGA_Template.zip_ file and setting up the project in Quartus II, as well as initializing the PLL as described above.  After reading through the associated project files, we instantiated the PLL within the project's top-level module, _DE0_NANO.v_.
 
