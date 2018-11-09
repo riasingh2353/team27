@@ -55,6 +55,10 @@ Next, we created a protocol for the FPGA to pass treasure information to the ard
 | 10               | Square   |
 | 11               | Triangle |
 
+When the Arduino wants treasure information, it will set a digital pin to high and then low for each bit that it wants (4 bits = 4 cycles of high then low). The FPGA will read this signal through a GPIO input pin. The FPGA is set so that it will send 1 bit of the treasure information to the Arduino for each positive edge of this signal. The treasure information is transmitted via a GPIO output pin that the arduino reads through a separate digital pin. This protocol uses 2 Arduino digital pins and 2 FPGA pins. 
+
+The Arduino then decodes the 4 bits that it receives and prints out the correct shape and color of the treasure if present, or “None none” is there is no treasure.
+
 ## Team FPGA:
 We began by opening the provided _Lab4_FPGA_Template.zip_ file and setting up the project in Quartus II, as well as initializing the PLL as described above.  After reading through the associated project files, we instantiated the PLL within the project's top-level module, _DE0_NANO.v_.
 
