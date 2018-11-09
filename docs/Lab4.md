@@ -39,8 +39,13 @@ jankPLL	jankPLL_inst (
 
 Above, c0, c1, and c2 are our 24, 25, and 50 MHz phase-locked clock signals, and c#\_sig are internal wires that can carry our three distinct frequencies.  Note that, while CLOCK_50 can also be used as a 50 MHz line, we use c2\_sig to drive 50 MHz signals instead of CLOCK_50 because our setup ensures that c2\_sig is phase-locked with the other signals.
 
-We attached the VGA adapter to our FPGA at this time.  The pre-made adapter fit neatly over one of the FPGA's GPIO pinouts, occupying pins in the even-numbered sequence from 8 to 28 on GPIO-0, or the odd-numbered sequence of addresses from GPIO_05 to GPIO_023 plus the grounded pin #12 (see below).
+We attached the VGA adapter to our FPGA at this time.  The pre-made adapter fit neatly over one of the FPGA's GPIO pinouts, occupying pins in the even-numbered sequence from 8 to 28 on GPIO-0, or the odd-numbered sequence of addresses from GPIO_05 to GPIO_023 plus the grounded pin #12 (outlined in red below).
 
 ![Adapter Pinout Diagram](./media/GPIO-0.PNG)
+
+In the top-level module, the clock pins were assigned to each sub-module accordingly.  Specifically, the .CLOCK input for the VGA module was assigned 25 MHz; the .CLK input for the Image Processor module was assigned 25 MHz; the .clk_R (read clock) input for the M9K memory module was assigned 25 MHz, and the .clk_W (write clock) input was assigned 50 MHz.  Thus, all of the modules needed to drive the monitor were instantiated.  The result is shown below.
+
+![VGANoInput](./media/VGANoInput.png)
+
 
 ## Final Integration:
