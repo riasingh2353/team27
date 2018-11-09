@@ -47,5 +47,18 @@ In the top-level module, the clock pins were assigned to each sub-module accordi
 
 ![VGANoInput](./media/VGANoInput.png)
 
+The black square in the top left corner represents the data stored in our M9K memory blocks, which is currently zeroed.  Our memory array consists of SCREEN_WIDTHxSCREEN_HEIGHT 8-bit registers, where SCREEN_WIDTHxSCREEN_HEIGHT is the product of the two global variables that determine the size of our image output.  For the purposes of this lab, 'SCREEN_WIDTH' is 176 and 'SCREEN_HEIGHT' is 144.  In order to traverse an array of this size, we need a 15-bit 'r_addr_reg' register.  To explain the blue remainder of the output, it is important to note that the VGA module is still configured to output the full 640x480 resolution.  However, when the values of 'PIXEL_X' and 'PIXEL_Y', the two registers that track the location of a given pixel, fall outside the boundary imposed by 'SCREEN_WIDTH' and 'SCREEN_HEIGHT,' the pixel is colored Blue on screen.  This is understood in an _always_ block in the top-level module, which updates the memory module's read address:
+
+~~~c
+always @ (VGA_PIXEL_X, VGA_PIXEL_Y) begin
+		READ_ADDRESS = (VGA_PIXEL_X + VGA_PIXEL_Y*`SCREEN_WIDTH);
+		if(VGA_PIXEL_X>(`SCREEN_WIDTH-1) || VGA_PIXEL_Y>(`SCREEN_HEIGHT-1))begin
+				VGA_READ_MEM_EN = 1'b0;
+		end
+		else begin
+				VGA_READ_MEM_EN = 1'b1;
+		end
+end
+~~~
 
 ## Final Integration:
