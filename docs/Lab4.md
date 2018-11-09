@@ -26,7 +26,17 @@ With all the different components to drive for this lab, each of which requiring
 
 
 ## Team FPGA:
-The FPGA team began by opening the provided _Lab4_FPGA_Template.zip_ file and setting up the 
+We began by opening the provided _Lab4_FPGA_Template.zip_ file and setting up the project in Quartus II, as well as initializing the PLL as described above.  After reading through the associated project files, we implemented the PLL into the project's header file, _DE0_NANO.v_.
 
+~~~c
+jankPLL	jankPLL_inst (
+	.inclk0 ( CLOCK_50 ),
+	.c0 ( c0_sig ),
+	.c1 ( c1_sig ),
+	.c2 ( c2_sig )
+	);
+~~~
+
+Above, c0, c1, and c2 are our 24, 25, and 50 MHz phase-locked clock signals, and c#\_sig are internal wires that can carry our three distinct frequencies.  Note that, while CLOCK_50 can also be used as a 50 MHz line, we use c2\_sig to drive 50 MHz signals instead of CLOCK_50 because we know that c2\_sig is phase-locked with the other signals.
 
 ## Final Integration:
