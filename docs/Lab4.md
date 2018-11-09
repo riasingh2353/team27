@@ -30,7 +30,7 @@ A table of the addresses of these registers and the values that must be written 
 
 | Register | Address (Camera) | Address (Arduino) | Value Written (bin) | Additional Comments                                                                                                     |
 |----------|------------------|-------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------|
-| COM7     | 0x12             | 0x09              | 10000110            | bit 7: Reset all registers bit 1: Enable color bar test Setting bit 2 and bit 0 high sets the OV7670 to output RGB data |
+| COM7     | 0x12             | 0x09              | 10000110            | bit 7: Reset all registers <br>bit 1: Enable color bar test <br>Setting bit 2 and bit 0 high sets the OV7670 to output RGB data |
 | COM14    | 0x3E             | 0x1F              | N/A                 | Enable Scaling                                                                                                          |
 | COM17    | 0x42             | 0x21              | 00001000            | Bit 3: High to enable color bar test (requires two registers)                                                           |
 | CLKRC    | 0x11             | 0x08              | 10000000            | Use external clock (i.e. 24 MHz clock from FPGA)                                                                        |
