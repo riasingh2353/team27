@@ -26,7 +26,7 @@ With all the different components to drive for this lab, each of which requiring
 
 
 ## Team FPGA:
-The FPGA team began with the provided _Lab4_FPGA_Template.zip_
+The FPGA team began by opening the provided _Lab4_FPGA_Template.zip_ file and setting up the 
 
 
 ## Final Integration:
