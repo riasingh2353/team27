@@ -37,6 +37,24 @@ A table of the addresses of these registers and the values that must be written 
 | MVFP     | 0x1E             | 0x0F              | 00110000            | Vertical/Mirror Flip                                                                                                    |
 | GFIX     | 0x69             | 0x34              | N/A                 | Setting gain parameters                                                                                                 |
 
+Our group was provided with a template function that we used to overwrite the default values at these registers. This function required that only the most significant 7 bits of each register’s 8-bit address were passed to it. As such, the addresses that the arduino actually wrote to (column 1 in above table) were passed to this function by getting rid of the least significant bit in the actual camera address (column 2 in above table).
+
+Next, we created a protocol for the FPGA to pass treasure information to the arduino. We set the FPGA to output the treasure shape and color in 4 bits after Team FPGA’s color detection algorithm is run. The first 2 bits will represent the detected treasure’s shape, and the second 2 bits will represent its color.
+
+| Value (bits 1-0) | Color |
+|------------------|-------|
+| 00               | None  |
+| 01               | Red   |
+| 10               | Green |
+| 11               | Blue  |
+
+| Value (bits 3-2) | Shape    |
+|------------------|----------|
+| 00               | None     |
+| 01               | Circle   |
+| 10               | Square   |
+| 11               | Triangle |
+
 ## Team FPGA:
 We began by opening the provided _Lab4_FPGA_Template.zip_ file and setting up the project in Quartus II, as well as initializing the PLL as described above.  After reading through the associated project files, we instantiated the PLL within the project's top-level module, _DE0_NANO.v_.
 
