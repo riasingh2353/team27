@@ -41,6 +41,6 @@ Above, c0, c1, and c2 are our 24, 25, and 50 MHz phase-locked clock signals, and
 
 We attached the VGA adapter to our FPGA at this time.  The pre-made adapter fit neatly over one of the FPGA's GPIO pinouts, occupying pins in the even-numbered sequence from 8 to 28 on GPIO-0, or the odd-numbered sequence of addresses from GPIO_05 to GPIO_023 plus the grounded pin #12 (see below).
 
--pic-
+![Adapter Pinout Diagram](./media/GPIO-0.PNG)
 
 ## Final Integration:
