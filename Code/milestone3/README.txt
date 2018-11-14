@@ -61,17 +61,17 @@ THINGS ADDED:
 			intersections that exist in the direction the robot is facing when it starts.
 
 	VARIABLES:
-		width 
-			represents the width of the maze. 
-			from above: the robot always starts in the northwest corner facing east. so width will be the number 
-			of intersections that exist in the direction the robot is facing when it starts.
-		
-		height
-			represents the height of the maze.
+	width 
+		represents the width of the maze. 
+		from above: the robot always starts in the northwest corner facing east. so width will be the number 
+		of intersections that exist in the direction the robot is facing when it starts.
 
-		visited
-			a width*height entry array. an index stores 1 if the space with the corresponding raster coordinate
-			has been visited. otherwise it stores 0.
+	height
+		represents the height of the maze.
 
-		pos
-			stores the raster coordinate associated with the robot's current position. 
+	visited
+		a width*height entry array. an index stores 1 if the space with the corresponding raster coordinate
+		has been visited. otherwise it stores 0.
+
+	pos
+		stores the raster coordinate associated with the robot's current position. 
