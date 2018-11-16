@@ -51,10 +51,10 @@ void setup() {
   OV7670_write_register(COM3, 0x08); 
   
   //Write to bit 2 for color bar selection and enable color bar
-   OV7670_write_register(COM7, 0x0E);
+  OV7670_write_register(COM7, 0x0E);
    
   //Enable external clock
-  OV7670_write_register(CLKRC, 0xC0);
+  OV7670_write_register(CLKRC, 0x43);
   
   // Enable color bar test
   OV7670_write_register(COM17, 0x0C);
