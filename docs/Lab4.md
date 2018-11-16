@@ -24,6 +24,7 @@ With all the different components to drive for this lab, each of which requiring
 ## Team Arduino:
 Team Arduino set up the camera registers and I2C protocol to allow communication between the FPGA and the Arduino.
 
+## Writing to Camera Registers
 Our first step was to initialize camera registers using information from the OV7670 datasheet. In all, we had to be able to reset all registers, enable scaling, use the external FPGA clock as an internal clock, set the camera to the correct resolution and pixel format, enable a color bar test, and set gain (Automatic Gain Ceiling) parameters on the OV7670.
 
 A table of the addresses of these registers and the values that must be written to them to achieve the above functions is shown below:
@@ -38,6 +39,8 @@ A table of the addresses of these registers and the values that must be written 
 | GFIX     | 0x69             | 0x34              | N/A                 | Setting gain parameters                                                                                                 |
 
 Our group was provided with a template function that we used to overwrite the default values at these registers. This function required that only the most significant 7 bits of each register’s 8-bit address were passed to it. As such, the addresses that the arduino actually wrote to (column 1 in above table) were passed to this function by getting rid of the least significant bit in the actual camera address (column 2 in above table).
+
+## I2C Protocol
 
 Next, we created a protocol for the FPGA to pass treasure information to the arduino. We set the FPGA to output the treasure shape and color in 4 bits after Team FPGA’s color detection algorithm is run. The first 2 bits will represent the detected treasure’s shape, and the second 2 bits will represent its color.
 
@@ -60,6 +63,7 @@ When the Arduino wants treasure information, it will set a digital pin to high a
 The Arduino then decodes the 4 bits that it receives and prints out the correct shape and color of the treasure if present, or “None none” is there is no treasure.
 
 ## Team FPGA:
+
 We began by opening the provided _Lab4_FPGA_Template.zip_ file and setting up the project in Quartus II, as well as initializing the PLL as described above.  After reading through the associated project files, we instantiated the PLL within the project's top-level module, _DE0_NANO.v_.
 
 ~~~c
@@ -82,6 +86,8 @@ In the top-level module, the clock pins were assigned to each sub-module accordi
 ![VGANoInput](./media/VGANoInput.png)
 
 The black square in the top left corner represents the data stored in our M9K memory blocks, which is currently zeroed.  Our memory array consists of SCREEN_WIDTHxSCREEN_HEIGHT 8-bit registers, where SCREEN_WIDTHxSCREEN_HEIGHT is the product of the two global variables that determine the size of our image output.  For the purposes of this lab, 'SCREEN_WIDTH' is 176 and 'SCREEN_HEIGHT' is 144.  Addresses 0 through 175 hold the pixels corresponding to (0,0) through (0, 175), while the pixel at address (1,0) would be at address 176, and so on.  In order to traverse an array of this size, we need a 15-bit 'r_addr_reg' register.  To explain the blue remainder of the output, it is important to note that the VGA module is still configured to output the full 640x480 resolution.  However, when the values of 'VGA_PIXEL_X' and 'VGA_PIXEL_Y', the two registers that track the location of a given pixel, fall outside the boundary imposed by 'SCREEN_WIDTH' and 'SCREEN_HEIGHT,' the pixel is colored Blue on screen.  
+
+## Memory Buffer:
 
 To ensure that our memory buffer is set up correctly, we created a test pattern that could be written into memory and displayed on a screen.  The following code block creates an output resembling the English flag in the top left corner, surrounded by blue:
 
@@ -119,6 +125,11 @@ end
 After some trial and error, the resulting pattern is shown below:
 
 ![Try 2](./media/lab4/attempt2.PNG)
+
+## Downsampler
+
+## Image Processor
+
 
 ## Final Integration:
 
