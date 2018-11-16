@@ -33,7 +33,7 @@ Above, c0, c1, and c2 are our 24, 25, and 50 MHz phase-locked clock signals, and
 
 Team Arduino set up the camera registers and I2C protocol to allow communication between the FPGA and the Arduino.
 
-## Writing to Camera Registers
+### Writing to Camera Registers
 
 Our first step was to initialize camera registers using information from the OV7670 datasheet. In all, we had to be able to reset all registers, enable scaling, use the external FPGA clock as an internal clock, set the camera to the correct resolution and pixel format, enable a color bar test, and set gain (Automatic Gain Ceiling) parameters on the OV7670.
 
@@ -50,7 +50,7 @@ A table of the addresses of these registers and the values that must be written 
 
 Our group was provided with a template function that we used to overwrite the default values at these registers. This function required that only the most significant 7 bits of each register’s 8-bit address were passed to it. As such, the addresses that the arduino actually wrote to (column 1 in above table) were passed to this function by getting rid of the least significant bit in the actual camera address (column 2 in above table).
 
-## I2C Protocol
+### I2C Protocol
 
 Next, we created a protocol for the FPGA to pass treasure information to the arduino. We set the FPGA to output the treasure shape and color in 4 bits after Team FPGA’s color detection algorithm is run. The first 2 bits will represent the detected treasure’s shape, and the second 2 bits will represent its color.
 
@@ -84,7 +84,7 @@ In the top-level module, the clock pins were assigned to each sub-module accordi
 
 The black square in the top left corner represents the data stored in our M9K memory blocks, which is currently zeroed.  Our memory array consists of SCREEN_WIDTHxSCREEN_HEIGHT 8-bit registers, where SCREEN_WIDTHxSCREEN_HEIGHT is the product of the two global variables that determine the size of our image output.  For the purposes of this lab, 'SCREEN_WIDTH' is 176 and 'SCREEN_HEIGHT' is 144.  Addresses 0 through 175 hold the pixels corresponding to (0,0) through (0, 175), while the pixel at address (1,0) would be at address 176, and so on.  In order to traverse an array of this size, we need a 15-bit 'r_addr_reg' register.  To explain the blue remainder of the output, it is important to note that the VGA module is still configured to output the full 640x480 resolution.  However, when the values of 'VGA_PIXEL_X' and 'VGA_PIXEL_Y', the two registers that track the location of a given pixel, fall outside the boundary imposed by 'SCREEN_WIDTH' and 'SCREEN_HEIGHT,' the pixel is colored Blue on screen.  
 
-## Memory Buffer
+### Memory Buffer
 
 To ensure that our memory buffer is set up correctly, we created a test pattern that could be written into memory and displayed on a screen.  The following code block creates an output resembling the English flag in the top left corner, surrounded by blue:
 
@@ -123,7 +123,7 @@ After some trial and error, the resulting pattern is shown below:
 
 ![Try 2](./media/lab4/attempt2.PNG)
 
-## Downsampler
+### Downsampler
 
 Our next step is to create a downsampler to transform the 16-bit RGB555 output of the camera into an 8-bit RGB332 input to the VGA driver. The camera sends the RGB555 output serially using 2 bytes, with each bit being apportioned as shown in the diagram below, sourced from theimagingsource.com:
 
@@ -133,7 +133,7 @@ Our next step is to create a downsampler to transform the 16-bit RGB555 output o
 
 ![Timing Diagram](./media/lab4/cameratiming.PNG)
 
-## Image Processor
+### Image Processor
 
 
 ## Final Integration
