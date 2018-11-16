@@ -2,7 +2,7 @@
 
 [Home](./index.md)
 
-## Objective:
+## Objective
 The purpose of this lab is to begin the process of enabling our robot with computer vision, which will eventually allow it to locate treasures within an arbitrary maze based on sight.  For this week, our team broke off into two groups to tackle the logic and hardware implementation off the robot, so that we could have better control of, and ease of access to, our new system.  This system, at the time of writing, is composed of:
 
 ### Materials
@@ -13,18 +13,20 @@ The purpose of this lab is to begin the process of enabling our robot with compu
 * Pre-built VGA Adapter for FPGA
 * Additional Components as Needed
 
-## Subteams:
+## Subteams
 
 Team FPGA:  
 Team Arduino:
 
-## PLL:
+## PLL
 With all the different components to drive for this lab, each of which requiring different clock speeds, we needed to setup Phase-Locked Loops on our FPGAs to create a set of 'virtual' clocks.  While our FPGA can generate a 50 MHz internal clock, we need a 24 MHz clock to drive the camera and a 25 MHz clock for the VGA module to drive the screen output for debugging.  Out onboard memory also needs clocks associated with reading and writing data.  So, we created a phase-locked loop (PLL) to generate three clock lines at 24, 25, and 50 MHz, all in phase with each other.  This was accomplished using the _Altera_ IP that is packaged with Quartus II, the environment in which we programmed the FPGA.
 
-## Team Arduino:
+## Team Arduino
+
 Team Arduino set up the camera registers and I2C protocol to allow communication between the FPGA and the Arduino.
 
 ## Writing to Camera Registers
+
 Our first step was to initialize camera registers using information from the OV7670 datasheet. In all, we had to be able to reset all registers, enable scaling, use the external FPGA clock as an internal clock, set the camera to the correct resolution and pixel format, enable a color bar test, and set gain (Automatic Gain Ceiling) parameters on the OV7670.
 
 A table of the addresses of these registers and the values that must be written to them to achieve the above functions is shown below:
@@ -62,7 +64,7 @@ When the Arduino wants treasure information, it will set a digital pin to high a
 
 The Arduino then decodes the 4 bits that it receives and prints out the correct shape and color of the treasure if present, or “None none” is there is no treasure.
 
-## Team FPGA:
+## Team FPGA
 
 We began by opening the provided _Lab4_FPGA_Template.zip_ file and setting up the project in Quartus II, as well as initializing the PLL as described above.  After reading through the associated project files, we instantiated the PLL within the project's top-level module, _DE0_NANO.v_.
 
@@ -87,7 +89,7 @@ In the top-level module, the clock pins were assigned to each sub-module accordi
 
 The black square in the top left corner represents the data stored in our M9K memory blocks, which is currently zeroed.  Our memory array consists of SCREEN_WIDTHxSCREEN_HEIGHT 8-bit registers, where SCREEN_WIDTHxSCREEN_HEIGHT is the product of the two global variables that determine the size of our image output.  For the purposes of this lab, 'SCREEN_WIDTH' is 176 and 'SCREEN_HEIGHT' is 144.  Addresses 0 through 175 hold the pixels corresponding to (0,0) through (0, 175), while the pixel at address (1,0) would be at address 176, and so on.  In order to traverse an array of this size, we need a 15-bit 'r_addr_reg' register.  To explain the blue remainder of the output, it is important to note that the VGA module is still configured to output the full 640x480 resolution.  However, when the values of 'VGA_PIXEL_X' and 'VGA_PIXEL_Y', the two registers that track the location of a given pixel, fall outside the boundary imposed by 'SCREEN_WIDTH' and 'SCREEN_HEIGHT,' the pixel is colored Blue on screen.  
 
-## Memory Buffer:
+## Memory Buffer
 
 To ensure that our memory buffer is set up correctly, we created a test pattern that could be written into memory and displayed on a screen.  The following code block creates an output resembling the English flag in the top left corner, surrounded by blue:
 
@@ -131,10 +133,10 @@ After some trial and error, the resulting pattern is shown below:
 ## Image Processor
 
 
-## Final Integration:
+## Final Integration
 
 
-## Bonus Content:
+## Bonus Content
 
 Here's a failed attempt of our English flag for your viewing pleasure:
 
