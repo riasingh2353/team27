@@ -20,8 +20,8 @@ Servo servoR;
 bool start = 0;                  //0 if 660Hz has not been detected. 1 o/w
 int l = 0;
 unsigned int sensor_values[3];   //store sensor values
-                                 //sensor_values[0] -> left sensor; sensor_values[1] -> right sensor;
-                                 //sensor_values[2] -> rear sensor.
+//sensor_values[0] -> left sensor; sensor_values[1] -> right sensor;
+//sensor_values[2] -> rear sensor.
 int front_wall_value;            //store front wall sensor value
 int right_wall_value;            //store right wall sensor value
 int left_wall_value;             //store left wall sensor value
@@ -32,9 +32,9 @@ int wall_threshold = 150;        //A wall exists if a wall sensor reads a value 
 int countdown = 5000;
 int max_countdown_value = 5000;
 int dir = 1;                     //direction the robot is traveling in.
-                                 //0 -> N; 1 -> E; 2 -> S; 3 -> W;
-                                 //We assume the robot starts in the northwest corner
-                                 // traveling east by default
+//0 -> N; 1 -> E; 2 -> S; 3 -> W;
+//We assume the robot starts in the northwest corner
+// traveling east by default
 int width = 9;
 int height = 9;
 int maze_size = width * height;
@@ -121,8 +121,8 @@ void turn_left() {
     get_line_values();
     //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
   }
-  fft_detect();
-  radio_transmit();
+  //fft_detect();
+  //radio_transmit();
   update_position(dir, 1);
   update_direction(dir, 1);
 }
@@ -144,14 +144,14 @@ void turn_right() {
     get_line_values();
     //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
   }
-  fft_detect();
-  radio_transmit();
+  //fft_detect();
+  //radio_transmit();
   update_position(dir, 0);
   update_direction(dir, 0);
 }
 
 void turn_around() {
-  Serial.println("Turning Around");
+  //Serial.println("Turning Around");
 
   drive_straight();
   delay(200);
@@ -226,28 +226,29 @@ void stop_drive() {
 
 void line_follow_until_intersection() {
   get_line_values();
+  while (1) {
+    if (sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) { //INTERSECTION
+      return;
+    }
+    //Case: traveling along line --> drive straight
+    else if (sensor_values[0] > line_threshold && sensor_values[1] > line_threshold ) {
+      drive_straight();
+    }
 
-  if (sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) { //INTERSECTION
-    return;
-  }
-  //Case: traveling along line --> drive straight
-  else if (sensor_values[0] > line_threshold && sensor_values[1] > line_threshold ) {
-    drive_straight();
-  }
+    //Case: drifting off to the right --> correct left
+    else if (sensor_values[0] < line_threshold ) {
+      veer_left();
+    }
 
-  //Case: drifting off to the right --> correct left
-  else if (sensor_values[0] < line_threshold ) {
-    veer_left();
-  }
+    //Case: drifting off to the left --> correct right
+    else if (sensor_values[1] < line_threshold ) {
+      veer_right();
+    }
 
-  //Case: drifting off to the left --> correct right
-  else if (sensor_values[1] < line_threshold ) {
-    veer_right();
-  }
-
-  // Default: drive straight
-  else {
-    drive_straight();
+    // Default: drive straight
+    else {
+      drive_straight();
+    }
   }
 }
 
@@ -498,53 +499,6 @@ void update_direction(int facing, int turn_dir) {
   }
 }
 
-//Called when the robot reaches an intersection. reads wall sensor values and determines
-//whether to turn or drive straight. Also sets wall_before to appropriate values
-void intersection() {
-  get_wall_values();
-  fft_detect();
-  //determine whether to turn
-  if (front_wall_value > wall_threshold) {
-    if (right_wall_value > wall_threshold && left_wall_value > wall_threshold) {
-      Serial.println("LEFT WALL VALUE");
-      Serial.println(left_wall_value);
-      Serial.println("RIGHT WALL VALUE");
-      Serial.println(right_wall_value);
-      turn_around();
-      wall_before = true;
-    }
-    else if (right_wall_value > wall_threshold) {//WALLS ON FRONT AND RIGHT
-      Serial.println("TURNING LEFT");
-      turn_left();
-      wall_before = true;
-    }
-    else if (left_wall_value > wall_threshold) {//WALLS ON FRONT AND LEFT
-      turn_right();
-      wall_before = false;
-    }
-    else {//WALL ON FRONT ONLY
-      turn_left(); //arbitrary. the robot could also turn right here
-      wall_before = false;
-    }
-  }
-  else if (right_wall_value < wall_threshold && wall_before) { //SPECIAL CASE
-    turn_right();
-    wall_before = false;
-  }
-  else {//default case -- occurs when there is no wall, or wall only on right/left side
-    Serial.println("DRIVING STRAIGHT");
-    radio_transmit(); //need to manually call radio_transmit here, as there is no turn.
-    drive_straight();
-    delay(200);
-    if (right_wall_value > wall_threshold) {
-      wall_before = true;
-    }
-    else {
-      wall_before = false;
-    }
-  }
-}
-
 /////////
 ///MISC//
 /////////
@@ -612,13 +566,19 @@ void fft_detect() {
 //the direction the robot was travelling when dfs was called is passed to the function
 void dfs(int calling_dir) {
   //label intersection as visited
+  Serial.println("DFS Called");
+  Serial.println("Direction is:");
+  Serial.println(dir);
   visited[pos] = 1;
 
   //check where you can move -- store this information in array "options"
   byte options[4]; //index 0 corresponds with N, 1 with E, 2 with S, 3 with W.
-  //stores 1 if you can move in that direction, 0 o/w
+                   //stores 1 if you can move in that direction, 0 o/w
+   for (int k = 0; k<4;k++) {
+    options[k] = 0;
+  }
   get_wall_values();
-  if (right_wall_value) {
+  if (right_wall_value < wall_threshold) {
     if (dir == 3) { //if facing west, indicate that you can move north
       options[0] = 1;
     }
@@ -626,9 +586,9 @@ void dfs(int calling_dir) {
       options[dir + 1] = 1;
     }
   }
-  if (front_wall_value) options[dir] = 1;
+  if (front_wall_value < wall_threshold) options[dir] = 1;
 
-  if (left_wall_value) {
+  if (left_wall_value < wall_threshold) {
     if (dir == 0) {//if facing north, indicate that you can move west
       options[3] = 1;
     }
@@ -636,16 +596,20 @@ void dfs(int calling_dir) {
       options[dir - 1] = 1;
     }
   }
-
+  for (int k = 0; k<4;k++) {
+    Serial.println("Options:");
+    Serial.println(options[k]);
+  }
   //for each turn option:
   //if not yet visited, then visit
   for (int k = 0; k < 4; k++) {
-    if (options[k] == 1 && visited[k] == 0) {
+    if (options[k] == 1) { //NEEDS TO BE A CONDITION ABOUT WHETHER THE SPACE HAS BEEN VISITED
       //explore in direction k
       if (dir == k) {//if direction k is straight ahead
-        radio_transmit(); //need to explicitly call radio_transmit here, as there is no turn.
+        //radio_transmit(); //need to explicitly call radio_transmit here, as there is no turn.
         update_position(dir, 2); //also need to explicitly call this
         drive_straight();
+        delay(35);
       }
       if (dir == k + 1 || (dir == 0 && k == 3)) {//if direction k is to the left
         turn_left();
@@ -655,19 +619,21 @@ void dfs(int calling_dir) {
       }
       //pretty sure we shouldn't have the condition where we have to turn 180°
       line_follow_until_intersection();
+      Serial.println("Intersection");
 
       //INTERSECTION
       stop_drive();
       //NEED TO UPDATE POSITION -- PROBABLY SHOULD HAVE HELPER FUNCTION FOR THIS -- MAYBE ALREADY WRITTEN IN BASE STATION CODE
       dfs(dir);
     }
-
+  }
     //backtrack:
     //move back to space this function was recursively called from:
     //turn so that direction is the opposite of the direction the robot was travelling
     //at the time of the aforementioned recursive call
 
     //these turns probably shouldn't transmit anything??
+    Serial.println("backtracking");
     if (dir == calling_dir) {
       turn_around();
     }
@@ -678,5 +644,5 @@ void dfs(int calling_dir) {
       turn_left();
     }
     line_follow_until_intersection();
-  }
+    return;
 }
