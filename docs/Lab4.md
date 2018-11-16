@@ -145,7 +145,7 @@ Here's a failed attempt of our English flag for your viewing pleasure:
 
 ![Try 1](./media/lab4/attempt1.PNG)
 
-Here is Michael's face up close and personal with our camera. He is displaying a very green hue, which is helpful for debugging:
+Here is Michael getting up close and personal with our camera. Truly dedicated to this lab.
 
 ![Michael hehe](./media/lab4/closeup.PNG)
 
