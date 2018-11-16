@@ -15,18 +15,139 @@ The purpose of this lab is to begin the process of enabling our robot with compu
 
 ## Subteams:
 
-Team FPGA:
+Team FPGA:  
 Team Arduino:
 
 ## PLL:
 With all the different components to drive for this lab, each of which requiring different clock speeds, we needed to setup Phase-Locked Loops on our FPGAs to create a set of 'virtual' clocks.  While our FPGA can generate a 50 MHz internal clock, we need a 24 MHz clock to drive the camera and a 25 MHz clock for the VGA module to drive the screen output for debugging.  Out onboard memory also needs clocks associated with reading and writing data.  So, we created a phase-locked loop (PLL) to generate three clock lines at 24, 25, and 50 MHz, all in phase with each other.  This was accomplished using the _Altera_ IP that is packaged with Quartus II, the environment in which we programmed the FPGA.
 
 ## Team Arduino:
+Team Arduino set up the camera registers and I2C protocol to allow communication between the FPGA and the Arduino.
 
+Our first step was to initialize camera registers using information from the OV7670 datasheet. In all, we had to be able to reset all registers, enable scaling, use the external FPGA clock as an internal clock, set the camera to the correct resolution and pixel format, enable a color bar test, and set gain (Automatic Gain Ceiling) parameters on the OV7670.
 
+A table of the addresses of these registers and the values that must be written to them to achieve the above functions is shown below:
+
+| Register | Address (Camera) | Address (Arduino) | Value Written (bin) | Additional Comments                                                                                                     |
+|----------|------------------|-------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------|
+| COM7     | 0x12             | 0x09              | 10000110            | bit 7: Reset all registers <br>bit 1: Enable color bar test <br>Setting bit 2 and bit 0 high sets the OV7670 to output RGB data |
+| COM14    | 0x3E             | 0x1F              | N/A                 | Enable Scaling                                                                                                          |
+| COM17    | 0x42             | 0x21              | 00001000            | Bit 3: High to enable color bar test (requires two registers)                                                           |
+| CLKRC    | 0x11             | 0x08              | 10000000            | Use external clock (i.e. 24 MHz clock from FPGA)                                                                        |
+| MVFP     | 0x1E             | 0x0F              | 00110000            | Vertical/Mirror Flip                                                                                                    |
+| GFIX     | 0x69             | 0x34              | N/A                 | Setting gain parameters                                                                                                 |
+
+Our group was provided with a template function that we used to overwrite the default values at these registers. This function required that only the most significant 7 bits of each register’s 8-bit address were passed to it. As such, the addresses that the arduino actually wrote to (column 1 in above table) were passed to this function by getting rid of the least significant bit in the actual camera address (column 2 in above table).
+
+Next, we created a protocol for the FPGA to pass treasure information to the arduino. We set the FPGA to output the treasure shape and color in 4 bits after Team FPGA’s color detection algorithm is run. The first 2 bits will represent the detected treasure’s shape, and the second 2 bits will represent its color.
+
+| Value (bits 1-0) | Color |
+|------------------|-------|
+| 00               | None  |
+| 01               | Red   |
+| 10               | Green |
+| 11               | Blue  |
+
+| Value (bits 3-2) | Shape    |
+|------------------|----------|
+| 00               | None     |
+| 01               | Circle   |
+| 10               | Square   |
+| 11               | Triangle |
+
+When the Arduino wants treasure information, it will set a digital pin to high and then low for each bit that it wants (4 bits = 4 cycles of high then low). The FPGA will read this signal through a GPIO input pin. The FPGA is set so that it will send 1 bit of the treasure information to the Arduino for each positive edge of this signal. The treasure information is transmitted via a GPIO output pin that the arduino reads through a separate digital pin. This protocol uses 2 Arduino digital pins and 2 FPGA pins. 
+
+The Arduino then decodes the 4 bits that it receives and prints out the correct shape and color of the treasure if present, or “None none” is there is no treasure.
 
 ## Team FPGA:
-The FPGA team began with the provided _Lab4_FPGA_Template.zip_
+We began by opening the provided _Lab4_FPGA_Template.zip_ file and setting up the project in Quartus II, as well as initializing the PLL as described above.  After reading through the associated project files, we instantiated the PLL within the project's top-level module, _DE0_NANO.v_.
 
+~~~c
+jankPLL	jankPLL_inst (
+	.inclk0 ( CLOCK_50 ),
+	.c0 ( c0_sig ),
+	.c1 ( c1_sig ),
+	.c2 ( c2_sig )
+	);
+~~~
+
+Above, c0, c1, and c2 are our 24, 25, and 50 MHz phase-locked clock signals, and c#\_sig are internal wires that can carry our three distinct frequencies.  Note that, while CLOCK_50 can also be used as a 50 MHz line, we use c2\_sig to drive 50 MHz signals instead of CLOCK_50 because our setup ensures that c2\_sig is phase-locked with the other signals.
+
+We attached the VGA adapter to our FPGA at this time.  The pre-made adapter fit neatly over one of the FPGA's GPIO pinouts, occupying pins in the even-numbered sequence from 8 to 28 on GPIO-0, or the odd-numbered sequence of addresses from GPIO_05 to GPIO_023 plus the grounded pin #12 (outlined in red below).
+
+![Adapter Pinout Diagram](./media/GPIO-0.PNG)
+
+In the top-level module, the clock pins were assigned to each sub-module accordingly.  Specifically, the .CLOCK input for the VGA module was assigned 25 MHz; the .CLK input for the Image Processor module was assigned 25 MHz; the .clk_R (read clock) input for the M9K memory module was assigned 25 MHz, and the .clk_W (write clock) input was assigned 50 MHz.  Thus, all of the modules needed to drive the monitor were instantiated.  The result is shown below.
+
+![VGANoInput](./media/VGANoInput.png)
+
+The black square in the top left corner represents the data stored in our M9K memory blocks, which is currently zeroed.  Our memory array consists of SCREEN_WIDTHxSCREEN_HEIGHT 8-bit registers, where SCREEN_WIDTHxSCREEN_HEIGHT is the product of the two global variables that determine the size of our image output.  For the purposes of this lab, 'SCREEN_WIDTH' is 176 and 'SCREEN_HEIGHT' is 144.  Addresses 0 through 175 hold the pixels corresponding to (0,0) through (0, 175), while the pixel at address (1,0) would be at address 176, and so on.  In order to traverse an array of this size, we need a 15-bit 'r_addr_reg' register.  To explain the blue remainder of the output, it is important to note that the VGA module is still configured to output the full 640x480 resolution.  However, when the values of 'VGA_PIXEL_X' and 'VGA_PIXEL_Y', the two registers that track the location of a given pixel, fall outside the boundary imposed by 'SCREEN_WIDTH' and 'SCREEN_HEIGHT,' the pixel is colored Blue on screen.  This is understood in an _always_ block in the top-level module, which updates the memory module's read address:
+
+~~~c
+always @ (VGA_PIXEL_X, VGA_PIXEL_Y) begin
+		READ_ADDRESS = (VGA_PIXEL_X + VGA_PIXEL_Y*`SCREEN_WIDTH);
+		if(VGA_PIXEL_X>(`SCREEN_WIDTH-1) || VGA_PIXEL_Y>(`SCREEN_HEIGHT-1))begin
+				VGA_READ_MEM_EN = 1'b0;
+		end
+		else begin
+				VGA_READ_MEM_EN = 1'b1;
+		end
+end
+~~~
+
+To ensure that our memory array is set up correctly, we created test patterns that could be injected into memory and output on our display.  The following code block creates an output resembling St. George's Cross in the top left corner, surrounded by blue:
+
+~~~c
+always @ (posedge PCLK) begin
+	pixel_data_RGB332[1:0] <= blue;
+	pixel_data_RGB332[4:2] <= green;
+	pixel_data_RGB332[7:5] <= red;
+		W_EN <= 1;
+		
+		if (((X_ADDR + 10 > `SCREEN_WIDTH / 2) && (X_ADDR - 10 < `SCREEN_WIDTH / 2)) || 
+		((Y_ADDR + 10 > `SCREEN_HEIGHT / 2) && (Y_ADDR - 10 < `SCREEN_HEIGHT / 2)) ) begin
+			pixel_data_RGB332 <= RED;
+		end
+		else begin
+			pixel_data_RGB332 <= WHITE;
+		end
+	
+		if (X_ADDR == (`SCREEN_WIDTH-1)) begin
+			X_ADDR <= 0;
+			if (Y_ADDR == (`SCREEN_HEIGHT-1)) begin
+				Y_ADDR <= 0;
+			end 
+			else begin
+				Y_ADDR <= Y_ADDR + 1;
+			end
+		end 
+		else begin
+			X_ADDR <= X_ADDR + 1;
+			Y_ADDR <= Y_ADDR;
+		end
+end
+~~~
+
+After confirming the operation of our memory buffer reader, we needed to create a downsampler that could contract the data output by the OV7670 camera into a single byte.  We opted to have our OV7670 sample data using the RGB565 format, which delivers pixel data in a two-byte package; since the camera only has 8 output pins, this means it takes two clock cycles to fully read data from a single pixel.  Specifically, the memory layout is as follows: RRRRRGGG/GGGBBBBB where the five least significant bits contain Blue pixel data, bits 5-10 contain Green pixel Data, and bits 11-15 Red pixel data.  Our downsampler takes data from each of the camera's eight data pins (D0-D7), and then, dependent on which byte is currently being tramitted, the register 'pixel_data_RGB332' is updated accordingly.  This register contains the RGB332 "translation" for the given pixel, with the following memory layout: RRRGGGBB.  The following code block takes the most-significant bits of each color from the RGB565 format and places them in the 'pixel_data_RGB332' register:
+
+~~~c
+if (~byte_num) begin
+	pixel_data_RGB332[7:2] <= {D7,D6,D5,D2,D1,D0};
+	pixel_data_RGB332[1:0] <= pixel_data_RGB332[1:0];
+	byte_num <= W_EN;
+	X_ADDR <= X_ADDR;	
+	W_EN <= 0;      
+end
+
+else begin
+	pixel_data_RGB332[7:2] <=pixel_data_RGB332[7:2];
+	pixel_data_RGB332[1:0] <= {D4,D3}; 
+	X_ADDR <= X_ADDR + 1;		
+	byte_num <= W_EN;
+	W_EN <= 1;	  
+end
+~~~
+
+The 'byte_num' bit keeps track of which of the two bytes that OV7670 outputs is currently being processed.
 
 ## Final Integration:
