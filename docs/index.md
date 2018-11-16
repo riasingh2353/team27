@@ -8,3 +8,5 @@
 * [Milestone 2](./Milestone2.md)
 * [Lab 3](./Lab3.md)
 * [Lab 4](./Lab4.md)
+* [Milestone 3](./Milestone3.md)
+* [Milestone 4](./Milestone4.md)
