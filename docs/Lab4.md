@@ -144,7 +144,7 @@ Our next step is to create a downsampler to transform the 16-bit RGB555 output o
 ## Final Integration
 
 
-## Bonus Content
+## Bonus Content :)
 
 Here's a failed attempt of our English flag for your viewing pleasure:
 
