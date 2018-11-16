@@ -11,13 +11,6 @@
 RF24 radio(9, 10);
 //pipe addresses
 const uint64_t pipes[2] = { 0x0000000048LL, 0x0000000049LL };
-/*byte wall_encodings[12][3] = {{0b00011011, 0, 0},
-  {0b10011010, 0, 0}, {0b00101100, 0, 0}, {0b10100101, 0, 0}, {0b00100101, 0, 0}, {0b10110110, 0, 0}, {0b00111010, 0, 0},
-  {0b10000011, 0, 0}, {0b00000101, 0, 0}, {0b10011001, 0, 0}, {0b00101100, 0, 0}, {0b10000111, 0, 0}
-} ;*/
-//byte transmit[3] = {10, 20, 30};//wall_encodings[x][3];
-
-int count = 0;
 typedef enum { role_ping_out = 1, role_pong_back } role_e;
 role_e role = role_ping_out;
 
@@ -27,26 +20,25 @@ Servo servoR;
 bool start = 0;                  //0 if 660Hz has not been detected. 1 o/w
 int l = 0;
 unsigned int sensor_values[3];   //store sensor values
-//sensor_values[0] -> left sensor; sensor_values[1] -> right sensor;
-//sensor_values[2] -> rear sensor.
-int          front_wall_value;   //store front wall sensor value
-int          right_wall_value;   //store right wall sensor value
-int          left_wall_value;    //store left wall sensor value
+                                 //sensor_values[0] -> left sensor; sensor_values[1] -> right sensor;
+                                 //sensor_values[2] -> rear sensor.
+int front_wall_value;            //store front wall sensor value
+int right_wall_value;            //store right wall sensor value
+int left_wall_value;             //store left wall sensor value
 
 int line_threshold = 300;        //cutoff value b/w white and not white
 int wall_threshold = 150;        //A wall exists if a wall sensor reads a value greater than this threshold
 
 int countdown = 5000;
 int max_countdown_value = 5000;
-bool wall_before = false;
 int dir = 1;                     //direction the robot is traveling in.
-//0 -> N; 1 -> E; 2 -> S; 3 -> W;
-//We assume the robot starts in the northwest corner
-// traveling east by default
+                                 //0 -> N; 1 -> E; 2 -> S; 3 -> W;
+                                 //We assume the robot starts in the northwest corner
+                                 // traveling east by default
 int width = 9;
-int height= 9;
-int maze_size = width*height;
-byte visited[81]; //each entry in this array refers to a square 
+int height = 9;
+int maze_size = width * height;
+byte visited[81]; //each entry in this array refers to a square
 int pos    = 0;   //position in maze in raster coordinates
 
 void setup() {
@@ -80,8 +72,8 @@ void setup() {
   pinMode(7, OUTPUT); //FFT mux select bit
   //  //LOW reads microphone, HIGH reads IR circuit
   digitalWrite(7, LOW);
-        
-        
+
+
   servoL.attach(3);
   servoR.attach(5);
 
@@ -113,8 +105,8 @@ void veer_right() {
   servoR.write(100);
   get_line_values();
 }
-void turn_left() {
 
+void turn_left() {
   drive_straight();
   delay(200);
 
@@ -232,6 +224,33 @@ void stop_drive() {
   get_line_values();
 }
 
+void line_follow_until_intersection() {
+  get_line_values();
+
+  if (sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) { //INTERSECTION
+    return;
+  }
+  //Case: traveling along line --> drive straight
+  else if (sensor_values[0] > line_threshold && sensor_values[1] > line_threshold ) {
+    drive_straight();
+  }
+
+  //Case: drifting off to the right --> correct left
+  else if (sensor_values[0] < line_threshold ) {
+    veer_left();
+  }
+
+  //Case: drifting off to the left --> correct right
+  else if (sensor_values[1] < line_threshold ) {
+    veer_right();
+  }
+
+  // Default: drive straight
+  else {
+    drive_straight();
+  }
+}
+
 ///////////
 //GETTERS//
 ///////////
@@ -282,8 +301,7 @@ void radio_transmit() {
       //printf("ok, sending. \n");
       for (int i = 0; i < 3; i++) {
         //  Serial.println(transmit[i],BIN);
-      }
-      //printf(count);
+      };
     }
     else {
       //printf("failed.\n\r");
@@ -295,67 +313,6 @@ void radio_transmit() {
     delay(1000); //give time for other end to receive
   }
 }
-
-/*
-void radio_transmit() {
-  // First, stop listening so we can talk.
-  Serial.println("transmitting......");
-  //byte info[3] = {0, 0, 0};   //stores maze info.
-  //info[0] = pack_bit_one(dir);
-  //radio.stopListening();
-  // NOTE: the maze array is defined here
-  // Send the maze in a single payload
-  // Serial.println(count);
-  if (role == role_ping_out) {
-    // First, stop listening so we can talk.
-    radio.stopListening();
-    // NOTE: the maze array is defined here
-    // Send the maze in a single payload
-     Serial.println("Sending");
-    bool ok = radio.write( &transmit, sizeof(transmit) );
-    if (ok) {
-      Serial.println("ok, sending");
-      for (int i = 0; i < 3; i++) {
-        //  Serial.println(transmit[i],BIN);
-      }
-     //  Serial.println(count);
-    }
-    else {
-      Serial.println("failed");
-      for (int i = 0; i < 3; i++) {
-        //  Serial.println(transmit[i]);
-      }
-    }
-    delay(20); //give time for other end to receive
-  }
-   if ( role == role_pong_back )
-  {
-    // if there is data ready
-    if ( radio.available() )
-    {
-      // Dump the payloads until we've gotten everything
-      unsigned long got_time;
-      bool done = false;
-      while (!done)
-      {
-        // Fetch the payload, and see if this was the last one.
-        done = radio.read( &got_time, sizeof(unsigned long) );
-        // Spew it
-        printf("Got payload %lu...",got_time);
-        // Delay just a little bit to let the other unit
-        // make the transition to receiver
-        delay(20);
-      }
-      // First, stop listening so we can talk
-      radio.stopListening();
-      // Send the final one back.
-      radio.write( &got_time, sizeof(unsigned long) );
-      printf("Sent response.\n\r");
-      // Now, resume listening so we catch the next packets.
-      radio.startListening();
-    }
-  }
-}*/
 
 //helper for radio_transmit()
 //takes the direction the robot is facing as an input (pass global dir var to this function)
@@ -382,101 +339,163 @@ byte pack_bit_one(int facing) {
     rwall = 1;
   }
   if (dir == 0) {//ROBOT IS FACING NORTH
-      w = lwall;
-      n = fwall;
-      e = rwall;
-      //(i know i don't need to explicitly write zeros to locations
-      //initialized to be zero but it makes it more clear what is happening)
-      bitWrite(info, 4, 0);
-      bitWrite(info, 5, 0);
+    w = lwall;
+    n = fwall;
+    e = rwall;
+    //(i know i don't need to explicitly write zeros to locations
+    //initialized to be zero but it makes it more clear what is happening)
+    bitWrite(info, 4, 0);
+    bitWrite(info, 5, 0);
   }
   if (dir == 1) {//ROBOT IS FACING EAST
-      n = lwall;
-      e = fwall;
-      s = rwall;
-      bitWrite(info, 4, 1);
-      bitWrite(info, 5, 0);
+    n = lwall;
+    e = fwall;
+    s = rwall;
+    bitWrite(info, 4, 1);
+    bitWrite(info, 5, 0);
   }
-  if (dir == 2){//ROBOT IS FACING SOUTH
-      e = lwall;
-      s = fwall;
-      w = rwall;
-      bitWrite(info, 4, 0);
-      bitWrite(info, 5, 1);
+  if (dir == 2) { //ROBOT IS FACING SOUTH
+    e = lwall;
+    s = fwall;
+    w = rwall;
+    bitWrite(info, 4, 0);
+    bitWrite(info, 5, 1);
   }
-  if (dir == 3){//ROBOT IS FACING WEST
-      s = lwall;
-      w = fwall;
-      n = rwall;
-      bitWrite(info, 4, 1);
-      bitWrite(info, 5, 1);
+  if (dir == 3) { //ROBOT IS FACING WEST
+    s = lwall;
+    w = fwall;
+    n = rwall;
+    bitWrite(info, 4, 1);
+    bitWrite(info, 5, 1);
   }
   bitWrite(info, 0, w);
   bitWrite(info, 1, s);
   bitWrite(info, 2, e);
   bitWrite(info, 3, n);
-/*
-  Serial.println("DIR =");
-  Serial.println(dir);
-  Serial.println("Lwall =");
-  Serial.println(lwall);
-  Serial.println("Rwall =");
-  Serial.println(rwall);
-  Serial.println("Fwall =");
-  Serial.println(fwall);
-  Serial.println("n =");
-  Serial.println(n);
-  Serial.println("e =");
-  Serial.println(e);
-  Serial.println("s =");
-  Serial.println(s);
-  Serial.println("w =");
-  Serial.println(w);*/
+  /*
+    Serial.println("DIR =");
+    Serial.println(dir);
+    Serial.println("Lwall =");
+    Serial.println(lwall);
+    Serial.println("Rwall =");
+    Serial.println(rwall);
+    Serial.println("Fwall =");
+    Serial.println(fwall);
+    Serial.println("n =");
+    Serial.println(n);
+    Serial.println("e =");
+    Serial.println(e);
+    Serial.println("s =");
+    Serial.println(s);
+    Serial.println("w =");
+    Serial.println(w);*/
 
-    return info;
-
+  return info;
 }
 
 ///////////////////////////////////////////
 ////MAZE TRAVERSAL LOGIC HELPER FUNCTIONS//
 ///////////////////////////////////////////
 
+//MUST BE CALLED BEFORE DIRECITON HAS BEEN UPDATED
+//updates global position variable ('pos')
+//takes as input the direction the robot is facing (pass global dir var),
+//and the direction the robot is turning (0 -> Right turn, 1-> left turn, 2-> no turn)
+void update_position(int facing, int turn_dir) {
+  if (facing == 0) {//ROBOT IS FACING NORTH
+    if (turn_dir == 0) { // if robot is turning right
+      //x++
+      pos = pos + 1;
+    }
+    else if (turn_dir == 1) { // if robot is turning left
+      //x--
+      pos = pos - 1;
+    }
+    else {               // if robot is driving straight
+      //y++
+      pos = pos - width;
+    }
+  }
+  if (facing == 1) {//ROBOT IS FACING EAST
+    if (turn_dir == 0) { // if robot is turning right
+      //y--
+      pos = pos + width;
+    }
+    else if (turn_dir == 1) { // if robot is turning left
+      //y++
+      pos = pos - width;
+    }
+    else {               // if robot is driving straight
+      //x++
+      pos = pos + 1;
+    }
+  }
+  if (facing == 2) {//ROBOT IS FACING SOUTH
+    if (turn_dir == 0) { // if robot is turning right
+      //x--
+      pos = pos - 1;
+    }
+    else if (turn_dir == 1) { // if robot is turning left
+      //x++
+      pos = pos + 1;
+    }
+    else {               // if robot is driving straight
+      //y--
+      pos = pos + width;
+    }
+  }
+  if (facing == 3) {//ROBOT IS FACING WEST
+    if (turn_dir == 0) { // if robot is turning right
+      //y++
+      pos = pos - width;
+    }
+    else if (turn_dir == 1) { // if robot is turning left
+      //y--
+      pos = pos + width;
+    }
+    else {               // if robot is driving straight
+      //x--
+      pos = pos - 1;
+    }
+  }
+}
+
 //call at the end of turn_left() and turn_right() turn to update global dir (direction) variable.
 //takes as input the direction the robot is facing (pass global dir var),
 //and the direction the robot is turning (0 -> Right turn, 1-> left turn)
 void update_direction(int facing, int turn_dir) {
-    if (facing == 0) {//ROBOT IS FACING NORTH
-      if (turn_dir == 0) { // if robot is turning right
-        dir = 1;
-      }
-      else {               // if robot is turning left
-        dir = 3;
-      }
+  if (facing == 0) {//ROBOT IS FACING NORTH
+    if (turn_dir == 0) { // if robot is turning right
+      dir = 1;
     }
-    if (facing == 1) {//ROBOT IS FACING EAST
-      if (turn_dir == 0) { // if robot is turning right
-        dir = 2;
-      }
-      else {               // if robot is turning left
-        dir = 0;
-      }
+    else {               // if robot is turning left
+      dir = 3;
     }
-    if (facing == 2) {//ROBOT IS FACING SOUTH
-      if (turn_dir == 0) { // if robot is turning right
-        dir = 3;
-      }
-      else {               // if robot is turning left
-        dir = 1;
-      }
+  }
+  if (facing == 1) {//ROBOT IS FACING EAST
+    if (turn_dir == 0) { // if robot is turning right
+      dir = 2;
     }
-    if (facing == 3) {//ROBOT IS FACING WEST
-      if (turn_dir == 0) { // if robot is turning right
-        dir = 0;
-      }
-      else {               // if robot is turning left
-        dir = 2;
-      }
+    else {               // if robot is turning left
+      dir = 0;
     }
+  }
+  if (facing == 2) {//ROBOT IS FACING SOUTH
+    if (turn_dir == 0) { // if robot is turning right
+      dir = 3;
+    }
+    else {               // if robot is turning left
+      dir = 1;
+    }
+  }
+  if (facing == 3) {//ROBOT IS FACING WEST
+    if (turn_dir == 0) { // if robot is turning right
+      dir = 0;
+    }
+    else {               // if robot is turning left
+      dir = 2;
+    }
+  }
 }
 
 //Called when the robot reaches an intersection. reads wall sensor values and determines
@@ -597,9 +616,9 @@ void dfs(int calling_dir) {
 
   //check where you can move -- store this information in array "options"
   byte options[4]; //index 0 corresponds with N, 1 with E, 2 with S, 3 with W.
-                   //stores 1 if you can move in that direction, 0 o/w
+  //stores 1 if you can move in that direction, 0 o/w
   get_wall_values();
-  if(right_wall_value) {
+  if (right_wall_value) {
     if (dir == 3) { //if facing west, indicate that you can move north
       options[0] = 1;
     }
@@ -607,7 +626,7 @@ void dfs(int calling_dir) {
       options[dir + 1] = 1;
     }
   }
-  if(front_wall_value) options[dir] = 1;
+  if (front_wall_value) options[dir] = 1;
 
   if (left_wall_value) {
     if (dir == 0) {//if facing north, indicate that you can move west
@@ -621,134 +640,43 @@ void dfs(int calling_dir) {
   //for each turn option:
   //if not yet visited, then visit
   for (int k = 0; k < 4; k++) {
-    if (options[k] == 1 && visited[k] == 0){
+    if (options[k] == 1 && visited[k] == 0) {
       //explore in direction k
       if (dir == k) {//if direction k is straight ahead
-          radio_transmit(); //need to explicitly call radio_transmit here, as there is no turn.
-          update_position(dir, 2); //also need to explicitly call this
-          drive_straight();
+        radio_transmit(); //need to explicitly call radio_transmit here, as there is no turn.
+        update_position(dir, 2); //also need to explicitly call this
+        drive_straight();
       }
       if (dir == k + 1 || (dir == 0 && k == 3)) {//if direction k is to the left
-          turn_left();
+        turn_left();
       }
-      if (dir == k - 1 || (dir == 3 && k ==0)) {//if direction k is to the right
-          turn_right();
+      if (dir == k - 1 || (dir == 3 && k == 0)) { //if direction k is to the right
+        turn_right();
       }
       //pretty sure we shouldn't have the condition where we have to turn 180°
       line_follow_until_intersection();
-      
+
       //INTERSECTION
       stop_drive();
-        //NEED TO UPDATE POSITION -- PROBABLY SHOULD HAVE HELPER FUNCTION FOR THIS -- MAYBE ALREADY WRITTEN IN BASE STATION CODE
+      //NEED TO UPDATE POSITION -- PROBABLY SHOULD HAVE HELPER FUNCTION FOR THIS -- MAYBE ALREADY WRITTEN IN BASE STATION CODE
       dfs(dir);
-    }      
+    }
 
-    //backtrack:  
+    //backtrack:
     //move back to space this function was recursively called from:
-      //turn so that direction is the opposite of the direction the robot was travelling
-      //at the time of the aforementioned recursive call
+    //turn so that direction is the opposite of the direction the robot was travelling
+    //at the time of the aforementioned recursive call
 
-      //these turns probably shouldn't transmit anything??
-      if (dir == calling_dir) {
-        turn_around();
-      }
-      else if (dir == calling_dir + 1 || (dir == 0 && calling_dir == 3)) { 
-        turn_right();
-      }
-      else if (dir == calling_dir - 1 || (dir == 3 && calling_dir == 0)) {
-        turn_left();
-      }
-      line_follow_until_intersection();
-  }
-}
-
-void line_follow_until_intersection() {
-  get_line_values();
-
-  if (sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) { //INTERSECTION
-    return;
-  }
-  //Case: traveling along line --> drive straight
-  else if (sensor_values[0] > line_threshold && sensor_values[1] > line_threshold ) {
-    drive_straight();
-  }
-
-  //Case: drifting off to the right --> correct left
-  else if (sensor_values[0] < line_threshold ) {
-    veer_left();
-  }
-
-  //Case: drifting off to the left --> correct right
-  else if (sensor_values[1] < line_threshold ) {
-    veer_right();
-  }
-
-  // Default: drive straight
-  else {
-    drive_straight();
-  }
-}
-
-
-//MUST BE CALLED BEFORE DIRECITON HAS BEEN UPDATED
-//updates global position variable ('pos')
-//takes as input the direction the robot is facing (pass global dir var),
-//and the direction the robot is turning (0 -> Right turn, 1-> left turn, 2-> no turn)
-void update_position(int facing, int turn_dir) {
-    if (facing == 0) {//ROBOT IS FACING NORTH
-      if (turn_dir == 0) { // if robot is turning right
-        //x++
-        pos = pos + 1;
-      }
-      else if (turn_dir == 1) { // if robot is turning left
-        //x--
-        pos = pos - 1;
-      }
-      else {               // if robot is driving straight
-        //y++
-        pos = pos - width;
-      }
+    //these turns probably shouldn't transmit anything??
+    if (dir == calling_dir) {
+      turn_around();
     }
-    if (facing == 1) {//ROBOT IS FACING EAST
-      if (turn_dir == 0) { // if robot is turning right
-        //y--
-        pos = pos + width;
-      }
-      else if (turn_dir == 1) { // if robot is turning left
-        //y++
-        pos = pos - width;
-      }
-      else {               // if robot is driving straight
-        //x++
-        pos = pos + 1;
-      }
+    else if (dir == calling_dir + 1 || (dir == 0 && calling_dir == 3)) {
+      turn_right();
     }
-    if (facing == 2) {//ROBOT IS FACING SOUTH
-      if (turn_dir == 0) { // if robot is turning right
-        //x--
-        pos = pos - 1;
-      }
-      else if (turn_dir == 1) { // if robot is turning left
-        //x++
-        pos = pos + 1;
-      }
-      else {               // if robot is driving straight
-        //y--
-        pos = pos + width;
-      }
+    else if (dir == calling_dir - 1 || (dir == 3 && calling_dir == 0)) {
+      turn_left();
     }
-    if (facing == 3) {//ROBOT IS FACING WEST
-      if (turn_dir == 0) { // if robot is turning right
-        //y++
-        pos = pos - width;
-      }
-      else if (turn_dir == 1) { // if robot is turning left
-        //y--
-        pos = pos + width;
-      }
-      else {               // if robot is driving straight
-        //x--
-        pos = pos - 1;
-      }
-    }
+    line_follow_until_intersection();
+  }
 }
