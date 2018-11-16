@@ -130,7 +130,11 @@ After some trial and error, the resulting pattern is shown below:
 
 ## Downsampler
 
-Our next step is to create a downsampler to transform the 16-bit RGB555 output of the camera into an 8-bit RGB332 input to the VGA driver. 
+Our next step is to create a downsampler to transform the 16-bit RGB555 output of the camera into an 8-bit RGB332 input to the VGA driver. The camera sends the RGB555 output serially using 2 bytes, with each bit being apportioned as shown in the diagram below, sourced from theimagingsource.com:
+
+![RGB 555](./media/lab4/RGB555.PNG)
+
+
 
 ![Timing Diagram](./media/lab4/cameratiming.PNG)
 
