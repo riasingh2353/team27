@@ -1,4 +1,7 @@
-# Cabbage Corp.
+# Cabbage Corp
+
+Welcome! Check us out to see a nice robot grow up and some great cabbage-related content. 
+
 ## ECE 3400, Cornell University, Fall 2017
 
 * [Team Contract](./teamContract.md)
