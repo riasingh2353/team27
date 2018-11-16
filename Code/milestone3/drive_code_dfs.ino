@@ -35,11 +35,12 @@ int dir = 1;                     //direction the robot is traveling in.
 //0 -> N; 1 -> E; 2 -> S; 3 -> W;
 //We assume the robot starts in the northwest corner
 // traveling east by default
-int width = 9;
-int height = 9;
+int width = 4;
+int height = 5;
 int maze_size = width * height;
 byte visited[81]; //each entry in this array refers to a square
-int pos    = 0;   //position in maze in raster coordinates
+int pos    = 1;   //position in maze in raster coordinates
+                  //NOTE: WE START AT POSITION 1 -- I.E. east of the intersection at position 0
 
 void setup() {
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
@@ -604,20 +605,36 @@ void dfs(int calling_dir) {
   //if not yet visited, then visit
   for (int k = 0; k < 4; k++) {
     if (options[k] == 1) { //NEEDS TO BE A CONDITION ABOUT WHETHER THE SPACE HAS BEEN VISITED
-      //explore in direction k
-      if (dir == k) {//if direction k is straight ahead
-        //radio_transmit(); //need to explicitly call radio_transmit here, as there is no turn.
-        update_position(dir, 2); //also need to explicitly call this
-        drive_straight();
-        delay(35);
+      //determine raster index if you're to move in direction k
+      int posnext;
+      if (k == 0) {
+        posnext = pos - width;
       }
-      if (dir == k + 1 || (dir == 0 && k == 3)) {//if direction k is to the left
-        turn_left();
+      if (k == 1) {
+        posnext = pos + 1;
       }
-      if (dir == k - 1 || (dir == 3 && k == 0)) { //if direction k is to the right
-        turn_right();
+      if (k == 2) {
+        posnext = pos + width;
       }
+      if (k == 3) {
+        posnext = pos - 1;
+      }
+      if (posnext > -1 && posnext < maze_size && visited[posnext] == 0)  {
+        //explore in direction k
+        if (dir == k) {//if direction k is straight ahead
+          //radio_transmit(); //need to explicitly call radio_transmit here, as there is no turn.
+          update_position(dir, 2); //also need to explicitly call this
+          drive_straight();
+          delay(35);
+        }
+        if (dir == k + 1 || (dir == 0 && k == 3)) {//if direction k is to the left
+          turn_left();
+        }
+        if (dir == k - 1 || (dir == 3 && k == 0)) { //if direction k is to the right
+          turn_right();
+        }
       //pretty sure we shouldn't have the condition where we have to turn 180°
+      }
       line_follow_until_intersection();
       Serial.println("Intersection");
 
