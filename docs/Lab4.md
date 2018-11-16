@@ -81,21 +81,9 @@ In the top-level module, the clock pins were assigned to each sub-module accordi
 
 ![VGANoInput](./media/VGANoInput.png)
 
-The black square in the top left corner represents the data stored in our M9K memory blocks, which is currently zeroed.  Our memory array consists of SCREEN_WIDTHxSCREEN_HEIGHT 8-bit registers, where SCREEN_WIDTHxSCREEN_HEIGHT is the product of the two global variables that determine the size of our image output.  For the purposes of this lab, 'SCREEN_WIDTH' is 176 and 'SCREEN_HEIGHT' is 144.  Addresses 0 through 175 hold the pixels corresponding to (0,0) through (0, 175), while the pixel at address (1,0) would be at address 176, and so on.  In order to traverse an array of this size, we need a 15-bit 'r_addr_reg' register.  To explain the blue remainder of the output, it is important to note that the VGA module is still configured to output the full 640x480 resolution.  However, when the values of 'VGA_PIXEL_X' and 'VGA_PIXEL_Y', the two registers that track the location of a given pixel, fall outside the boundary imposed by 'SCREEN_WIDTH' and 'SCREEN_HEIGHT,' the pixel is colored Blue on screen.  This is understood in an _always_ block in the top-level module, which updates the memory module's read address:
+The black square in the top left corner represents the data stored in our M9K memory blocks, which is currently zeroed.  Our memory array consists of SCREEN_WIDTHxSCREEN_HEIGHT 8-bit registers, where SCREEN_WIDTHxSCREEN_HEIGHT is the product of the two global variables that determine the size of our image output.  For the purposes of this lab, 'SCREEN_WIDTH' is 176 and 'SCREEN_HEIGHT' is 144.  Addresses 0 through 175 hold the pixels corresponding to (0,0) through (0, 175), while the pixel at address (1,0) would be at address 176, and so on.  In order to traverse an array of this size, we need a 15-bit 'r_addr_reg' register.  To explain the blue remainder of the output, it is important to note that the VGA module is still configured to output the full 640x480 resolution.  However, when the values of 'VGA_PIXEL_X' and 'VGA_PIXEL_Y', the two registers that track the location of a given pixel, fall outside the boundary imposed by 'SCREEN_WIDTH' and 'SCREEN_HEIGHT,' the pixel is colored Blue on screen.  
 
-~~~c
-always @ (VGA_PIXEL_X, VGA_PIXEL_Y) begin
-		READ_ADDRESS = (VGA_PIXEL_X + VGA_PIXEL_Y*`SCREEN_WIDTH);
-		if(VGA_PIXEL_X>(`SCREEN_WIDTH-1) || VGA_PIXEL_Y>(`SCREEN_HEIGHT-1))begin
-				VGA_READ_MEM_EN = 1'b0;
-		end
-		else begin
-				VGA_READ_MEM_EN = 1'b1;
-		end
-end
-~~~
-
-To ensure that our memory array is set up correctly, we created test patterns that could be injected into memory and output on our display.  The following code block creates an output resembling St. George's Cross in the top left corner, surrounded by blue:
+To ensure that our memory buffer is set up correctly, we created a test pattern that could be written into memory and displayed on a screen.  The following code block creates an output resembling the English flag in the top left corner, surrounded by blue:
 
 ~~~c
 always @ (posedge PCLK) begin
@@ -128,26 +116,15 @@ always @ (posedge PCLK) begin
 end
 ~~~
 
-After confirming the operation of our memory buffer reader, we needed to create a downsampler that could contract the data output by the OV7670 camera into a single byte.  We opted to have our OV7670 sample data using the RGB565 format, which delivers pixel data in a two-byte package; since the camera only has 8 output pins, this means it takes two clock cycles to fully read data from a single pixel.  Specifically, the memory layout is as follows: RRRRRGGG/GGGBBBBB where the five least significant bits contain Blue pixel data, bits 5-10 contain Green pixel Data, and bits 11-15 Red pixel data.  Our downsampler takes data from each of the camera's eight data pins (D0-D7), and then, dependent on which byte is currently being tramitted, the register 'pixel_data_RGB332' is updated accordingly.  This register contains the RGB332 "translation" for the given pixel, with the following memory layout: RRRGGGBB.  The following code block takes the most-significant bits of each color from the RGB565 format and places them in the 'pixel_data_RGB332' register:
+After some trial and error, the resulting pattern is shown below:
 
-~~~c
-if (~byte_num) begin
-	pixel_data_RGB332[7:2] <= {D7,D6,D5,D2,D1,D0};
-	pixel_data_RGB332[1:0] <= pixel_data_RGB332[1:0];
-	byte_num <= W_EN;
-	X_ADDR <= X_ADDR;	
-	W_EN <= 0;      
-end
-
-else begin
-	pixel_data_RGB332[7:2] <=pixel_data_RGB332[7:2];
-	pixel_data_RGB332[1:0] <= {D4,D3}; 
-	X_ADDR <= X_ADDR + 1;		
-	byte_num <= W_EN;
-	W_EN <= 1;	  
-end
-~~~
-
-The 'byte_num' bit keeps track of which of the two bytes that OV7670 outputs is currently being processed.
+![Try 2](./media/lab4/attempt2.PNG)
 
 ## Final Integration:
+
+
+## Bonus Content:
+
+Here's a failed attempt of our English flag for your viewing pleasure:
+
+![Try 1](./media/lab4/attempt1.PNG)
