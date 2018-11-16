@@ -10,20 +10,20 @@ THINGS ADDED:
 		this function essentially replaces intersection() as the main controller of the robot's movement logic.
 		it's a recursive dfs algorithm which is called at each intersection. 
 		the algorithim basically consists of 3(ish) stages, which are as follows:
-			stage 0: mark space as visited
-				set visited(position) = 1. 
-				(for an m x n maze, visited is a m x n entry array which stores 1 if the corresponding space
-				has been visited and 0 otherwise) 
-			stage 1: figure out movement options
-				in this stage, the robot gets the wall values and uses these to determine which directions it
-				can move in. the cardinal direction of these movement options (e.g. N, E, S, W) is recorded in
-				the array'options'
-			stage 2: explore movement options
-				for each movement option, the robot will determine which way it needs to turn (if at all) to
-				travel in that direction. it will then move in that direction and call dfs recursively.
-			stage 3: backtrack
-				the robot orients itself in the direction opposite to the direction it was facing when dfs was
-				called (i.e., calling_dir). it then drives back to the intersection that dfs was called from.
+		stage 0: mark space as visited
+			set visited(position) = 1. 
+			(for an m x n maze, visited is a m x n entry array which stores 1 if the corresponding space
+			has been visited and 0 otherwise) 
+		stage 1: figure out movement options
+			in this stage, the robot gets the wall values and uses these to determine which directions it
+			can move in. the cardinal direction of these movement options (e.g. N, E, S, W) is recorded in
+			the array'options'
+		stage 2: explore movement options
+			for each movement option, the robot will determine which way it needs to turn (if at all) to
+			travel in that direction. it will then move in that direction and call dfs recursively.
+		stage 3: backtrack
+			the robot orients itself in the direction opposite to the direction it was facing when dfs was
+			called (i.e., calling_dir). it then drives back to the intersection that dfs was called from.
 
 		this code should allow the robot to traverse the entire maze. however, i'm pretty sure that it'll break 
 		the transmission of the robot's position to the base station.
