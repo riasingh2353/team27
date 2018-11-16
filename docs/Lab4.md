@@ -132,6 +132,7 @@ After some trial and error, the resulting pattern is shown below:
 
 Our next step is to create a downsampler to transform the 16-bit RGB555 output of the camera into an 8-bit RGB332 input to the VGA driver. 
 
+![Timing Diagram](./media/lab4/cameratiming.PNG)
 
 ## Image Processor
 
@@ -147,5 +148,5 @@ Here's a failed attempt of our English flag for your viewing pleasure:
 
 Here is Michael getting up close and personal with our camera. Truly dedicated to this lab.
 
-![Michael hehe](./media/lab4/closeup.PNG)
+![hehe](./media/lab4/closeup.PNG)
 
