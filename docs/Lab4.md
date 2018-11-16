@@ -29,7 +29,7 @@ Team Arduino set up the camera registers and I2C protocol to allow communication
 
 Our first step was to initialize camera registers using information from the OV7670 datasheet. In all, we had to be able to reset all registers, enable scaling, use the external FPGA clock as an internal clock, set the camera to the correct resolution and pixel format, enable a color bar test, and set gain (Automatic Gain Ceiling) parameters on the OV7670.
 
-A table of the addresses of these registers and the values that must be written to them to achieve the above functions is shown below:
+A table of the addresses of these registers and the values that must be written to them to achieve the above functions as set out in the prelab is shown below:
 
 | Register | Address (Camera) | Address (Arduino) | Value Written (bin) | Additional Comments                                                                                                     |
 |----------|------------------|-------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------|
@@ -130,6 +130,9 @@ After some trial and error, the resulting pattern is shown below:
 
 ## Downsampler
 
+Our next step is to create a downsampler to transform the 16-bit RGB555 output of the camera into an 8-bit RGB332 input to the VGA driver. 
+
+
 ## Image Processor
 
 
@@ -141,3 +144,8 @@ After some trial and error, the resulting pattern is shown below:
 Here's a failed attempt of our English flag for your viewing pleasure:
 
 ![Try 1](./media/lab4/attempt1.PNG)
+
+Here is Michael's face up close and personal with our camera. He is displaying a very green hue, which is helpful for debugging:
+
+![Michael hehe](./media/lab4/)
+
