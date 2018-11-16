@@ -40,33 +40,26 @@ void setup() {
 
   // Write to bit 7 to reset registers
   OV7670_write_register(COM7, 0x80); 
-//
+  
 //  delay(100); 
-//  
+ 
   set_color_matrix(); 
 
   // Set RGB option to RGB565
- OV7670_write_register(COM15,0xF0);
+  OV7670_write_register(COM15,0xF0);
+  
  //OV7670_write_register(RGB444,0x02); 
   
   //Write to bit 3 to enable scaling
   OV7670_write_register(COM3, 0x08); 
-  
-  //Write to bit 2 for color bar selection and enable color bar
-<<<<<<< HEAD
-  OV7670_write_register(COM7, 0x0E);
    
   //Enable external clock
   OV7670_write_register(CLKRC, 0x43);
-=======
-   OV7670_write_register(COM7, 0x0C); //0x0E color bar
-   
-  //Enable external clock
- OV7670_write_register(CLKRC, 0xC0);
->>>>>>> 533ed6195c8aac09e98a3206ca7d7965418ddc0a
+
+  OV7670_write_register(COM7, 0x0C); //0x0E color bar
   
   // Enable color bar test
-  OV7670_write_register(COM17, 0x00);//0x0C for color bar
+  OV7670_write_register(COM17, 0x00); //0x0C for color bar
   
   // Mirror/flip image
   OV7670_write_register(MVFP, 0x30);
