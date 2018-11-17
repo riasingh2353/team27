@@ -15,3 +15,4 @@ Depth-first search is an algorithm used to traverse the nodes of tree and graph 
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Depth-first-tree.svg/1200px-Depth-first-tree.svg.png" alt="DFS Graphic" width="600" height="385">
 
+When we selected DFS to implement for this milestone, we compared  with similar graph-traversal algorithms, including Breadth-
