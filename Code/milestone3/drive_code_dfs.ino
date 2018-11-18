@@ -27,7 +27,7 @@ int right_wall_value;            //store right wall sensor value
 int left_wall_value;             //store left wall sensor value
 
 int line_threshold = 300;        //cutoff value b/w white and not white
-int wall_threshold = 150;        //A wall exists if a wall sensor reads a value greater than this threshold
+int wall_threshold = 130;        //A wall exists if a wall sensor reads a value greater than this threshold
 
 int countdown = 5000;
 int max_countdown_value = 5000;
@@ -36,9 +36,9 @@ int dir = 1;                     //direction the robot is traveling in.
 //We assume the robot starts in the northwest corner
 // traveling east by default
 int width = 4;
-int height = 5;
+int height = 4;
 int maze_size = width * height;
-byte visited[81]; //each entry in this array refers to a square
+byte visited[16]; //each entry in this array refers to a square
 int pos    = 1;   //position in maze in raster coordinates
                   //NOTE: WE START AT POSITION 1 -- I.E. east of the intersection at position 0
 
@@ -74,7 +74,6 @@ void setup() {
   //  //LOW reads microphone, HIGH reads IR circuit
   digitalWrite(7, LOW);
 
-
   servoL.attach(3);
   servoR.attach(5);
 
@@ -86,6 +85,10 @@ void loop() {
   line_follow_until_intersection();
   dfs(dir);
   turn_around(); //after dfs completes the maze, we need to turn around to return to our starting position
+  Serial.println("END OF LOOP!");
+  servoL.write(90);
+  servoR.write(90);
+  delay(100000); //stop for 100s
 }
 ////////////////////
 //HELPER FUNCTIONS//
@@ -152,14 +155,14 @@ void turn_right() {
 }
 
 void turn_around() {
-  //Serial.println("Turning Around");
+  Serial.println("Turning Around");
 
   drive_straight();
   delay(200);
 
   servoL.write(90);
   servoR.write(90);
-  delay(500);
+  delay(50);
 
   servoL.write(100);
   servoR.write(92);
@@ -167,7 +170,7 @@ void turn_around() {
 
   servoL.write(90);
   servoR.write(90);
-  delay(500);
+  delay(50);
 
   servoL.write(100);
   servoR.write(92);
@@ -178,7 +181,7 @@ void turn_around() {
   }
   servoL.write(90);
   servoR.write(90);
-  delay(500);
+  delay(50);
 
   servoL.write(80);
   servoR.write(100);
@@ -186,7 +189,7 @@ void turn_around() {
 
   servoL.write(90);
   servoR.write(90);
-  delay(500);
+  delay(50);
 
   servoL.write(110);
   servoR.write(90);
@@ -194,7 +197,7 @@ void turn_around() {
 
   servoL.write(90);
   servoR.write(90);
-  delay(500);
+  delay(50);
 
   servoL.write(100);
   servoR.write(92);
@@ -566,19 +569,26 @@ void fft_detect() {
 //please note: refers to global visited matrix + global position variable
 //the direction the robot was travelling when dfs was called is passed to the function
 void dfs(int calling_dir) {
+  stop_drive();
   //label intersection as visited
   Serial.println("DFS Called");
-  Serial.println("Direction is:");
+  Serial.print("Direction is:");
   Serial.println(dir);
   visited[pos] = 1;
+  Serial.print("Visited[");
+  Serial.print(pos);
+  Serial.print("] is 1");
+  Serial.println();
 
   //check where you can move -- store this information in array "options"
   byte options[4]; //index 0 corresponds with N, 1 with E, 2 with S, 3 with W.
                    //stores 1 if you can move in that direction, 0 o/w
-   for (int k = 0; k<4;k++) {
+  for (int k = 0; k<4;k++) {
     options[k] = 0;
   }
+  
   get_wall_values();
+  
   if (right_wall_value < wall_threshold) {
     if (dir == 3) { //if facing west, indicate that you can move north
       options[0] = 1;
@@ -597,51 +607,62 @@ void dfs(int calling_dir) {
       options[dir - 1] = 1;
     }
   }
-  for (int k = 0; k<4;k++) {
-    Serial.println("Options:");
-    Serial.println(options[k]);
+  Serial.println("Options:");
+  for (int j = 0; j<4;j++) {
+    Serial.println(options[j]);
   }
-  //for each turn option:
-  //if not yet visited, then visit
-  for (int k = 0; k < 4; k++) {
-    if (options[k] == 1) { //NEEDS TO BE A CONDITION ABOUT WHETHER THE SPACE HAS BEEN VISITED
+  
+  for (int i = 0; i < 4; i++) {
+    if (options[i] == 1) { //NEEDS TO BE A CONDITION ABOUT WHETHER THE SPACE HAS BEEN VISITED
       //determine raster index if you're to move in direction k
       int posnext;
-      if (k == 0) {
+      if (i == 0) {
         posnext = pos - width;
       }
-      if (k == 1) {
+      if (i == 1) {
         posnext = pos + 1;
       }
-      if (k == 2) {
+      if (i == 2) {
         posnext = pos + width;
       }
-      if (k == 3) {
+      if (i == 3) {
         posnext = pos - 1;
       }
+      Serial.print("Posnext is: ");
+      Serial.print(posnext);
+      Serial.println();
       if (posnext > -1 && posnext < maze_size && visited[posnext] == 0)  {
+        Serial.print("Travelling in direction: ");
+        Serial.println(i);
         //explore in direction k
-        if (dir == k) {//if direction k is straight ahead
+        if (dir == i) {//if direction k is straight ahead
           //radio_transmit(); //need to explicitly call radio_transmit here, as there is no turn.
           update_position(dir, 2); //also need to explicitly call this
           drive_straight();
-          delay(35);
+          Serial.println("Driving Straight");
+          delay(1000);
         }
-        if (dir == k + 1 || (dir == 0 && k == 3)) {//if direction k is to the left
+        if (dir == i + 1 || (dir == 0 && i == 3)) {//if direction k is to the left
           turn_left();
         }
-        if (dir == k - 1 || (dir == 3 && k == 0)) { //if direction k is to the right
+        if (dir == i - 1 || (dir == 3 && i == 0)) { //if direction k is to the right
           turn_right();
         }
       //pretty sure we shouldn't have the condition where we have to turn 180°
-      }
       line_follow_until_intersection();
       Serial.println("Intersection");
+      
 
       //INTERSECTION
       stop_drive();
       //NEED TO UPDATE POSITION -- PROBABLY SHOULD HAVE HELPER FUNCTION FOR THIS -- MAYBE ALREADY WRITTEN IN BASE STATION CODE
       dfs(dir);
+      }
+      else{
+        Serial.print("Not Travelling in direction: ");
+        Serial.print(i);
+        Serial.println();
+      }
     }
   }
     //backtrack:
@@ -660,6 +681,9 @@ void dfs(int calling_dir) {
     else if (dir == calling_dir - 1 || (dir == 3 && calling_dir == 0)) {
       turn_left();
     }
+    Serial.print("Next position is:");
+    Serial.print(pos);
+    Serial.println();
     line_follow_until_intersection();
     return;
 }
