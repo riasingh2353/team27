@@ -58,15 +58,15 @@ void setup() {
   //Enable external clock
   OV7670_write_register(CLKRC, 0xC0);
 
-  OV7670_write_register(COM7, 0x0E); //0x0E color bar
+  OV7670_write_register(COM7, 0x0C); //0x0E no color bar
   
   // Enable color bar test
-  OV7670_write_register(COM17, 0x0C); //0x0C for color bar
+  OV7670_write_register(COM17, 0x00); //0x08 for no color bar
   
   // Mirror/flip image
   OV7670_write_register(MVFP, 0x30);
 
-  OV7670_write_register(COM9, 0x0B);
+  //OV7670_write_register(COM9, 0x0B);
 
   // x scaling
  // y scaling
