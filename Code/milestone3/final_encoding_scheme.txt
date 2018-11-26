@@ -1,0 +1,20 @@
+This is the final encoding scheme for transmission between the robot
+and the base-station.
+
+BIT 0: [X|X|DIR|DIR|N|E|S|W]
+BIT 1: [Es|Es|Ec|Ec|Ns|Ns|Nc|Nc]
+BIT 2: [Ws|Ws|Wc|Wc|Ss|Ss|Sc|Sc]
+WHERE Ns are bits encoding the shape at the north wall
+	    and Nc are bits encoding the color at the north wall
+
+SHAPE BIT TRUTH TABLE:
+00: no shape
+01: circle
+10: square
+11: triangle
+
+Color BIT TRUTH TABLE:
+00: no color
+01: red
+10: green
+11: blue
