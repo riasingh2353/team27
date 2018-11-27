@@ -47,6 +47,7 @@ int loffset= -1;  //add this value to the left wheel's speed when driving straig
 
 byte b1 = 0;  //second bit to be sent to base station
 byte b2 = 0;  //third bit to be sent to base station
+byte colors[4]; //stores the color/shape info at each wall any any given position
 
 void setup() {
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
@@ -357,6 +358,8 @@ void radio_transmit() {
   // First, stop listening so we can talk.
   byte info[3] = {0, 0, 0};   //stores maze info.
   info[0] = pack_bit_one(dir);
+  info[1] = pack_bit_two(colors[0],colors[1]);
+  info[2] = pack_bit_three(colors[2],colors[3]);
   Serial.println("VALUE SENT TO BASE:");
   Serial.println(info[0]);
   radio.stopListening();
@@ -463,6 +466,34 @@ byte pack_bit_one(int facing) {
     Serial.println(w);*/
 
   return info;
+}
+
+//bit two is of the form [Es|Es|Ec|Ec|Ns|Ns|Nc|Nc]
+//cn is the color/shape info from get_FPGA_data at the north wall
+//ce is the color/shape info from get_FPGA_data at the east wall
+byte pack_bit_two(byte cn,byte ce) {
+  byte b_two = 0;
+  for (int k = 0; k<4; k++){
+    int temp_n = bitRead(cn, k);
+    int temp_e = bitRead(ce, k);
+    bitWrite(b_two, k, temp_n);
+    bitWrite(b_two, k+4, temp_e);
+  }
+  return b_two;
+}
+
+//bit three is of the form [Ws|Ws|Wc|Wc|Ss|Ss|Sc|Sc]
+//cs is the color/shape info from get_FPGA_data at the south wall
+//cw is the color/shape info from get_FPGA_data at the west wall
+byte pack_bit_three(byte cs, byte cw) {
+  byte b_three = 0;
+  for (int k = 0; k<4; k++){
+    int temp_s = bitRead(cs, k);
+    int temp_w = bitRead(cw, k);
+    bitWrite(b_three, k, temp_s);
+    bitWrite(b_three, k+4, temp_w);
+  }
+  return b_three;
 }
 
 ///////////////////////////////////////////
@@ -641,11 +672,6 @@ void dfs(int calling_dir) {
   Serial.println("DFS Called");
   Serial.print("Direction is:");
   Serial.println(dir);
-  visited[pos] = 1;
-  Serial.print("Visited[");
-  Serial.print(pos);
-  Serial.print("] is 1");
-  Serial.println();
 
   //check where you can move -- store this information in array "options"
   byte options[4]; //index 0 corresponds with N, 1 with E, 2 with S, 3 with W.
@@ -681,26 +707,34 @@ void dfs(int calling_dir) {
 
   //THIS BLOCK RIGHT HERE NEEDS A LOTTA WORK
   //get colors:
-  int tempdir = (dir+2)%4;
-  for (int k = 0;k<4;k++){
-    if (!options[k] && k != tempdir) {
-      if (dir == (k+2)%4) {//if direction k is behind ahead
-        spin_right();
-        spin_right();
+  int tempdir = (dir+2)%4; //direction opposite of where the robot is facing 
+  if(!visited[pos]){
+    for (int k = 0;k<4;k++){
+      if (!options[k] && k != tempdir) {
+        if (dir == (k+2)%4) {//if direction k is behind ahead
+          spin_right();
+          spin_right();
+        }
+        if (dir == k + 1 || (dir == 0 && k == 3)) {//if direction k is to the left
+          spin_left(); //this needs to update dir
+        }
+        if (dir == k - 1 || (dir == 3 && k == 0)) { //if direction k is to the right
+          spin_right(); //this needs to update dir
+        }
+      colors[k] = get_FPGA_data();
       }
-      if (dir == k + 1 || (dir == 0 && k == 3)) {//if direction k is to the left
-        spin_left(); //this needs to update dir
+      else {
+        colors[k] = 0;
       }
-      if (dir == k - 1 || (dir == 3 && k == 0)) { //if direction k is to the right
-        spin_right(); //this needs to update dir
-      }
-    Serial.println("New Direction is: ");
-    Serial.print(dir);
-    Serial.println();  
-    //record colors from camera
-    //cam_out = color_record();
     }
   }
+
+  //need to update visited after checking for colors
+  visited[pos] = 1;
+  Serial.print("Visited[");
+  Serial.print(pos);
+  Serial.print("] is 1");
+  Serial.println();
 
   
   for (int i = 0; i < 4; i++) {
@@ -779,26 +813,27 @@ void dfs(int calling_dir) {
     return;
 }
 
-/*unsigned int getColors(options) { //takes in options array from dfs
-  unsigned int colors = 0;
-  //spin toward each existing wall
-  for (int k = 0;k<4;k++){
-    if (!options[k]) {
-      if (dir == k) {//if direction k is straight ahead
-      }
-      if (dir == k + 1 || (dir == 0 && k == 3)) {//if direction k is to the left
-        spin_left(); //this needs to update dir
-      }
-      if (dir == k - 1 || (dir == 3 && k == 0)) { //if direction k is to the right
-        spin_right(); //this needs to update dir
-      }
-    //record colors from camera
-    //cam_out = color_record();
-    }
-  }
-  //write to colors
-  for(int i = 0;i<4;i++){
-    c = bitRead(cam_out, i);
-    bitWrite(colors, (4*k) + i, c)
-  }
-}*/
+//info about treasure shape and color sent to arduino
+//this information is transmitted as four bits in the form shown below:
+// |X|X|X|X|shp|shp|col|col|
+//where shp is a 2 bit value corresponding with shape info
+//and col is a 2 bit value corresponding with color info
+byte get_FPGA_data(){
+  byte treasure = 0b00000000;
+  digitalWrite(8, HIGH);
+  delay(5); //wait for FPGA to compute treasure data
+  bitWrite(treasure, 3, digitalRead(4)); //store MSB (shape bit 1)
+  digitalWrite(8, LOW);
+  digitalWrite(8, HIGH);
+  bitWrite(treasure, 2, digitalRead(4)); //store shape bit 2
+  digitalWrite(8, LOW);
+  digitalWrite(8, HIGH);
+  bitWrite(treasure, 1, digitalRead(4)); //store color bit 1
+  digitalWrite(8, LOW);
+  digitalWrite(8, HIGH);
+  bitWrite(treasure, 0, digitalRead(4)); //store color bit 2
+  digitalWrite(8, LOW);
+  //Serial.println(treasure);
+  //decode_treasure_info(treasure);
+  return treasure;
+}
