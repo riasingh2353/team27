@@ -45,6 +45,9 @@ int pos    = 1;   //position in maze in raster coordinates
 int loffset= -1;  //add this value to the left wheel's speed when driving straight to adjust for
                  //veering
 
+byte b1 = 0;  //second bit to be sent to base station
+byte b2 = 0;  //third bit to be sent to base station
+
 void setup() {
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
   ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
@@ -100,7 +103,79 @@ void loop() {
 //////////////////////////////////////
 //TURNING + DRIVING HELPER FUNCTIONS//
 //////////////////////////////////////
+void spin_left() {
+  drive_straight();
+  delay(400);
 
+  Serial.println("turning to get off of line");
+  get_line_values();
+  while (sensor_values[2] < line_threshold - 75) {
+    servoL.write(80);
+    servoR.write(80);
+    get_line_values();
+  }
+  servoL.write(80);
+  servoR.write(80);
+  delay(250);
+
+  get_line_values();
+  Serial.println(sensor_values[2]);
+  while (sensor_values[2] > line_threshold - 75) {
+    servoL.write(80);
+    servoR.write(80);
+    get_line_values();
+    //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
+  }
+  //turn a lil bit more so the robot is aligned w the line
+  delay(55);
+  //back up until intersection
+  servoL.write(85);
+  servoR.write(95);
+  get_line_values();
+  while (!(sensor_values[0] < line_threshold && sensor_values[1] < line_threshold)) { // NOT INTERSECTION
+      get_line_values();
+  }
+  stop_drive();
+  delay(300);
+  update_direction(dir, 1);
+}
+
+void spin_right() {
+  drive_straight();
+  delay(400);
+
+  Serial.println("turning to get off of line");
+  get_line_values();
+  while (sensor_values[2] < line_threshold - 75) {
+    servoL.write(100);
+    servoR.write(100);
+    get_line_values();
+  }
+  servoL.write(100);
+  servoR.write(100);
+  delay(250);
+
+  get_line_values();
+  Serial.println(sensor_values[2]);
+  while (sensor_values[2] > line_threshold - 75) {
+    servoL.write(100);
+    servoR.write(100);
+    get_line_values();
+    //Serial.println("TURNING UNTIL MIDDLE SENSOR REACHES LINE");
+  }
+  //turn a lil bit more so the robot is aligned w the line
+  delay(50);
+  //back up until intersection
+  servoL.write(85);
+  servoR.write(95);
+  get_line_values();
+  while (!(sensor_values[0] < line_threshold && sensor_values[1] < line_threshold)) { // NOT INTERSECTION
+      get_line_values();
+  }
+  stop_drive();
+  delay(300);
+  update_direction(dir, 0);
+}
 void veer_left() {
   servoL.write(80);
   servoR.write(55);
@@ -603,6 +678,30 @@ void dfs(int calling_dir) {
   for (int j = 0; j<4;j++) {
     Serial.println(options[j]);
   }
+
+  //THIS BLOCK RIGHT HERE NEEDS A LOTTA WORK
+  //get colors:
+  int tempdir = (dir+2)%4;
+  for (int k = 0;k<4;k++){
+    if (!options[k] && k != tempdir) {
+      if (dir == (k+2)%4) {//if direction k is behind ahead
+        spin_right();
+        spin_right();
+      }
+      if (dir == k + 1 || (dir == 0 && k == 3)) {//if direction k is to the left
+        spin_left(); //this needs to update dir
+      }
+      if (dir == k - 1 || (dir == 3 && k == 0)) { //if direction k is to the right
+        spin_right(); //this needs to update dir
+      }
+    Serial.println("New Direction is: ");
+    Serial.print(dir);
+    Serial.println();  
+    //record colors from camera
+    //cam_out = color_record();
+    }
+  }
+
   
   for (int i = 0; i < 4; i++) {
     if (options[i] == 1) { //NEEDS TO BE A CONDITION ABOUT WHETHER THE SPACE HAS BEEN VISITED
@@ -620,9 +719,9 @@ void dfs(int calling_dir) {
       if (i == 3) {
         posnext = pos - 1;
       }
-      Serial.print("Posnext is: ");
-      Serial.print(posnext);
-      Serial.println();
+      //Serial.print("Posnext is: ");
+      //Serial.print(posnext);
+      //Serial.println();
       if (posnext > -1 && posnext < maze_size && visited[posnext] == 0)  {
         Serial.print("Travelling in direction: ");
         Serial.println(i);
@@ -650,11 +749,11 @@ void dfs(int calling_dir) {
       //NEED TO UPDATE POSITION -- PROBABLY SHOULD HAVE HELPER FUNCTION FOR THIS -- MAYBE ALREADY WRITTEN IN BASE STATION CODE
       dfs(dir);
       }
-      else{
+      /*else{
         Serial.print("Not Travelling in direction: ");
         Serial.print(i);
         Serial.println();
-      }
+      }*/
     }
   }
     //backtrack:
@@ -679,3 +778,27 @@ void dfs(int calling_dir) {
     line_follow_until_intersection();
     return;
 }
+
+/*unsigned int getColors(options) { //takes in options array from dfs
+  unsigned int colors = 0;
+  //spin toward each existing wall
+  for (int k = 0;k<4;k++){
+    if (!options[k]) {
+      if (dir == k) {//if direction k is straight ahead
+      }
+      if (dir == k + 1 || (dir == 0 && k == 3)) {//if direction k is to the left
+        spin_left(); //this needs to update dir
+      }
+      if (dir == k - 1 || (dir == 3 && k == 0)) { //if direction k is to the right
+        spin_right(); //this needs to update dir
+      }
+    //record colors from camera
+    //cam_out = color_record();
+    }
+  }
+  //write to colors
+  for(int i = 0;i<4;i++){
+    c = bitRead(cam_out, i);
+    bitWrite(colors, (4*k) + i, c)
+  }
+}*/
