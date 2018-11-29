@@ -178,6 +178,38 @@ Using this downsampler, we were able to successfully display the color bar test:
 
 ### Image Processor
 
+The goal of the image processor module is to determine whether an image is more red or blue and return the result. To determine if there is more red than blue, we first decide if a pixel is blue or red by directly comparing their red and blue values, and taking the larger value to be the dominant color. This code is shown below:
+
+~~~c
+if (PIXEL_IN[7:6] > PIXEL_IN[1:0] && PIXEL_IN[7:6] > PIXEL_IN[4:3]) begin
+	REDCOUNT = REDCOUNT +16'd1;
+	rowCount = rowCount +16'd1;
+end
+else if (PIXEL_IN[7:6] < PIXEL_IN[1:0] && PIXEL_IN[1:0] > PIXEL_IN[4:3]) begin
+	BLUECOUNT = BLUECOUNT +16'd1;
+	rowCount = rowCount +16'd1;
+end
+else begin
+	BLUECOUNT = BLUECOUNT;
+	REDCOUNT = REDCOUNT;
+	rowCount = rowCount;
+end
+~~~
+
+Then, we sum up the total number of red pixels and the total number of blue pixels and compare the counts. If REDCOUNT is larger than BLUECOUNT, the image is more red than blue, and vice versa for an image that is more blue than red. This comparison is shown below:
+
+~~~c
+if (!VGA_VSYNC_NEG && lastSYNC) begin //each frame 
+		if (BLUECOUNT >REDCOUNT && BLUECOUNT >16'd25000)begin 
+			RESULT = 2'b10;
+		end
+		else if (REDCOUNT > BLUECOUNT && REDCOUNT > 16'd25000) begin 
+			RESULT = 2'b01;
+		end
+		else begin 
+			RESULT = 2'b00;
+		end
+~~~
 
 ## Final Integration
 
