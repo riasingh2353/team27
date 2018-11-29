@@ -125,13 +125,56 @@ After some trial and error, the resulting pattern is shown below:
 
 ### Downsampler
 
-Our next step is to create a downsampler to transform the 16-bit RGB555 output of the camera into an 8-bit RGB332 input to the VGA driver. The camera sends the RGB555 output serially using 2 bytes, with each bit being apportioned as shown in the diagram below, sourced from theimagingsource.com:
-
-![RGB 555](./media/lab4/RGB555.PNG)
-
-
+Our next step is to create a downsampler to transform the 16-bit RGB444 output of the camera into an 8-bit RGB332 input to the VGA driver. We found experimentally that RGB444 is the most effective for the camera and the downsampler. We are given the camera outputs of HREF and VSYNC, which denote the end of a row of pixels and a frame, respectively, and our goal is to extract the most significant bits corresponding to each color and assign them to the RGB 332 values that will then be displayed on the VGA driver. Since the RGB information is sent over two cycles, we needed to look at the timing diagram in order to determine when best to sample the pixel information.
 
 ![Timing Diagram](./media/lab4/cameratiming.PNG)
+
+Using the timing diagram above, we decided to sample the pixel data only when both HREF and PCLK were high, to ensure that we were not overwriting the values with data corresponding to the wrong byte of the 2 byte input. We sampled over two cycles by creating a register called byte_num, which was assigned 0 if the first byte was being read and 1 if the second byte was being read. Once the data over both bytes was aggregated, we wrote W_EN high and allowed the pixel information to be written to memory only after byte_num was made 1 and both bytes were read. 
+
+Since the end of a row is denoted by the falling edge of HREF and the end of a frame is denoted by the rising edge of VSYNC, we created registers to store the last values of HREF and VSYNC in order to find when HREF changws from 1 to 0 and VSYNC changes from 0 to 1. When HREF changes, the x address is reset and the y address is incremented to denote the next row. When VSYNC changes, the x address and y address are both reset to indicate a new frame. The downsampler code is shown below:
+
+~~~c
+always @ (posedge PCLK) begin
+	temp = {D7, D6, D5, D4, D3, D2, D1, D0};
+	if (VSYNC == 1 && lastVSYNC == 0) begin //posedge VSYNC
+		X_ADDR = 0;
+		Y_ADDR = 0; 
+	end
+	else if (HREF == 0 && lastHREF ==1) begin
+			X_ADDR = 0;
+			Y_ADDR = Y_ADDR + 1;
+	end
+	else begin
+		if(HREF && PCLK) begin
+			if (~byte_num) begin
+				pixel_data_RGB332[7:5] = temp[3:1]; //RGB444
+				pixel_data_RGB332[4:0] = pixel_data_RGB332[4:0];
+				X_ADDR = X_ADDR;	
+			Y_ADDR = Y_ADDR;
+				W_EN = 0;      
+			end
+			else begin 
+				pixel_data_RGB332[7:5] = pixel_data_RGB332[7:5]; //RGB444
+				pixel_data_RGB332[4:0] =  {temp[7:5], temp[3:2]};
+				X_ADDR = X_ADDR + 1;	
+				Y_ADDR = Y_ADDR;	
+				W_EN = 1;	  
+			end
+			byte_num = ~byte_num;
+		end
+		else begin
+			X_ADDR=0;
+			Y_ADDR = Y_ADDR;
+		end
+	end
+		lastVSYNC = VSYNC;
+		lastHREF = HREF;
+	
+end
+~~~
+Using this downsampler, we were able to successfully display the color bar test:
+
+![Color Bar](./media/lab4/colorbar.png)
 
 ### Image Processor
 
