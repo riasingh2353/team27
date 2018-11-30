@@ -13,13 +13,20 @@ Previously, we had already implemented color detection with our camera. This mil
 
 
 
-The video below demonstrates our shape detection capability. The LEDs are assigned to shapes as follows:
+The video below demonstrates our shape detection capability. The last 3 LEDs on the right are assigned to shapes as follows:
 
-| Shape            | Color    |
-|------------------|----------|
-| Square           | Red      |
-| Triangle         | Green    |
-| Diamond          | Yellow   |
+| Shape            | LED Color    |
+|------------------|--------------|
+| Square           | Red          |
+| Triangle         | Green        |
+| Diamond          | Yellow       |
+
+The first 2 LEDs of the 5 total are assigned to colors as follows:
+| Color        | LED Color    |
+|--------------|--------------|
+| Red          | Red          |
+| Blue         | Green        |
+
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/F9ZXnC7BIEg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
