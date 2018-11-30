@@ -28,3 +28,4 @@ image coming soon
 ## Jankbot
 
 What a nice robot...
+![jankbot](./media/FRONTOFROBOT.jpg)
