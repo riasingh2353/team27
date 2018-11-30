@@ -19,6 +19,9 @@ FEATURES & TRAITS: Nocturnal, Roastable, Sarcasm, Masochist (Analog)<br/>
 
 
 ## Ria Singh
+
+
+
 ![Ria](./media/about_us/ria.png) 
 
 
