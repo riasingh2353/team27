@@ -214,6 +214,11 @@ if (!VGA_VSYNC_NEG && lastSYNC) begin //each frame
 ## Final Integration
 We tested the system as a whole by displaying the camera image on the screen and using LEDs to display the results of the image processor in order to show to functionality of the memory buffer, downsampler, and image processor.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/WfuxtL3I-Fc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/F9ZXnC7BIEg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
 INSERT VIDEO OF FPGA-ARDUINO COMMUNICATION
 
 ## Bonus Content :)
