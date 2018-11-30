@@ -39,14 +39,15 @@ Our first step was to initialize camera registers using information from the OV7
 
 A table of the addresses of these registers and the values that must be written to them to achieve the above functions as set out in the prelab is shown below:
 
-| Register | Address (Camera) | Address (Arduino) | Value Written (bin) | Additional Comments                                                                                                     |
-|----------|------------------|-------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------|
-| COM7     | 0x12             | 0x09              | 10000110            | bit 7: Reset all registers <br>bit 1: Enable color bar test <br>Setting bit 2 and bit 0 high sets the OV7670 to output RGB data |
-| COM14    | 0x3E             | 0x1F              | N/A                 | Enable Scaling                                                                                                          |
-| COM17    | 0x42             | 0x21              | 00001000            | Bit 3: High to enable color bar test (requires two registers)                                                           |
-| CLKRC    | 0x11             | 0x08              | 10000000            | Use external clock (i.e. 24 MHz clock from FPGA)                                                                        |
-| MVFP     | 0x1E             | 0x0F              | 00110000            | Vertical/Mirror Flip                                                                                                    |
-| GFIX     | 0x69             | 0x34              | N/A                 | Setting gain parameters                                                                                                 |
+| Register | Address (Camera) | Value Written (hex) | Additional Comments                                                                                                     |
+|----------|------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------|
+| COM7     | 0x12             |  0x80 (RESET), 0x0E/0x0C(enable/disable color bar)           | bit 7: Reset all registers <br>bit 1: Enable color bar test <br>Setting bit 2 and bit 0 high sets the OV7670 to output RGB data |
+| COM15    | 0x40             | 0xD0                | To set camera to RGB444                                                                                                      |
+| COM17    | 0x42             | 0x00/0x08(disable/enable colorbar)        | Bit 3: High to enable color bar test (requires two registers)                                                           |
+| CLKRC    | 0x11             | 0xC0                | Use external clock (i.e. 24 MHz clock from FPGA)                                                                        |
+| MVFP     | 0x1E             | 0x30                | Vertical/Mirror Flip                                                                                                    |
+| GFIX     | 0x69             | N/A                 | Setting gain parameters                                                                                                 |
+| RGB444    | 0x8C            | 00000010            | Use RGB444 for camera setting                                                                                                         |
 
 Our group was provided with a template function that we used to overwrite the default values at these registers. This function required that only the most significant 7 bits of each register’s 8-bit address were passed to it. As such, the addresses that the arduino actually wrote to (column 1 in above table) were passed to this function by getting rid of the least significant bit in the actual camera address (column 2 in above table).
 
