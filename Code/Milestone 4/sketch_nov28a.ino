@@ -31,10 +31,10 @@ void setup() {
   Serial.println("HELLO WORLD !");
   // TODO: READ KEY REGISTERS
 //
-//  pinMode(4, INPUT); //input from FPGA
-//  pinMode(8, OUTPUT); //output to FPGA saying it wants image info
+  pinMode(4, INPUT); //input from FPGA
+  pinMode(8, OUTPUT); //output to FPGA saying it wants image info
 //
-//  digitalWrite(8, LOW);
+  digitalWrite(8, LOW);
 //    
 //  delay(100);
 
@@ -59,11 +59,11 @@ void setup() {
   OV7670_write_register(CLKRC, 0xC0);
 
   OV7670_write_register(COM7, 0x0C); //no color bar
- //  OV7670_write_register(COM7, 0x0E); // color bar
+  //OV7670_write_register(COM7, 0x0E); // color bar
    
   // Enable color bar test
   OV7670_write_register(COM17, 0x00); //no color bar
- // OV7670_write_register(COM17, 0x08); //color bar
+  //OV7670_write_register(COM17, 0x08); //color bar
   // Mirror/flip image
   OV7670_write_register(MVFP, 0x30);
 
@@ -74,13 +74,12 @@ void setup() {
   set_color_matrix(); 
   read_key_registers();
 //  read_color_registers();
-
- // get_FPGA_data();
- // get_FPGA_data();
+ 
 }
 
 void loop(){
-  
+    get_FPGA_data();
+    delay(1000);
  }
 
 
@@ -199,6 +198,27 @@ byte get_FPGA_data(){
   digitalWrite(8, LOW);
   Serial.println(treasure);
   decode_treasure_info(treasure);
+  /*byte treasure1 = 0b00000000;
+  digitalWrite(8, HIGH);
+  delay(5); //wait for FPGA to compute treasure data
+  bitWrite(treasure1, 3, digitalRead(4)); //store MSB (shape bit 1)
+  digitalWrite(8, LOW);
+  digitalWrite(8, HIGH);
+  bitWrite(treasure1, 2, digitalRead(4)); //store shape bit 2
+  digitalWrite(8, LOW);
+  digitalWrite(8, HIGH);
+  bitWrite(treasure1, 1, digitalRead(4)); //store color bit 1
+  digitalWrite(8, LOW);
+  digitalWrite(8, HIGH);
+  bitWrite(treasure1, 0, digitalRead(4)); //store color bit 2
+  digitalWrite(8, LOW);
+  Serial.println(treasure1);
+
+  if (treasure == treasure1){
+  decode_treasure_info(treasure);
+  }
+  else Serial.println("Don't match");
+  */
   return treasure;
 }
 
@@ -211,16 +231,16 @@ void decode_treasure_info(byte t){
   }
   else {
     if (bitRead(t, 2)){
-      Serial.println("circle");
+      Serial.println("diamond");
     }
     else Serial.println("None");
   }
 
   if (bitRead(t, 1)){
     if (bitRead(t, 0)){
-      Serial.println("blue");
+      Serial.println("Invalid");
     }
-    else Serial.println("green");
+    else Serial.println("blue");
   }
   else {
     if (bitRead(t, 0)){
