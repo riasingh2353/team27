@@ -41,4 +41,4 @@ In order to debug this implementation, we first mocked this algorithim up in MAT
 
 In practice, the robot behaves in essentially the same way.
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=PR1MIr2Fp-U&feature=youtu.be" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/PR1MIr2Fp-U" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
