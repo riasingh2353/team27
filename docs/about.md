@@ -1,4 +1,4 @@
-Meet the ~coolest~ team around:
+Meet the *coolest* team around:
 
 
 ![Felicia](./media/about_us/felicia.png) 
