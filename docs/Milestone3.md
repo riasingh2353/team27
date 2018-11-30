@@ -39,4 +39,6 @@ In order to debug this implementation, we first mocked this algorithim up in MAT
 
 ![what a nice robot](cabbageanimation.gif)
 
-In practice, the robot behaves in essentially the same way. 
+In practice, the robot behaves in essentially the same way.
+
+<iframe width="560" height="315" src="https://youtu.be/PR1MIr2Fp-U" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
