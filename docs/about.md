@@ -27,5 +27,6 @@ image coming soon
 
 ## Jankbot
 
-What a nice robot...
+Such a nice robot...
+
 ![jankbot](./media/FRONTOFROBOT.jpg)
