@@ -1,6 +1,6 @@
-Meet the *coolest* team around:
-
 [Home](./index.md)
+
+Meet the *coolest* team around:
 
 ## Felicia Guo
 ![Felicia](./media/about_us/felicia.png) 
