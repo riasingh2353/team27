@@ -218,17 +218,7 @@ The following video demonstrates color detection. The red LED will light up when
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/WfuxtL3I-Fc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-The video below demonstrates our shape detection capability. The LEDs are assigned to shapes as follows:
-
-| Shape            | Color    |
-|------------------|----------|
-| Square           | Red      |
-| Triangle         | Green    |
-| Diamond          | Yellow   |
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/F9ZXnC7BIEg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-We found that, on average, our shape detection works well but is highly dependent on the quality of the image, which varies at different times that we test our code. On the Arduino side, we will likely take the shape value that occurs the most often and take it as the value to reduce this effect.
+The video below demonstrates the communication of treasure information between the FPGA and Arduino: 
 
 INSERT VIDEO OF FPGA-ARDUINO COMMUNICATION
 
