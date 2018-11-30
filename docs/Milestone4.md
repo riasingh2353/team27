@@ -10,7 +10,24 @@ No additional materials were needed for this milestone
 
 ### Shape Detection
 Previously, we had already implemented color detection with our camera. This milestone adds shape detection to functionality, allowing us to distinguish between triangles, diamonds, and square. As our image processor reads pixels in rows from top to bottom, we implemented a simple algorithm that would count the number of red or blue pixels in a row every couple of rows, and compare with a previous row from higher up in the frame. If the shape is a triangle, each next row read would have more counted pixels than the previous row read. If the shape is a diamond, at a certain point a read row will have less counted pixels than a previous row. If the shape is a square, the amount of pixels counted will remain relatively constant. To prevent comparison to white space where the treasure image is not present, we set a threshold for the number of pixels that must be counted in a row before it is allowed for comparison. 
-
+~~~c
+		if (VGA_PIXEL_X == 10'b0  && rowCount > 15'd50 && VGA_PIXEL_Y < 144*2/3) begin //new row
+			count = count - 3'b001;
+			if (count == 3'b0) begin
+				if (lastRowCount+16'd7 < rowCount) begin
+					TEMP_SHAPE = 2'b11; // triangle
+				end
+				else if (lastRowCount-16'd15 > rowCount) begin
+					TEMP_SHAPE = 2'b01; // diamond
+				end
+				else begin
+					TEMP_SHAPE = 2'b10; // square
+				end
+				count = 3'b101;
+			lastRowCount = rowCount;
+			end
+			rowCount  = 16'd0;
+~~~
 
 
 The video below demonstrates our shape detection capability. The last 3 LEDs on the right are assigned to shapes as follows:
