@@ -59,7 +59,7 @@ void setup() {
   OV7670_write_register(CLKRC, 0xC0);
 
   OV7670_write_register(COM7, 0x0C); //no color bar
-  //OV7670_write_register(COM7, 0x0E); // color bar
+ // OV7670_write_register(COM7, 0x0E); // color bar
    
   // Enable color bar test
   OV7670_write_register(COM17, 0x00); //no color bar
@@ -185,18 +185,18 @@ byte get_FPGA_data(){
   byte treasure = 0b00000000;
   digitalWrite(8, HIGH);
   delay(5); //wait for FPGA to compute treasure data
-  bitWrite(treasure, 3, digitalRead(4)); //store MSB (shape bit 1)
+  bitWrite(treasure, 0, digitalRead(4)); //store MSB (shape bit 1)
   digitalWrite(8, LOW);
   digitalWrite(8, HIGH);
-  bitWrite(treasure, 2, digitalRead(4)); //store shape bit 2
+  bitWrite(treasure, 1, digitalRead(4)); //store shape bit 2
   digitalWrite(8, LOW);
   digitalWrite(8, HIGH);
-  bitWrite(treasure, 1, digitalRead(4)); //store color bit 1
+  bitWrite(treasure, 2, digitalRead(4)); //store color bit 1
   digitalWrite(8, LOW);
   digitalWrite(8, HIGH);
-  bitWrite(treasure, 0, digitalRead(4)); //store color bit 2
+  bitWrite(treasure, 3, digitalRead(4)); //store color bit 2
   digitalWrite(8, LOW);
-  Serial.println(treasure);
+  Serial.println(treasure, BIN);
   decode_treasure_info(treasure);
   /*byte treasure1 = 0b00000000;
   digitalWrite(8, HIGH);
@@ -213,7 +213,6 @@ byte get_FPGA_data(){
   bitWrite(treasure1, 0, digitalRead(4)); //store color bit 2
   digitalWrite(8, LOW);
   Serial.println(treasure1);
-
   if (treasure == treasure1){
   decode_treasure_info(treasure);
   }
@@ -294,4 +293,4 @@ void read_color_registers() {
     Serial.print(bitRead(regval, k));
   }
   Serial.println();
-}       
+} 
