@@ -11,10 +11,10 @@
 RF24 radio(9, 10);
 //pipe addresses
 const uint64_t pipes[2] = { 0x0000000048LL, 0x0000000049LL };
-byte zero[3] = {0, 0, 0};
-byte data_before [3];
-byte data[3];
-int data_array[24];
+byte zero[4] = {0, 0, 0, 0};
+byte data_before [4];
+byte data[4];
+int data_array[32];
 int x = 0;
 int y = 0;
 bool first = true;
@@ -64,13 +64,14 @@ void loop() {
 
 void decipher() {
   // Parse byte array into 1D int array
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 8; j++) {
       int k = 8 * i + j;
       data_array[k] = int(bitRead(data[i], 7 - j));
+      Serial.print(data_array[k]);
     }
   }
-
+  Serial.println("");
   // Other Robot Information
   if (data_array[1] == 1) {
     robot = "true";
@@ -170,7 +171,7 @@ bool check_data() {
 bool check_zeros () {
   // Serial.println("checking if all zeros");
   byte zero = 0;
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 4; i++) {
     if (data[i] != zero) {
       //     Serial.println("not zero");
       return false;
