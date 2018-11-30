@@ -22,13 +22,19 @@ We decided to implement a depth-first search (DFS, henceforth) algorithm because
 On our robot, we use a recursive DFS algorithm. We chose to implement DFS recursively because an iterative implementation would require the creation of a stack data type, that could potentially be costly in terms of memory usage. The recursive implementation in effect uses recursive function calls as a sort of stack, allowing us to save on memory.
 
 Now, our robot is controlled by a DFS maze exploration algorithim that is called at each intersection of the maze. The algorithm essentially consists of 3(ish) stages, which are as follows:
+
 Stage 0: Mark Space as Visited
 		Indicate that the space the robot currently occupies has been visited
+
 Stage 1: Figure out Movement Options
 		The robot reads the wall values and uses these to determine which directions it can move in. the cardinal direction of these movement options (e.g. N, E, S, W) is recorded.
+
 Stage 2: Explore Movement Options
 		for each movement option, the robot will determine which way it needs to turn (if at all) to travel in that direction. it will then move in that direction and call dfs recursively from the next intersection it reaches.
+
 Stage 3: Backtrack
 		the robot orients itself in the direction opposite to the direction it was facing when DFS was called. it then drives back to the intersection that dfs was called from.
 
-In order to debug this implementation, we first mocked this algorithim up in MATLAB, and were able to obtain the following animation of the robot's traversal
+In order to debug this implementation, we first mocked this algorithim up in MATLAB, and were able to obtain the following animation of the robot's traversal: 
+
+![what a nice robot](cabbageanimation.gif)
