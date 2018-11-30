@@ -9,11 +9,13 @@ Meet the *coolest* team around:
 
 
 ## Michael Gong Rivera
+NAME: MGGGGGGGGGGGGGGGGGG<br/><br/>
+CLASS & TITLE: Elf Sorcerer, ECE Folk Hero<br/><br/>
+STATS: Str: Thinks about going to the gym (+0)   Dex: 50 WPM (+1)   Con: 150lbs +- 10 (+0)   Int: Can this be negative (+3)   Wis: Beyond his years (+2)   Cha: "unethusiastic...not very helpful...typically another ask a TA who is more knowledgeable" (+0)<br/><br/>
+SPELLS: Long-winded Joke, "_Have heard of Stuyvesant?_", Talk to Self<br/><br/>
+FEATURES & TRAITS: Nocturnal, Sarcasm, Masochist, Lack of Impulse Control, Basic Taste<br/><br/>
+WEAKNESSES: Try literally roast, it'll probably stick<br/>
 
-Elf Sorcerer, ECE Folk Hero<br/>
-Str: Thinks about going to the gym (+0)   Dex: 50 WPM (+1)   Con: 150lbs (+0)   Int: Can this be negative (+3)   Wis: Beyond his years (+2)   Cha: lmao (+0)<br/>
-Spells: Long-winded Joke, "_Have heard of Stuyvesant?_"<br/>
-FEATURES & TRAITS: Nocturnal, Roastable, Sarcasm, Masochist (Analog)<br/>
 
 ![Michael](./media/about_us/michael.png) 
 
