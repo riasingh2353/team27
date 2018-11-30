@@ -24,7 +24,7 @@ FEATURES & TRAITS: Nocturnal, Roastable, Sarcasm, Masochist (Analog)<br/>
 
 ## Ben Taussig
 
-Ben is an elder lich, spawned during the Neoproterozoic Era and skilled in necromancy, coffee making, and aquakinesis. Neglect his warnings at your peril.
+Ben is an elder lich, spawned during the Neoproterozoic Era and skilled in necromancy and aquakinesis. Neglect his warnings at your peril.
 
 ![Ben](./media/about_us/ben.png) 
 
