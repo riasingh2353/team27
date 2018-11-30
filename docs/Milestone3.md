@@ -35,6 +35,8 @@ Stage 2: Explore Movement Options
 Stage 3: Backtrack
 		the robot orients itself in the direction opposite to the direction it was facing when DFS was called. it then drives back to the intersection that dfs was called from.
 
-In order to debug this implementation, we first mocked this algorithim up in MATLAB, and were able to obtain the following animation of the robot's traversal: 
+In order to debug this implementation, we first mocked this algorithim up in MATLAB. From this, we obtained the following animation of the robot's traversal: 
 
 ![what a nice robot](cabbageanimation.gif)
+
+In practice, the robot behaves in essentially the same way. 
