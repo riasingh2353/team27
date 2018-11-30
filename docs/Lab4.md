@@ -41,13 +41,14 @@ A table of the addresses of these registers and the values that must be written 
 
 | Register | Address (Camera) | Value Written (hex) | Additional Comments                                                                                                     |
 |----------|------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------|
-| COM7     | 0x12             |  0x80 (RESET), 0x0E/0x0C(enable/disable color bar)           | bit 7: Reset all registers <br>bit 1: Enable color bar test <br>Setting bit 2 and bit 0 high sets the OV7670 to output RGB data |
+| COM7     | 0x12             |  0x80 (RESET)   
+0x0E/0x0C(enable/disable color bar)           | bit 7: Reset all registers <br>bit 1: Enable color bar test <br>Setting bit 2 and bit 0 high sets the OV7670 to output RGB data |
 | COM15    | 0x40             | 0xD0                | To set camera to RGB444                                                                                                      |
 | COM17    | 0x42             | 0x00/0x08(disable/enable colorbar)        | Bit 3: High to enable color bar test (requires two registers)                                                           |
 | CLKRC    | 0x11             | 0xC0                | Use external clock (i.e. 24 MHz clock from FPGA)                                                                        |
 | MVFP     | 0x1E             | 0x30                | Vertical/Mirror Flip                                                                                                    |
 | GFIX     | 0x69             | N/A                 | Setting gain parameters                                                                                                 |
-| RGB444    | 0x8C            | 00000010            | Use RGB444 for camera setting                                                                                                         |
+| RGB444    | 0x8C            | 0x02                | Use RGB444 for camera setting                                                                                                         |
 
 Our group was provided with a template function that we used to overwrite the default values at these registers. This function required that only the most significant 7 bits of each register’s 8-bit address were passed to it. As such, the addresses that the arduino actually wrote to (column 1 in above table) were passed to this function by getting rid of the least significant bit in the actual camera address (column 2 in above table).
 
