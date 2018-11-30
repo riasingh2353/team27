@@ -10,10 +10,10 @@ Meet the *coolest* team around:
 
 ## Michael Gong Rivera
 
-Elf Sorcerer, ECE Folk Hero
-Str: Thinks about going to the gym (+0)   Dex: 50 WPM (+1)   Con: 150lbs (+0)   Int: Can this be negative (+3)   Wis: Beyond his years (+2)   Cha: lmao (+0)
-Spellcasting Ability: Charisma
-FEATURES & TRAITS: Nocturnal, Roastable, Sarcasm, Masochist (Analog)
+Elf Sorcerer, ECE Folk Hero<br/>
+Str: Thinks about going to the gym (+0)   Dex: 50 WPM (+1)   Con: 150lbs (+0)   Int: Can this be negative (+3)   Wis: Beyond his years (+2)   Cha: lmao (+0)<br/>
+Spellcasting Ability: Charisma<br/>
+FEATURES & TRAITS: Nocturnal, Roastable, Sarcasm, Masochist (Analog)<br/>
 
 ![Michael](./media/about_us/michael.png) 
 
