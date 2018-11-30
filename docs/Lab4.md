@@ -41,8 +41,7 @@ A table of the addresses of these registers and the values that must be written 
 
 | Register | Address (Camera) | Value Written (hex) | Additional Comments                                                                                                     |
 |----------|------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------|
-| COM7     | 0x12             |  0x80 (RESET)   
-0x0E/0x0C(enable/disable color bar)           | bit 7: Reset all registers <br>bit 1: Enable color bar test <br>Setting bit 2 and bit 0 high sets the OV7670 to output RGB data |
+| COM7     | 0x12             |  0x80 (RESET)     0x0E/0x0C(enable/disable color bar)           | bit 7: Reset all registers <br>bit 1: Enable color bar test <br>Setting bit 2 and bit 0 high sets the OV7670 to output RGB data |
 | COM15    | 0x40             | 0xD0                | To set camera to RGB444                                                                                                      |
 | COM17    | 0x42             | 0x00/0x08(disable/enable colorbar)        | Bit 3: High to enable color bar test (requires two registers)                                                           |
 | CLKRC    | 0x11             | 0xC0                | Use external clock (i.e. 24 MHz clock from FPGA)                                                                        |
