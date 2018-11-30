@@ -22,6 +22,7 @@ The video below demonstrates our shape detection capability. The last 3 LEDs on 
 | Diamond          | Yellow       |
 
 The first 2 LEDs of the 5 total are assigned to colors as follows:
+
 | Color        | LED Color    |
 |--------------|--------------|
 | Red          | Red          |
