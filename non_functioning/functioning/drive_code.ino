@@ -154,6 +154,7 @@ void setup(void){
 
 void loop(void)
 {
+  audio_begin();
   line_follow_until_intersection();
   dfs(dir, 0);
   turn_around(); //after dfs completes the maze, we need to turn around to return to our starting position
@@ -411,7 +412,10 @@ void line_follow_until_intersection() {
   get_line_values();
   while (1) {
     if (sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) { //INTERSECTION
-      return;
+      stop_drive();
+      if (!IR_detect()) {//if no robot is detected
+        return;
+      }
     }
     //Case: traveling along line --> drive straight
     else if (sensor_values[0] > line_threshold && sensor_values[1] > line_threshold ) {
@@ -688,61 +692,6 @@ void copy(byte* src, byte* dst, int len) {
   memcpy(dst, src, sizeof(src[0])*len);
 }
 
-void fft_detect() {
-  servoL.detach();
-  servoR.detach();
-
-  cli();
-
-  for (int i = 0 ; i < 512 ; i += 2) {
-    fft_input[i] = analogRead(A5); // <-- NOTE THIS LINE
-    fft_input[i + 1] = 0;
-  }
-
-  fft_window();
-  fft_reorder();
-  fft_run();
-  fft_mag_log();
-  sei();
-  if (!start) {
-    digitalWrite(7, LOW);
-    Serial.println(fft_log_out[3]);
-    if (fft_log_out[3] > 80) {
-      l = l + 1;
-    }
-    else {
-      l = 0;
-    }
-    if (l >= 15) {
-      digitalWrite(7, HIGH);
-      servoL.attach(3);
-      servoR.attach(5);
-      drive_straight();
-      start = 1;
-      //flip select bit
-      Serial.println("660 HURTS !!!!!");
-    }
-  }
-  else if (start) {
-    if (fft_log_out[26] > 60 || fft_log_out[25] > 60 || fft_log_out[27] > 60) {
-      Serial.println("6KHz !!!!!");
-      servoL.attach(3);
-      servoR.attach(5);
-      stop_drive;
-      //digitalWrite(6, HIGH); //turn on indicator LED
-      delay(2500);
-      //else turn_left();
-    }
-    else {
-      //digitalWrite(6, LOW); //turn off indicator LED
-      servoL.attach(3);
-      servoR.attach(5);
-      drive_straight();
-    }
-  }
-  Serial.println(start);
-}
-
 //please note: refers to global visited matrix + global position variable
 //the direction the robot was travelling when dfs was called is passed to the function
 void dfs(int calling_dir, bool backtrack) {
@@ -963,4 +912,67 @@ byte get_FPGA_data(){
   //Serial.println(treasure);
   //decode_treasure_info(treasure);
   return treasure;
+}
+
+void audio_begin() {
+  while (start == 0) {
+    digitalWrite(7, LOW);
+    cli();
+    for (int i = 0 ; i < 128 ; i += 2) {
+      fft_input[i] = analogRead(A0); // <-- NOTE THIS LINE
+      fft_input[i + 1] = 0;
+      delayMicroseconds(500);
+    }
+    fft_window();
+    fft_reorder();
+    fft_run();
+    fft_mag_log();
+    sei();
+    /*for (int k = 0; k<64; k++) {
+      Serial.print(fft_log_out[k]);
+      Serial.print(" ");
+    }
+    Serial.println();*/
+    if (fft_log_out[43] > 55 && (fft_log_out[43] > fft_log_out[22])) { 
+      Serial.println("660 KHz detected");
+      start == 1;
+    }
+    else {
+      //Serial.println("660 KHz /NOT/ detected");
+    }
+  }
+}
+
+
+//returns true if a 6.6 KHz signal is detected, false otherwise.
+bool IR_detect() {
+  byte sum = 0;
+  for (int k = 0; k <= 10; k++) {
+    digitalWrite(7, HIGH);
+    for (int i = 0 ; i < 128 ; i += 2) {
+      fft_input[i] = analogRead(A0); // <-- NOTE THIS LINE
+      fft_input[i + 1] = 0;
+    }
+    fft_window();
+    fft_reorder();
+    fft_run();
+    fft_mag_log();
+    sei();
+    /*for (int k = 0; k<64; k++) {
+      Serial.print(fft_log_out[k]);
+      Serial.print(" ");
+    }
+    Serial.println();*/
+
+    if (fft_log_out[14] > 50) {
+      sum = sum + 1;
+    }      
+    //count = count + 1;
+  }
+  if (sum > 5) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }
