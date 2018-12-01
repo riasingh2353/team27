@@ -41,10 +41,10 @@ In order to debug this implementation, we first mocked this algorithim up in MAT
 
 In practice, the robot behaves in essentially the same way.<br/>
 
-DFS with Maze, but no GUI (it broke on Friday)
+DFS with Maze, but no GUI
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/PR1MIr2Fp-U" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br/>
 
-DFS with Smaller Maze and GUI (got it to work at 8:15pm)<br/>
+DFS with Smaller Maze and GUI
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/ITaQrIupPFI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
