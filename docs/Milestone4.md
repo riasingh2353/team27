@@ -53,3 +53,5 @@ We found that, on average, our shape detection works well but is highly dependen
 In Lab 4, we demonstrated the functionality of the communication between the Arduino and the FPGA, and we extended this to communicate treasure shape information as well as color. A video of this is shown below:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/RRkVq5P6AAY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+The values fluctuate slightly before a steady input is shown, but we believe that the issue will be solved by a stationary treasure and a fixed camera.
