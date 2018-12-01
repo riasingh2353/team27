@@ -23,14 +23,14 @@ WEAKNESSES: Try literally roast, it'll probably stick<br/>
 
 ## Ria Singh
 
-For the following, description requires background music to set the ambience.
-Please open a new tab and play "Duck, Duck, Goose" by Cupcakke (Rated R)
-(Aside: Don't actually play the song. You'll think less of us afterwards)
-Don't worry, I'll wait.
-Ready?
-Ok.
+For the following, description requires background music to set the ambience.<br/>
+Please open a new tab and play "Duck, Duck, Goose" by Cupcakke (Rated R)<br/>
+(Aside: Don't actually play the song. You'll think less of us afterwards)<br/>
+Don't worry, I'll wait.<br/>
+Ready?<br/>
+Ok.<br/>
 Ria is a wandering bard searching for anyone willing to listen to her shittalk her companions. From objectively the worst state in the country, New Jersey, her abilities include laughing at the anything, as everything is apparently funny. Always one to lighten the hearts of her fellow travelers in times of stress, Ria embodies the mantras of memeing. Whether it be yelling at inanimate objects or forgetting to turn on the power supply, Ria always manages to roll a perfect 20 on a d6 and temporarily improve the constitution of her party members by 2.
-
+<br/><br/>
 Please finish listening to the song and then consider you life decisions
 
 
@@ -59,3 +59,8 @@ A nightmarish creature beyond the control of its creators.
 Special Ability: Force all players to make a sanity roll on a d2. If successful, survive the semester, but receive +10 stress. On failure, cry and change major to CS.
 
 ![jankbot](./media/FRONTOFROBOT.jpg)
+
+<br/>
+I hope these words steel your convictions for the trials to come.<br/>
+Yours Truly,<br/>
+-The Narrator
