@@ -23,6 +23,15 @@ WEAKNESSES: Try literally roast, it'll probably stick<br/>
 
 ## Ria Singh
 
+For the following, description requires background music to set the ambience.
+Please open a new tab and play "Duck, Duck, Goose" by Cupcakke (Rated R)
+(Aside: Don't actually play the song. You'll think less of us afterwards)
+Don't worry, I'll wait.
+Ready?
+Ok.
+Ria is a wandering bard searching for anyone willing to listen to her shittalk her companions. From objectively the worst state in the country, New Jersey, her abilities include laughing at the anything, as everything is apparently funny. Always one to lighten the hearts of her fellow travelers in times of stress, Ria embodies the mantras of memeing. Whether it be yelling at inanimate objects or forgetting to turn on the power supply, Ria always manages to roll a perfect 20 on a d6 and temporarily improve the constitution of her party members by 2.
+
+Please finish listening to the song and then consider you life decisions
 
 
 ![Ria](./media/about_us/ria.png) 
@@ -39,12 +48,14 @@ image coming soon
 
 Ian Power can be described as the diva of the group, the Scary Spice of the respective Girls.  He's fiercly independent, but never fails to be the star of the show.  Nevertheless, even when times get tough and the Cart has been gutted to find a loose wire, he can keep his head on his shoulders and remaining steadfast, like the steady Libyan coast that sheltered Aeneas' crew from Hera's watery wrath.
 
-Ian Power is credited with robot documentation on the website, out-of-pocket R&D expenses (currently totalling $4620), and paying off TAs to sabotage other teams' cameras in order to pressure Kirstin to push back lab deadlines.  He currently holds the titles of Lead SysAdmin, Supreme Schematic-meister, and the Party Bard.  His special skills include playing the Trumpet, uphill skiing, and playing the numbers round in the UK gameshow Countdown.
+Ian Power is credited with robot documentation on the website, out-of-pocket R&D expenses (currently totalling $4620), and paying off TAs to sabotage other teams' cameras in order to pressure Kirstin to push back lab deadlines.  He currently holds the titles of Lead SysAdmin, Supreme Schematic-meister, and the Party Minstrel.  His special skills include playing the Trumpet, uphill skiing, and playing the numbers round in the UK gameshow Countdown.
 
 Ian Power has never been to Canada, and doesn't believe it really exists.
 
 ## Jankbot
 
-Such a nice robot...
+A nightmarish creature beyond the control of its creators.
+
+Special Ability: Force all players to make a sanity roll on a d2. If successful, survive the semester, but receive +10 stress. On failure, cry and change major to CS.
 
 ![jankbot](./media/FRONTOFROBOT.jpg)
