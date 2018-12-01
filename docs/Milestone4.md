@@ -49,3 +49,7 @@ The first 2 LEDs of the 5 total are assigned to colors as follows:
 <iframe width="560" height="315" src="https://www.youtube.com/embed/F9ZXnC7BIEg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 We found that, on average, our shape detection works well but is highly dependent on the quality of the image, which varies at different times that we test our code. On the Arduino side, we will likely take the shape value that occurs the most often and take it as the value to reduce this effect.
+
+In Lab 4, we demonstrated the functionality of the communication between the Arduino and the FPGA, and we extended this to communicate treasure shape information as well as color. A video of this is shown below:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/RRkVq5P6AAY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
