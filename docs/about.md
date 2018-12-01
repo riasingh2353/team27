@@ -31,7 +31,7 @@ Ready?<br/>
 Ok.<br/>
 Ria is a wandering bard searching for anyone willing to listen to her shittalk her companions. From objectively the worst state in the country, New Jersey, her abilities include laughing at the anything, as everything is apparently funny. Always one to lighten the hearts of her fellow travelers in times of stress, Ria embodies the mantras of memeing. Whether it be yelling at inanimate objects or forgetting to turn on the power supply, Ria always manages to roll a perfect 20 on a d6 and temporarily improve the constitution of her party members by 2.
 <br/><br/>
-Please finish listening to the song and then consider you life decisions
+Please finish listening to the song and then consider your life decisions
 
 
 ![Ria](./media/about_us/ria.png) 
