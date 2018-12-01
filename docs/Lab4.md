@@ -245,7 +245,7 @@ The following video demonstrates color detection. The red LED will light up when
 
 The video below demonstrates the communication of treasure information between the FPGA and Arduino: 
 
-INSERT VIDEO OF FPGA-ARDUINO COMMUNICATION
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4qbswV10Brk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Bonus Content :)
 
