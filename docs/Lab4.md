@@ -237,7 +237,7 @@ if (!VGA_VSYNC_NEG && lastSYNC) begin //each frame
 ~~~
 
 ## Final Integration
-We tested the system as a whole by displaying the camera image on the screen and using LEDs to display the results of the image processor in order to show to functionality of the memory buffer, downsampler, and image processor.
+We tested the system as a whole by displaying the camera image on the screen and using LEDs to display the results of the image processor in order to show to functionality of the memory buffer, downsampler, and image processor. We found that the quality of our image varies, and is likely due to a connection issue since the signals are on the scales of MHz. In order to increase the reliability of the image, we plan to solder connections onto a perforated board to improve connection quality.
 
 The following video demonstrates color detection. The red LED will light up when the image processor returns a result of red, and the green LED will light up when the image processor returns a result of blue.
 
