@@ -5,9 +5,10 @@ Let me share with you the terrible wonders I have come to know...
 [Home](./index.md)
 
 ## Felicia Guo
+Felicia asked not to participate in D&D related about page descriptions. As a level 10 ruiner of fun, Felicia is in the tomes of "Can you not?" and Loud Sighing. She embodies the spirit of the questing party, begrudgingly going along with the requirements of the ECE 3400 quest and the antics of her fellow adventurers.<br/>
+
 ![Felicia](./media/about_us/felicia.png) 
 
-Felicia asked not to participate in D&D related about page descriptions. As a level 10 ruiner of fun, Felicia is in the tomes of "Can you not?" and Loud Sighing. She embodies the spirit of the questing party, begrudgingly going along with the requirements of the ECE 3400 quest and the antics of her fellow adventurers.
 
 ## Michael Gong Rivera
 NAME: MGGGGGGGGGGGGGGGGGG | ˈem-jēēēēēēēēēēēēēē<br/><br/>
@@ -16,7 +17,6 @@ STATS: Str: Thinks about going to the gym (+4)   Dex: 50 WPM (+1)   Con: 150lbs 
 SPELLS: Long-winded Joke, "_Have heard of Stuyvesant?_", Talk to Self<br/><br/>
 FEATURES & TRAITS: Nocturnal, Sarcasm, Masochist, Lack of Impulse Control, Basic Taste<br/><br/>
 WEAKNESSES: Try literally roast, it'll probably stick<br/>
-
 
 ![Michael](./media/about_us/michael.png) 
 
