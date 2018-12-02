@@ -458,11 +458,11 @@ void get_wall_values() {
   delay(50);
   digitalWrite(6, LOW);
   Serial.println(F("LEFT WALL!!!"));
-  Serial.println(F(left_wall_value));
+  Serial.println(left_wall_value);
   Serial.println(F("RIGHT WALL!!!"));
-  Serial.println(F(right_wall_value));
+  Serial.println(right_wall_value);
   Serial.println(F("FRONT WALL!!!"));
-  Serial.println(F(front_wall_value));
+  Serial.println(front_wall_value);
 }
 
 //obtains left, right, and rear wall sensor values
@@ -492,7 +492,7 @@ void radio_transmit(int n, int e, int s, int w) {
   info[3] = pos;
   
   Serial.println(F("VALUE SENT TO BASE:"));
-  Serial.println(F());
+  Serial.println();
   unsigned long long_info = 0;
   for (int k = 0; k < 8; k++) {
     bitWrite(long_info, k, bitRead(info[0], k));
@@ -505,7 +505,7 @@ void radio_transmit(int n, int e, int s, int w) {
       Serial.print(bitRead(info[0], 7-k));
   }
 
-  Serial.println(F());
+  Serial.println();
   transmit(long_info);
 }
 
@@ -680,8 +680,8 @@ void update_direction(int facing, int turn_dir) {
     }
   }
   Serial.println(F("Direction is:"));
-  Serial.print(F(dir));
-  Serial.println(F());
+  Serial.print(dir);
+  Serial.println();
 }
 
 /////////
@@ -699,7 +699,7 @@ void dfs(int calling_dir, bool backtrack) {
   //label intersection as visited
   Serial.println(F("DFS Called"));
   Serial.print(F("Direction is:"));
-  Serial.println(F(dir));
+  Serial.println(dir);
 
   //check where you can move -- store this information in array "options"
   byte options[4]; //index 0 corresponds with N, 1 with E, 2 with S, 3 with W.
@@ -746,8 +746,8 @@ void dfs(int calling_dir, bool backtrack) {
     if (pos >= width && visited[pos - width]) {
       options[0] = 0;
       Serial.println(F("Visited[0] is: "));
-      Serial.print(F(visited[pos - width]));
-      Serial.println(F());
+      Serial.print(visited[pos - width]);
+      Serial.println();
     }
   }
   if (options[1]) {
@@ -768,15 +768,15 @@ void dfs(int calling_dir, bool backtrack) {
 
   Serial.println("Options:");
   for (int j = 0; j<4;j++) {
-    Serial.println(F(options[j]));
+    Serial.println(options[j]);
   }
 
   //need to update visited after checking for colors + transmitting
   visited[pos] = 1;
   Serial.print(F("Visited["));
-  Serial.print(F()pos);
+  Serial.print(pos);
   Serial.print(F("] is 1"));
-  Serial.println(F());
+  Serial.println();
 
   
   for (int i = 0; i < 4; i++) {
@@ -785,8 +785,8 @@ void dfs(int calling_dir, bool backtrack) {
       if (pos >= width && visited[pos - width]) {
         options[0] = 0;
         Serial.println(F("Visited[0] is: "));
-        Serial.print(F(visited[pos - width]));
-        Serial.println(F());
+        Serial.print(visited[pos - width]);
+        Serial.println();
       }
     }
     if (options[1]) {
@@ -826,7 +826,7 @@ void dfs(int calling_dir, bool backtrack) {
       //Serial.println();
       if (posnext > -1 && posnext < maze_size && visited[posnext] == 0)  {
         Serial.print(F("Travelling in direction: "));
-        Serial.println(F(i));
+        Serial.println(i);
         //explore in direction k
         int dir_old = dir; //HACKY FIX FOR BACKTRACKING ISSUE
         if (dir == i) {//if direction k is straight ahead
@@ -866,10 +866,10 @@ void dfs(int calling_dir, bool backtrack) {
       }
       else if (dir == calling_dir + 1 || (dir == 0 && calling_dir == 3)) {
         Serial.println(F("Calling dir:"));
-        Serial.print(F(calling_dir));
+        Serial.print(calling_dir);
         Serial.println(F("dir:"));
-        Serial.print(F(dir));
-        Serial.println(F());
+        Serial.print(dir);
+        Serial.println();
         
         turn_right();
       }
@@ -882,8 +882,8 @@ void dfs(int calling_dir, bool backtrack) {
         update_position(dir,2);
       }
       Serial.print(F("Next position is:"));
-      Serial.print(F(pos));
-      Serial.println(F());
+      Serial.print(pos);
+      Serial.println();
       line_follow_until_intersection();
     }
     return; 
