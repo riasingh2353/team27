@@ -3,7 +3,7 @@
 
 # WHEN ROBOTS ATTACK!!
 
-### ->A Discussion on the Ethics of Autonomous Weapons by the Members of Team #27<-
+ ->A Discussion on the Ethics of Autonomous Weapons by the Members of Team #27<-
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In 2015, at the 24th International Joint Conference on Artificial Intelligence, the Campaign to Stop Killer Robots put forth a letter urging the scientific and military communities to come together in an effort to stop the growing threat of a new type of arms race, one of artificial intelligence, by pledging to put a ban on autonomous weapons. The letter received popular support from several big-name signatories, including Stephen Hawking, Elon Musk, Steve Wozniak, and Cornell University President Martha E. Pollack. “Autonomous weapons,” the letter begins, “select and engage targets without human intervention.”(Campaign, 2015) As memories of Philip K. Dick and Isaac Asimov flood through the minds of science-fiction fans, the reality is slowly beginning to take hold around us. Unmanned, armed drones can eliminate targets with limited human involvement from around the globe, sentry guns can identify and target aggressors autonomously, and today’s disarmament treaties have trouble gaining traction among the biggest players on the world stage. With all of the odds stacked against it, a ban on “offensive autonomous weapons beyond meaningful human control” seems destined to fail in the long run.
