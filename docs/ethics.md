@@ -15,7 +15,7 @@
   
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As a result of the numerous challenges associated with such a ban, any international legislation preventing the proliferation and use of offensive autonomous weapons would not be effective at limiting the potential harm associated with this new fleet of armaments. While states may agree to such a treaty on a global scale, total unity among all the necessary superpowers does not seem likely to effect change in meaningful proportions. Special cases exist, and always will, for which global powers will expect exceptions to be made, and passing on the current arms race is too great a cost for any one nation over another. These tools exist, and we can only limit who will use them. As Gubrud concludes, “The point of such negotiations should not be to draw a line defining autonomy; that has already been done...Philosophical clarity is not the issue, for we have already achieved that. From this point forward, it’s just old-fashioned horse trading.”(Gubrud, 2014)
 
-##Bibliography:
+## Bibliography:
 
 Campaign to Stop Killer Robots. (2015, July 8). Autonomous weapons: an open letter from AI & robotics researchers. Campaign to Stop Killer Robots. Retrieved from https://futureoflife.org/open-letter-autonomous-weapons/ 
 
