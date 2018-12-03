@@ -52,15 +52,15 @@ int wall_threshold = 160;        //A wall exists if a wall sensor reads a value 
 
 int countdown = 5000;
 int max_countdown_value = 5000;
-int dir = 0;                     //direction the robot is traveling in.
+int dir = 2;                     //direction the robot is traveling in.
 //0 -> N; 1 -> E; 2 -> S; 3 -> W;
 //We assume the robot starts in the northwest corner
 // traveling east by default
-int width = 2;
-int height = 3;
+int width = 9;
+int height = 9;
 int maze_size = width * height;
-byte visited[6]; //each entry in this array refers to a square
-byte pos = 4;   //position in maze in raster coordinates
+byte visited[81]; //each entry in this array refers to a square
+byte pos = 0;   //position in maze in raster coordinates
                   //NOTE: WE START AT POSITION 1 -- I.E. east of the intersection at position 0
 
 int loffset= -1;  //add this value to the left wheel's speed when driving straight to adjust for
@@ -77,8 +77,8 @@ void setup(void){
   //
   // Print preamble
   //
-  //ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
-  //ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
+  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+  ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
   Serial.begin(57600);
   printf_begin();
   printf("\n\rRF24/examples/GettingStarted/\n\r");
@@ -161,10 +161,12 @@ void loop(void)
   servoL.write(90);
   servoR.write(90);
   delay(100000); //stop for 100s
-  Serial.println(F("END OF LOOP!"));
+  Serial.println("END OF LOOP!");
+  //IR_detect();
+
 }
 void transmit(unsigned long val) {
-    // First, stop listening so we can talk.
+    // First, stop listenings so we can talk.
     radio.stopListening();
     // Take the time, and send it.  This will block until complete
     
@@ -223,7 +225,7 @@ void spin_left() {
   drive_straight();
   delay(400);
 
-  Serial.println(F("turning to get off of line"));
+  Serial.println("turning to get off of line");
   get_line_values();
   while (sensor_values[2] < line_threshold - 75) {
     servoL.write(80);
@@ -260,7 +262,7 @@ void spin_right() {
   drive_straight();
   delay(400);
 
-  Serial.println(F("turning to get off of line"));
+  Serial.println("turning to get off of line");
   get_line_values();
   while (sensor_values[2] < line_threshold - 75) {
     servoL.write(100);
@@ -308,7 +310,7 @@ void turn_left() {
   drive_straight();
   delay(400);
 
-  Serial.println(F("turning to get off of line"));
+  Serial.println("turning to get off of line");
   get_line_values();
   while (sensor_values[2] < line_threshold - 75) {
     servoL.write(80);
@@ -338,7 +340,7 @@ void turn_right() {
   drive_straight();
   delay(400);
   
-  Serial.println(F("turning to get off of line"));
+  Serial.println("turning to get off of line");
   get_line_values();
   while (sensor_values[2] < line_threshold - 75) {
     servoL.write(119);
@@ -365,10 +367,10 @@ void turn_right() {
 }
 
 void turn_around() {
-  Serial.println(F("Turning Around"));
+  Serial.println("Turning Around");
 
   //drive straight to get the robot off of the intersection
-  Serial.println(F("DRIVING STRAIGHT TO GET OFF INTERSECTION"));
+  Serial.println("DRIVING STRAIGHT TO GET OFF INTERSECTION");
   drive_straight();
   delay(200);
   
@@ -377,7 +379,7 @@ void turn_around() {
   delay(500);*/
 
   //turn in place
-  Serial.println(F("TURNING IN PLACE TAKE 1"));
+  Serial.println("TURNING IN PLACE TAKE 1");
   servoL.write(110);
   servoR.write(110);
   delay(600); //delay so that the following while loop does 
@@ -414,7 +416,12 @@ void line_follow_until_intersection() {
     if (sensor_values[0] < line_threshold && sensor_values[1] < line_threshold ) { //INTERSECTION
       stop_drive();
       if (!IR_detect()) {//if no robot is detected
+        Serial.println("NO ROBOT DETECTED");
         return;
+      }
+      else{
+        Serial.println("ROBOT DETECTED");
+        delay(1000);
       }
     }
     //Case: traveling along line --> drive straight
@@ -457,11 +464,11 @@ void get_wall_values() {
   left_wall_value   = analogRead(A4);
   delay(50);
   digitalWrite(6, LOW);
-  Serial.println(F("LEFT WALL!!!"));
+  Serial.println("LEFT WALL!!!");
   Serial.println(left_wall_value);
-  Serial.println(F("RIGHT WALL!!!"));
+  Serial.println("RIGHT WALL!!!");
   Serial.println(right_wall_value);
-  Serial.println(F("FRONT WALL!!!"));
+  Serial.println("FRONT WALL!!!");
   Serial.println(front_wall_value);
 }
 
@@ -491,7 +498,7 @@ void radio_transmit(int n, int e, int s, int w) {
   //LOOK WE JUST TRANSMIT THE RASTER POSITION NOW!
   info[3] = pos;
   
-  Serial.println(F("VALUE SENT TO BASE:"));
+  Serial.println("VALUE SENT TO BASE:");
   Serial.println();
   unsigned long long_info = 0;
   for (int k = 0; k < 8; k++) {
@@ -500,7 +507,7 @@ void radio_transmit(int n, int e, int s, int w) {
     bitWrite(long_info, k+16, bitRead(info[2], k));
     bitWrite(long_info, k+24, bitRead(info[3], k));
   }
-  Serial.println(F("VALUE SENT TO BASE:"));
+  Serial.println("VALUE SENT TO BASE:");
   for (int k = 0; k < 8; k++) {
       Serial.print(bitRead(info[0], 7-k));
   }
@@ -679,7 +686,7 @@ void update_direction(int facing, int turn_dir) {
       dir = 2;
     }
   }
-  Serial.println(F("Direction is:"));
+  Serial.println("Direction is:");
   Serial.print(dir);
   Serial.println();
 }
@@ -697,8 +704,8 @@ void copy(byte* src, byte* dst, int len) {
 void dfs(int calling_dir, bool backtrack) {
   stop_drive();
   //label intersection as visited
-  Serial.println(F("DFS Called"));
-  Serial.print(F("Direction is:"));
+  Serial.println("DFS Called");
+  Serial.print("Direction is:");
   Serial.println(dir);
 
   //check where you can move -- store this information in array "options"
@@ -738,14 +745,14 @@ void dfs(int calling_dir, bool backtrack) {
   //if the space has not yet been visited, transmit info about it
   if (!visited[pos]) {
     radio_transmit(!options[0], !options[1], !options[2], !options[3]);
-    Serial.println(F("TRANSMITTING!!!"));
+    Serial.println("TRANSMITTING!!!");
   }
 
     //block off visited spaces
   if (options[0]) {
     if (pos >= width && visited[pos - width]) {
       options[0] = 0;
-      Serial.println(F("Visited[0] is: "));
+      Serial.println("Visited[0] is: ");
       Serial.print(visited[pos - width]);
       Serial.println();
     }
@@ -773,9 +780,9 @@ void dfs(int calling_dir, bool backtrack) {
 
   //need to update visited after checking for colors + transmitting
   visited[pos] = 1;
-  Serial.print(F("Visited["));
+  Serial.print("Visited[");
   Serial.print(pos);
-  Serial.print(F("] is 1"));
+  Serial.print("] is 1");
   Serial.println();
 
   
@@ -784,7 +791,7 @@ void dfs(int calling_dir, bool backtrack) {
     if (options[0]) {
       if (pos >= width && visited[pos - width]) {
         options[0] = 0;
-        Serial.println(F("Visited[0] is: "));
+        Serial.println("Visited[0] is: ");
         Serial.print(visited[pos - width]);
         Serial.println();
       }
@@ -792,7 +799,7 @@ void dfs(int calling_dir, bool backtrack) {
     if (options[1]) {
       if(pos != maze_size &&  visited[pos + 1]) {
         options[1] = 0;
-        Serial.println(F("RESET"));
+        Serial.println("RESET");
       }
     }
     if (options[2]) {
@@ -825,14 +832,14 @@ void dfs(int calling_dir, bool backtrack) {
       //Serial.print(posnext);
       //Serial.println();
       if (posnext > -1 && posnext < maze_size && visited[posnext] == 0)  {
-        Serial.print(F("Travelling in direction: "));
+        Serial.print("Travelling in direction: ");
         Serial.println(i);
         //explore in direction k
         int dir_old = dir; //HACKY FIX FOR BACKTRACKING ISSUE
         if (dir == i) {//if direction k is straight ahead
           update_position(dir, 2); //also need to explicitly call this
           drive_straight();
-          Serial.println(F("Driving Straight"));
+          Serial.println("Driving Straight");
           delay(1000);
         }
         if (dir == i + 1 || (dir == 0 && i == 3)) {//if direction k is to the left
@@ -843,7 +850,7 @@ void dfs(int calling_dir, bool backtrack) {
         }
       //pretty sure we shouldn't have the condition where we have to turn 180°
       line_follow_until_intersection();
-      Serial.println(F("Intersection"));
+      Serial.println("Intersection");
       
 
       //INTERSECTION
@@ -860,14 +867,14 @@ void dfs(int calling_dir, bool backtrack) {
     //at the time of the aforementioned recursive call
 
     if (backtrack) {
-      Serial.println(F("backtracking"));
+      Serial.println("backtracking");
       if (dir == calling_dir) {
         turn_around();
       }
       else if (dir == calling_dir + 1 || (dir == 0 && calling_dir == 3)) {
-        Serial.println(F("Calling dir:"));
+        Serial.println("Calling dir:");
         Serial.print(calling_dir);
-        Serial.println(F("dir:"));
+        Serial.println("dir:");
         Serial.print(dir);
         Serial.println();
         
@@ -881,7 +888,7 @@ void dfs(int calling_dir, bool backtrack) {
         delay(400);
         update_position(dir,2);
       }
-      Serial.print(F("Next position is:"));
+      Serial.print("Next position is:");
       Serial.print(pos);
       Serial.println();
       line_follow_until_intersection();
@@ -914,12 +921,17 @@ byte get_FPGA_data(){
   return treasure;
 }
 
+
+//BIN 52 = 660 Hz AUDIO FFT
+//BIN 43 =
 void audio_begin() {
+  servoL.detach();
+  servoR.detach();
+  digitalWrite(7, LOW);
   while (start == 0) {
-    digitalWrite(7, LOW);
     cli();
     for (int i = 0 ; i < 128 ; i += 2) {
-      fft_input[i] = analogRead(A0); // <-- NOTE THIS LINE
+      fft_input[i] = analogRead(A5); // <-- NOTE THIS LINE
       fft_input[i + 1] = 0;
       delayMicroseconds(500);
     }
@@ -932,25 +944,43 @@ void audio_begin() {
       Serial.print(fft_log_out[k]);
       Serial.print(" ");
     }
-    Serial.println();*/
-    if (fft_log_out[43] > 55 && (fft_log_out[43] > fft_log_out[22])) { 
-      Serial.println(F("660 KHz detected"));
-      start == 1;
+    Serial.println();
+    count = count + 1;*/
+    //Serial.println(analogRead(A4));
+    //Serial.println(analogRead(A5));
+
+    Serial.print(fft_log_out[43]);
+    Serial.println();
+    
+    
+    if (fft_log_out[43] > 75) {
+      Serial.println("660 Hz Detected");
+      servoL.attach(3);
+      servoR.attach(5);
+      servoL.write(90);
+      servoR.write(90);
+      start =1; 
+      return;
     }
     else {
-      //Serial.println("660 KHz /NOT/ detected");
     }
   }
 }
 
-
+//BIN 33 = 6.6 KHz IR signal
+//BIN 12,13,14??
 //returns true if a 6.6 KHz signal is detected, false otherwise.
 bool IR_detect() {
-  byte sum = 0;
-  for (int k = 0; k <= 10; k++) {
-    digitalWrite(7, HIGH);
+  servoL.detach();
+  servoR.detach();
+  byte sum0 = 0;
+  byte sum1 = 0;
+  byte sum2 = 0;
+  byte sum3 = 0;
+  digitalWrite(7, HIGH);
+  for (int k = 0; k <= 50; k++) {
     for (int i = 0 ; i < 128 ; i += 2) {
-      fft_input[i] = analogRead(A0); // <-- NOTE THIS LINE
+      fft_input[i] = analogRead(A5); // <-- NOTE THIS LINE
       fft_input[i + 1] = 0;
     }
     fft_window();
@@ -963,16 +993,45 @@ bool IR_detect() {
       Serial.print(" ");
     }
     Serial.println();*/
-
-    if (fft_log_out[14] > 50) {
-      sum = sum + 1;
-    }      
-    //count = count + 1;
+    
+    Serial.println();
+    Serial.println(fft_log_out[14]);
+    if (fft_log_out[12] > 60){
+      sum0 = sum0 + 1;
+    }
+    if(fft_log_out[13] > 60) {
+      sum1 = sum1 + 1;
+    }
+    if(fft_log_out[14] > 60) { 
+      sum2 = sum2 + 1;    
+    }
+    if(fft_log_out[15] > 60) { 
+      sum3 = sum3 + 1;    
+    }
   }
-  if (sum > 5) {
+  if (sum0 > 25 || sum1 > 25 || sum2 > 25|| sum3 > 25) {
+    delay(300);
     return true;
   }
   else {
+    Serial.println();
+    Serial.print("Sum0 is: ");
+    Serial.print(sum0);
+    Serial.print(" ");
+    Serial.print("Sum1 is: ");
+    Serial.print(sum1);
+    Serial.print(" ");
+    Serial.print("Sum2 is: ");
+    Serial.print(sum2);
+    Serial.print(" ");
+    Serial.print("Sum3 is: ");
+    Serial.print(sum3);
+    Serial.print(" ");
+    Serial.println();
+    servoL.attach(3);
+    servoR.attach(5);
+    servoL.write(90);
+    servoR.write(90);
     return false;
   }
 }
