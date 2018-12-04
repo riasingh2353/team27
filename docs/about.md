@@ -52,7 +52,7 @@ Ian Power is credited with robot documentation on the website, out-of-pocket R&D
 
 Ian Power has never been to Canada, and doesn't believe it really exists.
 
-## Jankbot
+## Zabiba, formerly known as Jankbot
 
 A nightmarish creature beyond the control of its creators.
 
