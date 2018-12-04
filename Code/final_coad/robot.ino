@@ -23,24 +23,33 @@ unsigned int sensor_values[3];   //store line sensor values
                                  //sensor_values[0] -> left sensor; sensor_values[1] -> right sensor;
                                  //sensor_values[2] -> middle sensor.
 
+int front_wall_value1;            //store front wall sensor value
+int right_wall_value1;            //store right wall sensor value
+int left_wall_value1;             //store left wall sensor value
+int front_wall_value2;            //store front wall sensor value
+int right_wall_value2;            //store right wall sensor value
+int left_wall_value2;             //store left wall sensor value
+
 int front_wall_value;            //store front wall sensor value
 int right_wall_value;            //store right wall sensor value
 int left_wall_value;             //store left wall sensor value
 
+
 int line_threshold = 350;        //cutoff value b/w white and not white
-int wall_threshold = 160;        //A wall exists if a wall sensor reads a value greater than this threshold
+int wall_threshold = 355;        //A wall exists if a wall sensor reads a value greater than this threshold
 
 
 
-bool start = 0;                  //0 if 660Hz has not been detected. 1 o/w
+bool start = 1;                  //0 if 660Hz has not been detected. 1 o/w
 
-int dir = 2;                     //direction the robot is traveling in.
+int dir = 3;                     //direction the robot is traveling in.
                                   //0 -> N; 1 -> E; 2 -> S; 3 -> W;
-int width = 9;
-int height = 9;
+int width = 6;
+int height = 10;
 int maze_size = width * height;
-byte visited[81]; //each entry in this array refers to a square
-byte pos = 0;     //position in maze in raster coordinates
+byte visited[60]; //each entry in this array refers to a square
+
+byte pos = 4;     //position in maze in raster coordinates
                   //NOTE: WE START AT POSITION 1 -- I.E. east of the intersection at position 0
 
 int loffset= -1;  //add this value to the left wheel's speed when driving straight to adjust for veering
@@ -53,8 +62,8 @@ byte last = 0;    //parity bit for radio transmission
 
 
 void setup(void){
-  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
-  ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
+  //ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+  //ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
   Serial.begin(57600);
   
   printf_begin();
@@ -93,14 +102,16 @@ void setup(void){
 
 void loop(void)
 {
-  /*audio_begin();
+  //audio_begin();
+  /*servoL.attach(3);
+  servoR.attach(5);
   line_follow_until_intersection();
   dfs(dir, 0);
   turn_around(); //after dfs completes the maze, we need to turn around to return to our starting position
   servoL.write(90);
   servoR.write(90);
   delay(100000); //stop for 100s
-  Serial.println("END OF LOOP!");*/
+  Serial.println(F("END OF LOOP!"));*/
   IR_detect();
 
 }
@@ -127,7 +138,7 @@ void spin_left() {
   delay(250);
 
   get_line_values();
-  Serial.println(sensor_values[2]);
+  //Serial.println(sensor_values[2]);
   while (sensor_values[2] > line_threshold - 75) {
     servoL.write(80);
     servoR.write(80);
@@ -162,7 +173,7 @@ void spin_right() {
   delay(250);
 
   get_line_values();
-  Serial.println(sensor_values[2]);
+  //Serial.println(sensor_values[2]);
   while (sensor_values[2] > line_threshold - 75) {
     servoL.write(100);
     servoR.write(100);
@@ -182,20 +193,25 @@ void spin_right() {
   update_direction(dir, 0);
 }
 void veer_left() {
-  servoL.write(80);
-  servoR.write(55);
+  servoL.write(85);
+  servoR.write(75);
   get_line_values();
 }
 
 void veer_right() {
-  servoL.write(125);
-  servoR.write(100);
+  servoL.write(105);
+  servoR.write(95);
   get_line_values();
 }
 
 void turn_left() {
+  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+  ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
   drive_straight();
-  delay(400);
+  delay(300);
+
+  servoL.write(90);
+  servoR.write(90);
 
   get_line_values();
   while (sensor_values[2] < line_threshold - 75) {
@@ -208,21 +224,25 @@ void turn_left() {
   delay(250);
 
   get_line_values();
-  Serial.println(sensor_values[2]);
+  //Serial.println(sensor_values[2]);
   while (sensor_values[2] > line_threshold - 75) {
     servoL.write(80);
     servoR.write(80);
     get_line_values();
   }
   //turn a little bit more so the robot is aligned w the line
-  delay(50);
+  //delay(25);
   update_position(dir, 1);
   update_direction(dir, 1);
+  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+  ADCSRA |= bit (ADPS0) | bit (ADPS1) | bit (ADPS2);
 }
 
 void turn_right() {
+  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+  ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
   drive_straight();
-  delay(400);
+  delay(300);
   
   get_line_values();
   while (sensor_values[2] < line_threshold - 75) {
@@ -241,14 +261,18 @@ void turn_right() {
     get_line_values();
   }
   //turn a little bit more so the robot is aligned w the line
-  delay(50);
+  //delay(25);
   
   update_position(dir, 0);
   update_direction(dir, 0);
+  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+  ADCSRA |= bit (ADPS0) | bit (ADPS1) | bit (ADPS2);
 }
 
 void turn_around() {
-  Serial.println(F("Turning Around"));
+  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+  ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
+  //Serial.println(F("Turning Around"));
 
   //drive straight to get the robot off of the intersection
   drive_straight();
@@ -270,9 +294,17 @@ void turn_around() {
   update_direction(dir, 1);
   update_direction(dir, 1);
   update_position(dir, 2);
+  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+  ADCSRA |= bit (ADPS0) | bit (ADPS1) | bit (ADPS2);
 }
 
 void drive_straight() {
+  servoL.write(95+loffset);
+  servoR.write(85);
+  get_line_values();
+}
+
+void drive_straight_lf() {
   servoL.write(95+loffset);
   servoR.write(85);
   get_line_values();
@@ -295,12 +327,12 @@ void line_follow_until_intersection() {
       }
       else{
         Serial.println(F("ROBOT DETECTED"));
-        delay(1000);
+        delay(5000);
       }
     }
     //Case: traveling along line --> drive straight
     else if (sensor_values[0] > line_threshold && sensor_values[1] > line_threshold ) {
-      drive_straight();
+      drive_straight_lf();
     }
 
     //Case: drifting off to the right --> correct left
@@ -315,7 +347,7 @@ void line_follow_until_intersection() {
 
     // Default: drive straight
     else {
-      drive_straight();
+      drive_straight_lf();
     }
   }
 }
@@ -327,32 +359,76 @@ void line_follow_until_intersection() {
 //obtains front_wall_value, right_wall_value and left_wall_value
 //also writes to wall detection indicator LEDs
 void get_wall_values() {
+  /* digitalWrite(6, LOW);//set wall sensor select bit to read right wall sensor
+  right_wall_value  = analogRead(A4);
+  digitalWrite(6, HIGH);//set wall sensor select bit to read left wall sensor
+  front_wall_value  = analogRead(A3);
+  left_wall_value   = analogRead(A4);
+   Serial.println("LEFT WALL!!!");
+  Serial.println(left_wall_value);
+  Serial.println("FRONT WALL!!!");
+  Serial.println(front_wall_value);
+  Serial.println("RIGHT WALL !!!");
+  Serial.println(right_wall_value);*/
   digitalWrite(6, LOW);//set wall sensor select bit to read right wall sensor
-  right_wall_value  = analogRead(A4);
-  right_wall_value  = analogRead(A4);
+  right_wall_value1  = analogRead(A4);
+  delay(50);
+  right_wall_value2 = analogRead(A4);
+  while (abs(right_wall_value1 - right_wall_value2) > 20) 
+  {
+      right_wall_value1  = analogRead(A4);
+      delay(50);
+      right_wall_value2 = analogRead(A4);
+  }
+  right_wall_value = right_wall_value2;
+  
   delay(50);
   digitalWrite(6, HIGH);//set wall sensor select bit to read left wall sensor
   delay(50);
-  front_wall_value  = analogRead(A3);
-  left_wall_value   = analogRead(A4);
-  left_wall_value   = analogRead(A4);
+  front_wall_value1  = analogRead(A3);
+  delay(50);
+  front_wall_value2  = analogRead(A3);
+  while (abs(front_wall_value1 - front_wall_value2) > 20) 
+  {
+      front_wall_value1  = analogRead(A4);
+      delay(50);
+      front_wall_value2 = analogRead(A4);
+  }
+  front_wall_value = front_wall_value2;
+  
+  left_wall_value1   = analogRead(A4);
+  delay(50);
+  left_wall_value2   = analogRead(A4);
+  while (abs(left_wall_value1 - left_wall_value2) > 20) 
+  {
+      left_wall_value1  = analogRead(A4);
+      delay(50);
+      left_wall_value2 = analogRead(A4);
+  }
+  left_wall_value = left_wall_value2;
   delay(50);
   digitalWrite(6, LOW);
-  /*Serial.println("LEFT WALL!!!");
+  Serial.println("LEFT WALL!!");
   Serial.println(left_wall_value);
   Serial.println("RIGHT WALL!!!");
   Serial.println(right_wall_value);
   Serial.println("FRONT WALL!!!");
-  Serial.println(front_wall_value);*/
+  Serial.println(front_wall_value1);
 }
 
 //obtains left, right, and rear wall sensor values
 void get_line_values() {
   sensor_values[0] = analogRead(A0); //left line sensor
+  delay(20);
   sensor_values[1] = analogRead(A1); //right line sensor
+  delay(20);
   sensor_values[2] = analogRead(A2); //rear line sensor
-  /*Serial.println(sensor_values[0]);
+  delay(20);
+  /*Serial.print(F("Left:"));
+  Serial.println(sensor_values[0]);
+  Serial.print(F("Right:"));
   Serial.println(sensor_values[1]);
+  Serial.print(F("Middle:"));
   Serial.println(sensor_values[2]);*/
 }
 
@@ -669,7 +745,7 @@ void dfs(int calling_dir, bool backtrack) {
     }
   }
   if (options[1]) {
-    if(pos != maze_size &&  visited[pos + 1]) {
+    if(pos != maze_size-1 &&  visited[pos + 1]) {
       options[1] = 0;
     }
   }
@@ -698,32 +774,6 @@ void dfs(int calling_dir, bool backtrack) {
 
   
   for (int i = 0; i < 4; i++) {
-    //block off visited spaces
-    if (options[0]) {
-      if (pos >= width && visited[pos - width]) {
-        options[0] = 0;
-        Serial.println(F("Visited[0] is: "));
-        Serial.print(visited[pos - width]);
-        Serial.println();
-      }
-    }
-    if (options[1]) {
-      if(pos != maze_size &&  visited[pos + 1]) {
-        options[1] = 0;
-        Serial.println(F("RESET"));
-      }
-    }
-    if (options[2]) {
-      if((pos + width) < maze_size && visited[pos + width]) {
-        options[2] = 0;
-      }
-    }
-    if (options[3]) {
-      if(pos != 0 && visited[pos - 1]) {
-        options[3] = 0;
-      }
-    }
-
     if (options[i] == 1) { //NEEDS TO BE A CONDITION ABOUT WHETHER THE SPACE HAS BEEN VISITED
       //determine raster index if you're to move in direction k
       int posnext;
@@ -828,6 +878,8 @@ byte get_FPGA_data(){
 
 //Called at the beginning of the loop in order to start the robot.
 void audio_begin() {
+  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+  ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
   servoL.detach();
   servoR.detach();
   digitalWrite(7, LOW);
@@ -863,15 +915,22 @@ void audio_begin() {
       servoL.write(90);
       servoR.write(90);
       start =1; 
+       ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+      ADCSRA |= bit (ADPS0) | bit (ADPS1) | bit (ADPS2);
       return;
     }
     else {
     }
   }
+
+ 
 }
 
 //returns true if a 6.6 KHz signal is detected, false otherwise.
 bool IR_detect() {
+  ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+  ADCSRA |= bit (ADPS2); // set ADC prescalar to be eight times faster than default
+  delay(5);
   servoL.detach();
   servoR.detach();
   byte sum0 = 0;
@@ -898,26 +957,28 @@ bool IR_detect() {
     
     Serial.println();
     Serial.println(fft_log_out[14]);
-    if (fft_log_out[12] > 60){
+    if (fft_log_out[12] > 65){
       sum0 = sum0 + 1;
     }
-    if(fft_log_out[13] > 60) {
+    if(fft_log_out[13] > 65) {
       sum1 = sum1 + 1;
     }
-    if(fft_log_out[14] > 60) { 
+    if(fft_log_out[14] > 65) { 
       sum2 = sum2 + 1;    
     }
-    if(fft_log_out[15] > 60) { 
+    if(fft_log_out[15] > 65) { 
       sum3 = sum3 + 1;    
     }
   }
   if (sum0 > 25 || sum1 > 25 || sum2 > 25|| sum3 > 25) {
     delay(300);
     Serial.println(F("Robot detected!!!"));
+    ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+    ADCSRA |= bit (ADPS0) | bit (ADPS1) | bit (ADPS2);
     return true;
   }
   else {
-    Serial.println();
+   Serial.println();
     Serial.print(F("Sum0 is: "));
     Serial.print(sum0);
     Serial.print(F(" "));
@@ -931,10 +992,13 @@ bool IR_detect() {
     Serial.print(sum3);
     Serial.print(F(" "));
     Serial.println();
+    ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2)); // clear prescaler bits
+    ADCSRA |= bit (ADPS0) | bit (ADPS1) | bit (ADPS2);
     servoL.attach(3);
     servoR.attach(5);
     servoL.write(90);
     servoR.write(90);
+
     return false;
   }
 }
