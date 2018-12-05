@@ -6,21 +6,23 @@
 #include <SPI.h>
 #include "nRF24L01.h"
 #include "RF24.h"
-#include "printf.h"
+//#include "printf.h"
 
 RF24 radio(9, 10);
 //pipe addresses
 const uint64_t pipes[2] = { 0x0000000048LL, 0x0000000049LL };
 byte zero[4] = {0, 0, 0, 0};
 byte data_before [4];
-byte data[4];
+byte data;
+byte full_data[4];
 int data_array[32];
 int x = 0;
 int y = 0;
-int width = 5;
-int height = 5;
 bool first = true;
 int facing;
+
+int width;
+int height;
 
 // Intialize strings to print
 String xstring;
@@ -35,44 +37,61 @@ String tcolor;
 
 
 void setup() {
+  //BE SURE TO CHANGE THESE DEPENDING ON MAZE SIZE!
+  width = 9;
+  height = 9;
   Serial.begin(9600);
-  printf_begin();
+  //printf_begin();
   radio.begin();
   radio.setRetries(15, 15);
   radio.setAutoAck(true);
   radio.setChannel(0x50);
-  radio.setPALevel(RF24_PA_MIN);
+  radio.setPALevel(RF24_PA_MAX);
   radio.setDataRate(RF24_250KBPS);
 
   radio.openWritingPipe(pipes[1]);
   radio.openReadingPipe(1, pipes[0]);
 
   radio.startListening();
+  //Serial.println(radio.getPayloadSize());
 }
 void loop() {
   // put your main code here, to run repeatedly:
-  if ( radio.available() ) {
-    bool done = false;
-    while (!done) {
-      done = radio.read(&data, sizeof(data));
-      if (!check_zeros()) {
-        if (check_data()) {
-          decipher();
-        }
-        copy(data, data_before, 3);
-        delay(20);
+  bool avail = radio.available();
+  if (avail) {
+    radio.startListening();
+    for (int k = 0; k < 4; k++) {
+      bool done = false;
+      while(!done) {
+        full_data[k] = 0;
+        done = radio.read(&data, 1);
+        full_data[k] = data;
+        
+        Serial.println();
+        Serial.print("full_data[");
+        Serial.print(k);
+        Serial.print("] is: ");
+        Serial.print(data);
+        delay(200);
       }
+      Serial.println("");
+      delay(20);    
+      Serial.println("done:");
+      Serial.println(done);
+     // radio.startListening();
     }
-  }
-}
+  //  radio.stopListening(); 
 
+  }
+  //Serial.println("END OF LOOP");
+}
 void decipher() {
   // Parse byte array into 1D int array
   
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 1; i++) {
     for (int j = 0; j < 8; j++) {
       int k = 8 * i + j;
-      data_array[k] = int(bitRead(data[i], j));
+      data_array[k] = int(bitRead(full_data[i], j));
       Serial.print(data_array[k]);
     }
   }
@@ -91,9 +110,9 @@ void decipher() {
     Serial.print(data_array[k]);
   }
   Serial.println();
-  for (int k = 24; k<32;k++) {
-    Serial.print(data_array[k]);
-  }
+ // for (int k = 24; k<32;k++) {
+  //  Serial.print(data_array[k]);
+ // }
   Serial.println();
   if (data_array[1] == 1) {
     robot = "true";
@@ -178,9 +197,7 @@ void decipher() {
     bitWrite(pos, k, data_array[24+k]);
     //Serial.print(data_array[24+k]);
   }
-
-  Serial.println("Pos:");
-  Serial.println(pos);
+  //Serial.println(pos);
   xstring = pos % width;
   ystring = pos/width;
 
@@ -224,7 +241,7 @@ bool check_data() {
   }
 
   int last = int(bitRead(data_before[0], 7));
-  int now = int(bitRead(data[0], 7));
+  int now = int(bitRead(full_data[0], 7));
 
   if (last != now) {
     return true;
@@ -237,8 +254,8 @@ bool check_data() {
 bool check_zeros () {
   // Serial.println("checking if all zeros");
   byte zero = 0;
-  for (int i = 0; i < 4; i++) {
-    if (data[i] != zero) {
+  for (int i = 0; i < 3; i++) {
+    if (full_data[i] != zero) {
       //     Serial.println("not zero");
       return false;
     }
