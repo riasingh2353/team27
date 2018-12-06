@@ -78,13 +78,13 @@ The movement block emcompasses how the robot progresses from one intersection to
 
 Our robot’s wheels were controlled using Parallax Continuous Rotation servos. Using Arduino’s built-in servo library, we were able to control the rotation speed by first declaring the servos to be attached to a specific digital output pin and then writing a PWM signal to the servo. The servo library allows us to adjust the duty cycle of this PWM signal (and thus, the speed and direction of the wheel’s rotation) by writing a value between 0 to 180 to a given servo. 
 
-`
+```
 void drive_straight() {
   servoL.write(95+loffset);
   servoR.write(85);
   get_line_values();
 }
-`
+```
 
 ### Line Following:
 Our robot uses QRE1113 line sensors in order to detect the grid on the floor of the maze. These sensors output a voltage between 0V and the supply voltage corresponding to the darkness of the surface under them. These voltages are then binned into an array of length 1024. Lower output voltages correspond with lighter surfaces, and higher output voltages correspond with darker surfaces. We read the output voltages from three of these line sensors into three of our Arduino’s analog inputs, and compare them to a predetermined threshold value stored locally. To achieve line following, we use the outer two sensors to detect when our robot strays too far to the left or right. Based on these inputs we are able to effectively course correct using a variety of helper functions designed to make the appropriate adjustments. To facilitate this process, we create a helper method line_follow_until_intersection() that steers the robot in the event that it veers off of the line, and brings the robot to a stop when a junction is detected.
