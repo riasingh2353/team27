@@ -44,15 +44,15 @@ Ben is an elder lich, spawned during the Neoproterozoic Era and skilled in necro
 ![Ben](./media/about_us/ben.png) 
 
 ## Ian Power
-image coming soon
 
 Ian Power can be described as the diva of the group, the Scary Spice of the respective Girls.  He's fiercly independent, but never fails to be the star of the show.  Nevertheless, even when times get tough and the Cart has been gutted to find a loose wire, he can keep his head on his shoulders and remaining steadfast, like the steady Libyan coast that sheltered Aeneas' crew from Hera's watery wrath.
 
 Ian Power is credited with robot documentation on the website, out-of-pocket R&D expenses (currently totalling $4620), and paying off TAs to sabotage other teams' cameras in order to pressure Kirstin to push back lab deadlines.  He currently holds the titles of Lead SysAdmin, Supreme Schematic-meister, and the Party Minstrel.  His special skills include playing the Trumpet, uphill skiing, and playing the numbers round in the UK gameshow Countdown.
 
 Ian Power has never been to Canada, and doesn't believe it really exists.
+![Cabbage Man] (./media/cabbage_man.jpg)
 
-## Zabiba, formerly known as Jankbot
+## Zabiba
 
 A nightmarish creature beyond the control of its creators.
 
