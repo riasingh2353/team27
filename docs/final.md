@@ -32,7 +32,7 @@ The output of each of these circuits was fed into an LM358 op-amp in an invertin
 The above circuits were wired to one of the analog inputs on our Arduino. Below is the entire pinout of our Arduino:
 <br>
 | Pin | Use |
-|:---:|:---:|
+| --- | --- |
 | A0 | Left line sensor |
 | A1 | Right line sensor |
 | A2 | Center line sensor |
