@@ -311,6 +311,7 @@ end
 We then devised a serial I2C protocol to communicate this treasure information from the FPGA to the Arduino, to then be transmitted to the base station Arduino and output to the GUI. This protocol involved the Arduino writing a designated input pin to the FPGA high when it was ready to receive information, and the FPGA writing a designated pin on the Arduino high or low depending on the treasure output. This is performed serially over 4 iterations to get all color and shape information in a given image.
 
 ## Budget:
+
 | Part                      | Threshold Value | Unit Cost    |
 | ------------------------- | --------------- | ------------ |
 | Line Sensors              | 3               | $3           |
@@ -326,7 +327,7 @@ We then devised a serial I2C protocol to communicate this treasure information f
 
 Total: $90.6
 *does not include cost of FPGA and arduino and radio on the base station receiving robot transmissions
-(~ means cost found based off of google and mouser, are mostly approximations)
+(~ means cost found based off of Google and mouser, and are mostly approximations)
 
 ## Results and Conclusions:
 This semester we were able to build a robot that follow lines, detect walls, and transmit to our GUI. We learned about image processing, FFT applications, and communication protocols, and along the way, how to work together as a team.
