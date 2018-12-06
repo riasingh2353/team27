@@ -327,7 +327,9 @@ We then devised a serial I2C protocol to communicate this treasure information f
 | CD74HC Mux                | 2               | ~$0.70       |
 
 Total: $90.6
+
 *does not include cost of FPGA and arduino and radio on the base station receiving robot transmissions
+
 (~ means cost found based off of Google and mouser, and are mostly approximations)
 
 ## Results and Conclusions:
