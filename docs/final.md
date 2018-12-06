@@ -69,7 +69,7 @@ Our final design is shown below:
 ## Code Design:
 Our code is broken into two modes within an overall loop. The first is a listening phase which continually waits for a 660 Hz input or a push button input. The second is a movement and transmission phase which processes the various sensor inputs, and uses these to map and catalog the maze. These phases are generally described by the diagram below and will be expanded upon in the subsequent sections.
 
-![FSM](./media/final_design/FSM.png)
+![FSM](./media/final_design/fsm.png)
 
 ### Movement:
 The movement block emcompasses how the robot progresses from one intersection to the next. This process requires line following, intersection detection, and turning. All of these sub-processes depend on the three line sensors mounted to the face of the robot. The major challenge of developing these processes was calibrating the sensitivity of our line sensors as we modified the structure of our robot.
