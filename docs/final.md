@@ -23,7 +23,7 @@ Generally, our system aimed to accomplish the following tasks:
 ## Physical Design:
 We reconstructed our FFT-amplifier circuit, adding additional pin headers to make testing and verification of functionality easier. The extra pin headers also allowed us to replace broken components easily. Our FFT-amplifier circuitry contains our IR and microphone circuits, as both require an FFT. As the microphone is only used at the beginning of the competition, we added a multiplexer to reduce the number of analog inputs we used on our Arduino, which deselects the microphone circuit and selects the IR circuit after the 660 Hz tone initiates operation. The layouts for both these circuits is shown below:
 <br>
-![Mic Circuit](./media/final_design/mic.png) ![IR Circuit](./media/final_design/phototransistor_schem.png) 
+![Mic Circuit](./media/final_design/mic.png =250x) ![IR Circuit](./media/final_design/phototransistor_schem.png =250x) 
 <br>
 The output of each of these circuits was fed into an LM358 op-amp in an inverting configuration (as shown below). A resistive voltage divider was used to bias the non-inverting terminal of each such op-amp to 2.5V (half of the supply voltage provided by the Arduino) in order to preserve the signal’s shape.
 <br>
