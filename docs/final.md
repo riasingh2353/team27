@@ -31,23 +31,24 @@ The output of each of these circuits was fed into an LM358 op-amp in an invertin
 <br>
 The above circuits were wired to one of the analog inputs on our Arduino. Below is the entire pinout of our Arduino:
 <br>
-| Pin | Use |
-| --- | --- |
-| A0 | Left line sensor |
-| A1 | Right line sensor |
-| A2 | Center line sensor |
-| A3 | Front wall sensor |
-| A4 | Left/right wall sensor |
-| A5 | Audio/IR output |
-| 0, 1, 2 | Unused |
-| 3 | Left servo control signal |
-| 4 | Serial communication with camera |
-| 5 | Right servo control signal |
-| 6 | Wall sensor mux select bit |
-| 7 | FFT mux select bit |
-| 8 | Serial communication with camera |
-| 9-13 | Nordic Radio |
-| SDA, SCL | I2C protocol for camera |
+
+| Pin       | Use                                |
+| --------- | ---------------------------------- |
+| A0        | Left line sensor                   |
+| A1        | Right line sensor                  |
+| A2        | Center line sensor                 |
+| A3        | Front wall sensor                  |
+| A4        | Left/right wall sensor             |
+| A5        | Audio/IR output                    |
+| 0, 1, 2   | Unused                             |
+| 3         | Left servo control signal          |
+| 4         | Serial communication with camera   |
+| 5         | Right servo control signal         |
+| 6         | Wall sensor mux select bit         |
+| 7         | FFT mux select bit                 |
+| 8         | Serial communication with camera   |
+| 9-13      | Nordic Radio                       |
+| SDA, SCL  | I2C protocol for camera            |
 
 <br>
 As shown in the table above, we also have a multiplexed input for our left and right wall sensors. This circuit, in addition to the audio/IR circuit and a breadboard is located on our robot’s bottom plate. On its top plate are three wall sensors and an IR transmission hat.
