@@ -313,7 +313,7 @@ We then devised a serial I2C protocol to communicate this treasure information f
 
 ## Budget:
 
-| Part                      | Threshold Value | Unit Cost    |
+| Part                      | Quantity        | Unit Cost    |
 | ------------------------- | --------------- | ------------ |
 | Line Sensors              | 3               | $3           |
 | IR Sensors                | 3               | $7           |
