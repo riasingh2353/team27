@@ -137,6 +137,7 @@ Example DFS Implementation:
 Our robot is designed to be capable of detecting 660 Hz audio signals and 6.08 KHz IR signals. In our final design, either the output of a microphone (i.e. an audio signal) or the output of a circuit driven by a phototransistor (i.e. an IR signal) is referenced to our arduino’s A5 analog input pin. When desired, our robot will compute the FFT of the signal at this input using openmusiclabs’ arduino FFT library. For each FFT computation, the robot takes 128 discrete samples of the voltage at this input at a sampling rate of either:
 1. Approximately 2 KHz when detecting audio signals
 2. 76.875 KHz (the Arduino’s clock frequency of 16 MHz, divided by the 13 cycles required to compute an analogRead() as well as by the value set as the ADC prescalar (16 in our system).
+
 We achieve this adjustment of sampling frequencies by delaying for 500 us after each 13 us analogRead() when sampling an audio signal. By using the arduino to control the selection bit of a multiplexer into which we input both of these signals, we can select both the type of signal present at A5, as well as the sampling frequency.
 After sampling, the FFT of this sampled signal is computed, and its outputs are scaled logarithmically.
 
