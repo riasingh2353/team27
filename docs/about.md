@@ -16,12 +16,12 @@ Felicia asked not to participate in D&D related about page descriptions.
 ## Michael Gong Rivera
 NAME: MGGGGGGGGGGGGGGGGGG | ˈem-jēēēēēēēēēēēēēē<br/><br/>
 CLASS & TITLE: Elf Sorcerer, ECE Folk Hero<br/><br/>
-[//]: # (STATS: Str: Thinks about going to the gym (+4) 
-[//]: # (  Dex: 50 WPM (+1)  
-[//]: # (Con: 150lbs +- 10 (-2)
-[//]: # (Int: Can this be negative (+pi)   
-[//]: # (Wis: Beyond his years (+20)   
-[//]: # (Cha: "unethusiastic...not very helpful...typically ask another TA who is more knowledgeable" (-6)<br/><br/>
+[//]: # (STATS: Str: Thinks about going to the gym (+4) )
+[//]: # (  Dex: 50 WPM (+1)  )
+[//]: # (Con: 150lbs +- 10 (-2))
+[//]: # (Int: Can this be negative (+pi)  ) 
+[//]: # (Wis: Beyond his years (+20)   )
+[//]: # (Cha: "unethusiastic...not very helpful...typically ask another TA who is more knowledgeable" (-6)<br/><br/>)
 [//]: # (SPELLS: Long-winded Joke, "_Have heard of Stuyvesant?_", Talk to Self<br/><br/>)
 [//]: # (FEATURES & TRAITS: Nocturnal, Sarcasm, Masochist, Lack of Impulse Control, Basic Taste<br/><br/>)
 [//]: # (WEAKNESSES: Try literally roast, it'll probably stick)
@@ -34,8 +34,8 @@ CLASS & TITLE: Elf Sorcerer, ECE Folk Hero<br/><br/>
 ## Ria Singh
 
 [//]: # (For the following, description requires background music to set the ambience.<br/>)
-[//]: # (Please open a new tab and play "Duck, Duck, Goose" by Cupcakke (Rated R)
-[//]: # ((Aside: Don't actually play the song. You'll think less of us afterwards)
+[//]: # (Please open a new tab and play "Duck, Duck, Goose" by Cupcakke (Rated R))
+[//]: # ((Aside: Don't actually play the song. You'll think less of us afterwards))
 [//]: # (Don't worry, I'll wait.)
 [//]: # (Ready?)
 [//]: # (Ok.)
@@ -58,7 +58,7 @@ Ben is an elder lich, spawned during the Neoproterozoic Era and skilled in necro
 
 [//]: # (Ian Power can be described as the diva of the group, the Scary Spice of the respective Girls.  He's fiercly independent, but never fails to be the star of the show.  Nevertheless, even when times get tough and the Cart has been gutted to find a loose wire, he can keep his head on his shoulders and remaining steadfast, like the steady Libyan coast that sheltered Aeneas' crew from Hera's watery wrath.)
 
-[//]: # (Ian Power is credited with robot documentation on the website, out-of-pocket R&D expenses (currently totalling $4620),
+[//]: # (Ian Power is credited with robot documentation on the website, out-of-pocket R&D expenses (currently totalling $4620),)
 [//]: # (and paying off TAs to sabotage other teams' cameras in order to pressure Kirstin to push back lab deadlines.  He currently holds the titles of Lead SysAdmin, Supreme Schematic-meister, and the Party Minstrel.  His special skills include playing the Trumpet, uphill skiing, and playing the numbers round in the UK gameshow Countdown.)
 
 Ian Power has never been to Canada, and doesn't believe it really exists.
