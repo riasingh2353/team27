@@ -28,16 +28,16 @@ WEAKNESSES: Try literally roast, it'll probably stick)
 
 ## Ria Singh
 
-[//]: # (For the following, description requires background music to set the ambience.<br/>
-Please open a new tab and play "Duck, Duck, Goose" by Cupcakke (Rated R)<br/>
-(Aside: Don't actually play the song. You'll think less of us afterwards)<br/>
-Don't worry, I'll wait.<br/>
-Ready?<br/>
-Ok.<br/>
-Ria is a wandering bard searching for anyone willing to listen to her shittalk her companions. From objectively the worst state in the country, New Jersey, her abilities include laughing at the anything, as everything is apparently funny. Always one to lighten the hearts of her fellow travelers in times of stress, Ria embodies the mantras of memeing. Whether it be yelling at inanimate objects or forgetting to turn on the power supply, )
+[//]: # (For the following, description requires background music to set the ambience.<br/>)
+[//]: # (Please open a new tab and play "Duck, Duck, Goose" by Cupcakke (Rated R)<br/>
+[//]: # ((Aside: Don't actually play the song. You'll think less of us afterwards)<br/>
+[//]: # (Don't worry, I'll wait.<br/>)
+[//]: # (Ready?<br/>)
+[//]: # (Ok.<br/>)
+[//]: # (Ria is a wandering bard searching for anyone willing to listen to her shittalk her companions. From objectively the worst state in the country, New Jersey, her abilities include laughing at the anything, as everything is apparently funny. Always one to lighten the hearts of her fellow travelers in times of stress, Ria embodies the mantras of memeing. Whether it be yelling at inanimate objects or forgetting to turn on the power supply, )
 Ria always manages to roll a perfect 20 on a d6 and temporarily improve the constitution of her party members by 2.
 <br/><br/>
-Please finish listening to the song and then consider your life decisions
+[//]: # (Please finish listening to the song and then consider your life decisions)
 
 
 ![Ria](./media/about_us/ria.png) 
@@ -51,9 +51,10 @@ Ben is an elder lich, spawned during the Neoproterozoic Era and skilled in necro
 
 ## Ian Power
 
-[//]: # (Ian Power can be described as the diva of the group, the Scary Spice of the respective Girls.  He's fiercly independent, but never fails to be the star of the show.  Nevertheless, even when times get tough and the Cart has been gutted to find a loose wire, he can keep his head on his shoulders and remaining steadfast, like the steady Libyan coast that sheltered Aeneas' crew from Hera's watery wrath.
+[//]: # (Ian Power can be described as the diva of the group, the Scary Spice of the respective Girls.  He's fiercly independent, but never fails to be the star of the show.  Nevertheless, even when times get tough and the Cart has been gutted to find a loose wire, he can keep his head on his shoulders and remaining steadfast, like the steady Libyan coast that sheltered Aeneas' crew from Hera's watery wrath.)
 
-Ian Power is credited with robot documentation on the website, out-of-pocket R&D expenses (currently totalling $4620), and paying off TAs to sabotage other teams' cameras in order to pressure Kirstin to push back lab deadlines.  He currently holds the titles of Lead SysAdmin, Supreme Schematic-meister, and the Party Minstrel.  His special skills include playing the Trumpet, uphill skiing, and playing the numbers round in the UK gameshow Countdown.)
+[//]: # (Ian Power is credited with robot documentation on the website, out-of-pocket R&D expenses (currently totalling $4620),
+[//]: # (and paying off TAs to sabotage other teams' cameras in order to pressure Kirstin to push back lab deadlines.  He currently holds the titles of Lead SysAdmin, Supreme Schematic-meister, and the Party Minstrel.  His special skills include playing the Trumpet, uphill skiing, and playing the numbers round in the UK gameshow Countdown.)
 
 Ian Power has never been to Canada, and doesn't believe it really exists.
 
