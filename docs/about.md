@@ -16,10 +16,15 @@ Felicia asked not to participate in D&D related about page descriptions.
 ## Michael Gong Rivera
 NAME: MGGGGGGGGGGGGGGGGGG | ˈem-jēēēēēēēēēēēēēē<br/><br/>
 CLASS & TITLE: Elf Sorcerer, ECE Folk Hero<br/><br/>
-[//]: # (STATS: Str: Thinks about going to the gym (+4)   Dex: 50 WPM (+1)   Con: 150lbs +- 10 (-2)   Int: Can this be negative (+pi)   Wis: Beyond his years (+20)   Cha: "unethusiastic...not very helpful...typically ask another TA who is more knowledgeable" (-6)<br/><br/>
-SPELLS: Long-winded Joke, "_Have heard of Stuyvesant?_", Talk to Self<br/><br/>
-FEATURES & TRAITS: Nocturnal, Sarcasm, Masochist, Lack of Impulse Control, Basic Taste<br/><br/>
-WEAKNESSES: Try literally roast, it'll probably stick)
+[//]: # (STATS: Str: Thinks about going to the gym (+4) 
+[//]: # (  Dex: 50 WPM (+1)  
+[//]: # (Con: 150lbs +- 10 (-2)
+[//]: # (Int: Can this be negative (+pi)   
+[//]: # (Wis: Beyond his years (+20)   
+[//]: # (Cha: "unethusiastic...not very helpful...typically ask another TA who is more knowledgeable" (-6)<br/><br/>
+[//]: # (SPELLS: Long-winded Joke, "_Have heard of Stuyvesant?_", Talk to Self<br/><br/>)
+[//]: # (FEATURES & TRAITS: Nocturnal, Sarcasm, Masochist, Lack of Impulse Control, Basic Taste<br/><br/>)
+[//]: # (WEAKNESSES: Try literally roast, it'll probably stick)
 
 <br/>
 
@@ -29,11 +34,11 @@ WEAKNESSES: Try literally roast, it'll probably stick)
 ## Ria Singh
 
 [//]: # (For the following, description requires background music to set the ambience.<br/>)
-[//]: # (Please open a new tab and play "Duck, Duck, Goose" by Cupcakke (Rated R)<br/>
-[//]: # ((Aside: Don't actually play the song. You'll think less of us afterwards)<br/>
-[//]: # (Don't worry, I'll wait.<br/>)
-[//]: # (Ready?<br/>)
-[//]: # (Ok.<br/>)
+[//]: # (Please open a new tab and play "Duck, Duck, Goose" by Cupcakke (Rated R)
+[//]: # ((Aside: Don't actually play the song. You'll think less of us afterwards)
+[//]: # (Don't worry, I'll wait.)
+[//]: # (Ready?)
+[//]: # (Ok.)
 [//]: # (Ria is a wandering bard searching for anyone willing to listen to her shittalk her companions. From objectively the worst state in the country, New Jersey, her abilities include laughing at the anything, as everything is apparently funny. Always one to lighten the hearts of her fellow travelers in times of stress, Ria embodies the mantras of memeing. Whether it be yelling at inanimate objects or forgetting to turn on the power supply, )
 Ria always manages to roll a perfect 20 on a d6 and temporarily improve the constitution of her party members by 2.
 <br/><br/>
