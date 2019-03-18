@@ -7,7 +7,7 @@ Let me share with you the terrible wonders I have come to know...
 ## Felicia Guo
 Felicia asked not to participate in D&D related about page descriptions.
 
-[//]: # As a level 10 ruiner of fun, Felicia is in the tomes of "Can you not?" and Loud Sighing. She embodies the spirit of the questing party, begrudgingly going along with the requirements of the ECE 3400 quest and the antics of her fellow adventurers.
+[//]: #( As a level 10 ruiner of fun, Felicia is in the tomes of "Can you not?" and Loud Sighing. She embodies the spirit of the questing party, begrudgingly going along with the requirements of the ECE 3400 quest and the antics of her fellow adventurers.)
 <br/>
 
 ![Felicia](./media/about_us/felicia.png) 
